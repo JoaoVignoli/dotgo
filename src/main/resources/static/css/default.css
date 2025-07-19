@@ -1,0 +1,39 @@
+.body {
+    background-color: #FFFAF5;
+}
+
+.container {
+    max-width: 100%;
+    padding-left: 16px;
+}
+
+.titulo {
+    height: 38px;
+    margin-top: 102px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: bold;
+    font-size: 32px;
+    color: #1a1a1a;
+}
+
+.descricao {
+    margin-top: 146px;;
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    color: #666666;
+}
+
+form label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+form input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
