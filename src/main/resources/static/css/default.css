@@ -28,7 +28,7 @@
     color: #666666;
 }
 
-form label {
+.tituloInput {
     margin-top: 25px;
     margin-bottom: 8px;
     font-weight: bold;
@@ -36,12 +36,12 @@ form label {
     display: block;
 }
 
-form input[type="email"] {
+.inputPadrao {
     width: 100%;
     padding: 12px;
     font-size: 16px;
     font-family: "DM Sans", sans-serif;
-    border: 1px solid #ccc;
+    border: 1px solid #CCCCCC;
     border-radius: 10px;
     margin-bottom: 20px;
 }
