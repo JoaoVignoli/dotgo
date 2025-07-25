@@ -2,14 +2,19 @@
     background-color: #FFFAF5;
 }
 
+.header {
+    margin-top: 54px;
+    margin-left: 16px;
+}
+
 .container {
-    max-width: 100%;
     padding-left: 16px;
+    display: inline-block;
 }
 
 .titulo {
     height: 38px;
-    margin-top: 102px;
+    margin-top: 36px;
     font-family: "DM Sans", sans-serif;
     font-weight: bold;
     font-size: 32px;
@@ -24,8 +29,10 @@
 }
 
 form label {
-    font-weight: bold;
+    margin-top: 25px;
     margin-bottom: 8px;
+    font-weight: bold;
+    font-family: "DM Sans", sans-serif;
     display: block;
 }
 
@@ -33,7 +40,25 @@ form input[type="email"] {
     width: 100%;
     padding: 12px;
     font-size: 16px;
+    font-family: "DM Sans", sans-serif;
     border: 1px solid #ccc;
     border-radius: 10px;
     margin-bottom: 20px;
+}
+
+.botaoDeContinuacao {
+    width: 100%;
+    height: 57px;
+    border-radius: 16px;
+    position: relative;
+    top: 532px;
+    padding-top: 16px;
+    padding-right: 24px;
+    padding-bottom: 16px;
+    padding-left: 24px;
+    display: inline-block;
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    color: #E6E6E6;
+    background-color: #0C0C0C;
 }
