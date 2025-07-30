@@ -61,3 +61,24 @@ body {
     height: 75%;
     overflow: scroll;
 }
+
+.categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 75%;
+    overflow: scroll;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+.categorie-item {
+    box-sizing: border-box;
+    background-color: red;
+    width: calc((100% / 2) - 5px);
+    height: 13rem;
+}
+
+.categorie-item img {
+    
+}
