@@ -1,0 +1,25 @@
+body {
+    background-color: #FFFAF5;
+}
+
+.botaoContinuar {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 57px;
+    border-radius: 16px;
+    position: relative;
+    top: 532px;
+    gap: 10px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    color: #E6E6E6;
+    background-color: #0C0C0C;
+}
+
+.title {
+    font-family: "DM Sans", sans-serif;
+    color: #0C0C0C;
+}
