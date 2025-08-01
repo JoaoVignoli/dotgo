@@ -62,3 +62,7 @@
     color: #E6E6E6;
     background-color: #0C0C0C;
 }
+
+.botaoDeContinuacao:active {
+    transform: translateY(1px);
+}
