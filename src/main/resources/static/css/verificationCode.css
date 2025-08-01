@@ -1,0 +1,45 @@
+.verificationCodeForm {
+    width: 340px;
+    height: 45px;
+    margin-left: 45px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+.inputVerificationCode {
+    width: 66px;
+    height: 35px;
+    padding: 12px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: center;
+    font-size: 27px;
+    font-family: monospace;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.emailEmPreto {
+    color: #0C0C0C;
+}
+
+.reenviar{
+    background-color: #FFFAF5;
+    border: none;
+    color: #0C0C0C;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "DM Sans", sans-serif;
+    text-decoration: underline
+}
+
+.reenviar:active {
+    transform: translateY(1px);
+}
