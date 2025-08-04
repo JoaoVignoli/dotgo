@@ -30,6 +30,11 @@
     color: #0C0C0C;
 }
 
+.containerReenvio {
+    width: 100%;
+    text-align: center;
+}
+
 .reenviar{
     background-color: #FFFAF5;
     border: none;
