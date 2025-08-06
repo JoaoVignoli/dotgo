@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Serviço do Banco de Dados
+  db:
+    image: postgres:16.3-alpine
+    container_name: dotgo-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres # Para produção, considere usar Docker Secrets
+      - POSTGRES_DB=dotgo
+    volumes:
+      - dotgo-data:/var/lib/postgresql/data
+    networks:
+      - dotgo-network
+
+  # Serviço da Aplicação
+  app:
+    # IMPORTANTE: Não usamos 'build'. A imagem será baixada do Docker Hub.
+    # O nome da imagem será passado por uma variável de ambiente pelo GitHub Actions.
+    image: ${DOCKER_IMAGE}
+    container_name: dotgo-app
+    restart: always
+    ports:
+      - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
+    depends_on:
+      - db # Garante que o banco de dados inicie antes da aplicação
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dotgo
+      - SPRING_DATASOURCE_USERNAME=dotgo
+      - SPRING_DATASOURCE_PASSWORD=root
+    networks:
+      - dotgo-network
+
+volumes:
+  dotgo-data:
+
+networks:
+  dotgo-network:
