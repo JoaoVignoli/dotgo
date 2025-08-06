@@ -5,6 +5,9 @@ on:
   push:
     branches: [ "main" ] # Aciona o workflow em cada push para a branch 'main'
 
+# Adiciona o novo gatilho manual
+  workflow_dispatch:
+
 jobs:
   # Job 1: Construir a imagem e enviar para o Docker Hub
   build-and-push:
