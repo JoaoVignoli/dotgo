@@ -26,10 +26,6 @@ services:
       - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
     depends_on:
       - db # Garante que o banco de dados inicie antes da aplicação
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dotgo
-      - SPRING_DATASOURCE_USERNAME=dotgo
-      - SPRING_DATASOURCE_PASSWORD=root
     networks:
       - dotgo-network
 
