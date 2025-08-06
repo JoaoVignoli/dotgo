@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           # A tag da imagem será 'latest' e o nome será 'seu-user/dotgo'
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dotgo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dotgo-app:latest
 
   # Job 2: Fazer o deploy no servidor via Cloudflare Tunnel
   deploy:
