@@ -14,6 +14,12 @@ services:
       - dotgo-data:/var/lib/postgresql/data
     networks:
       - dotgo-network
+    healthcheck:
+      # Comando que o Docker executa para verificar a saúde do banco
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dotgo"]
+      interval: 5s    # Verifica a cada 5 segundos
+      timeout: 5s     # Considera falha se o comando demorar mais de 5s
+      retries: 10     # Tenta 10 vezes antes de marcar como "unhealthy"
 
   # Serviço da Aplicação
   app:
@@ -25,7 +31,12 @@ services:
     ports:
       - "8080:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
     depends_on:
-      - db # Garante que o banco de dados inicie antes da aplicação
+      db: # Garante que o banco de dados inicie antes da aplicação
+        condition: service_healthy # <-- CONDIÇÃO ADICIONADA
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dotgo
+      - SPRING_DATASOURCE_USERNAME=dotgo
+      - SPRING_DATASOURCE_PASSWORD=root
     networks:
       - dotgo-network
 
