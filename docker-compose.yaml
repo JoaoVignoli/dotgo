@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Serviço do Banco de Dados
   db:
     image: postgres:16.3-alpine
     container_name: dotgo-db
@@ -15,7 +14,6 @@ services:
     volumes:
       - dotgo-data:/var/lib/postgresql/data
     healthcheck:
-      # Comando que o Docker executa para verificar a saúde do banco
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d {POSTGRES_DB}"]
       interval: 5s    # Verifica a cada 5 segundos
       timeout: 5s     # Considera falha se o comando demorar mais de 5s
@@ -23,13 +21,12 @@ services:
     networks:
       - dotgo-net
 
-  # Serviço da Aplicação
   app:
     build: .
     container_name: dotgo-app
     restart: always
     ports:
-      - "${APP_PORT}:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
+      - "${APP_PORT}:8080" 
     depends_on:
       db: # Garante que o banco de dados inicie antes da aplicação
         condition: service_healthy
@@ -46,7 +43,6 @@ services:
     restart: always
     depends_on:
       - app
-    # Você pode passar o token diretamente ou usar um arquivo .env
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - dotgo-net
