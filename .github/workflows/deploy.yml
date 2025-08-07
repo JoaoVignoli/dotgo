@@ -11,32 +11,27 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Use o seu novo runner!
+    runs-on: self-hosted
+
     steps:
+      # Passo 1: O runner precisa do código do repositório
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # Passo 1: Instalar o cliente cloudflared no runner
-      - name: Instalar cloudflared
+      # Passo 2: Executar os comandos de deploy diretamente
+      - name: Deploy da aplicação
         run: |
-          sudo wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O cloudflared.deb
-          sudo dpkg -i cloudflared.deb
-
-      # Passo 2: Fazer o deploy via SSH 
-      - name: Deploy no servidor via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          timeout: 30s
+          echo "Iniciando deploy local..."
           
-          script: |
-            echo "Conectado com sucesso!"
-            # Se o 'cd' falhar por algum motivo, o '&&' impede que os comandos seguintes (git pull, docker-compose )
-            # sejam executados no lugar errado. É uma pequena camada extra de segurança.
-            cd /home/vignoli/Documentos/Projects/dotgo && \
-            git pull && \
-            docker-compose up -d --force-recreate --build
-            
-            echo "Deploy finalizado!"
+          # O runner já está na máquina certa, então os comandos são locais!
+          # Navegue para o diretório do seu projeto
+          cd /home/vignoli/Documentos/Projects/dotgo
+          
+          # Atualize o código
+          git pull
+          
+          # Reconstrua e reinicie os containers
+          docker-compose up -d --force-recreate --build
+          
+          echo "Deploy finalizado!"
