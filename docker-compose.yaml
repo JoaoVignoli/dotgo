@@ -7,14 +7,14 @@ services:
     container_name: dotgo-db
     restart: always
     environment:
-      - POSTGRES_USER=${ POSTGRES_USER }
-      - POSTGRES_PASSWORD=${ POSTGRES_PASSWORD } 
-      - POSTGRES_DB=${ POSTGRES_DB }
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} 
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - dotgo-data:/var/lib/postgresql/data
     healthcheck:
       # Comando que o Docker executa para verificar a saúde do banco
-      test: ["CMD-SHELL", "pg_isready -U ${ POSTGRES_USER } -d { POSTGRES_DB }"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d {POSTGRES_DB}"]
       interval: 5s    # Verifica a cada 5 segundos
       timeout: 5s     # Considera falha se o comando demorar mais de 5s
       retries: 10     # Tenta 10 vezes antes de marcar como "unhealthy"
@@ -29,14 +29,14 @@ services:
     container_name: dotgo-app
     restart: always
     ports:
-      - "${ APP_PORT }:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
+      - "${APP_PORT}:8080" # Mapeia a porta 8080 do container para a 8080 do servidor
     depends_on:
       db: # Garante que o banco de dados inicie antes da aplicação
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${ POSTGRES_DB }
-      - SPRING_DATASOURCE_USERNAME=${ POSTGRES_USER }
-      - SPRING_DATASOURCE_PASSWORD=${ POSTGRES_PASSWORD }
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - dotgo-net
   
@@ -47,7 +47,7 @@ services:
     depends_on:
       - app
     # Você pode passar o token diretamente ou usar um arquivo .env
-    command: tunnel --no-autoupdate run --token ${ CLOUDFLARE_TUNNEL_TOKEN }
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - dotgo-net
 
