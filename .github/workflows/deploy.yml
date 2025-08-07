@@ -8,84 +8,35 @@ on:
 # Adiciona o novo gatilho manual
   workflow_dispatch:
 
+
 jobs:
-  # Job 1: Construir a imagem e enviar para o Docker Hub
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Testar com Maven
-        run: mvn -B test --file pom.xml
-
-      - name: Login no Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Construir e enviar imagem Docker
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          # A tag da imagem será 'latest' e o nome será 'seu-user/dotgo'
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dotgo-repository:latest
-
-  # Job 2: Fazer o deploy no servidor via Cloudflare Tunnel
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      # Passo 1: Instala o cliente cloudflared no ambiente do GitHub Actions
-      - name: Instalar Cloudflared
+      # Passo 1: Instalar o cliente cloudflared no runner
+      - name: Instalar cloudflared
         run: |
-          wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared-linux-amd64.deb
+          sudo wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O cloudflared.deb
+          sudo dpkg -i cloudflared.deb
 
-      # Passo 2: Configura a chave SSH (igual a antes )
-      - name: Configurar Chave SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      # Passo 2: Fazer o deploy via SSH 
+      - name: Deploy no servidor via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
-
-      # Passo 3: Configura o SSH para usar o Cloudflare Tunnel como Proxy
-      - name: Configurar Proxy SSH do Cloudflare
-        run: |
-          # Cria o diretório de configuração do SSH se não existir
-          mkdir -p ~/.ssh
-          # Adiciona a configuração do ProxyCommand ao arquivo de configuração do SSH
-          # Isso diz ao 'ssh' para usar o 'cloudflared' sempre que tentar conectar ao hostname do túnel
-          echo "Host ${{ secrets.CLOUDFLARE_TUNNEL_HOSTNAME }} ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> ~/.ssh/config
-
-      # Passo 4: Executa o Deploy
-      - name: Deploy no Servidor via Tunnel
-        run: |
-          # O comando SSH agora é mais simples. Ele usará automaticamente a configuração de proxy.
-          # O hostname aqui é o do túnel, não o IP público.
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.CLOUDFLARE_TUNNEL_HOSTNAME }} << 'EOF'
-            # A partir daqui, os comandos são executados no seu servidor, como antes.
-            echo "--- Conectado ao servidor via Cloudflare Tunnel! ---"
-            cd ~/dotgo
-
-            export DOCKER_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/dotgo:latest
-
-            echo "--- Baixando nova imagem: $DOCKER_IMAGE ---"
-            docker-compose pull app
-
-            echo "--- Reiniciando a aplicação... ---"
-            docker-compose up -d --force-recreate
-
-            echo "--- Limpando imagens antigas... ---"
-            docker image prune -af
-
-            echo "--- Deploy concluído com sucesso! ---"
-          EOF
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 30s
+          
+          script: |
+            echo "Conectado com sucesso!"
+            # Se o 'cd' falhar por algum motivo, o '&&' impede que os comandos seguintes (git pull, docker-compose )
+            # sejam executados no lugar errado. É uma pequena camada extra de segurança.
+            cd /home/vignoli/Documentos/Projects/dotgo && \
+            git pull && \
+            docker-compose up -d --force-recreate --build
+            
+            echo "Deploy finalizado!"

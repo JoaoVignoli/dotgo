@@ -12,20 +12,20 @@ services:
       - POSTGRES_DB=dotgo
     volumes:
       - dotgo-data:/var/lib/postgresql/data
-    networks:
-      - dotgo-network
     healthcheck:
       # Comando que o Docker executa para verificar a saúde do banco
       test: ["CMD-SHELL", "pg_isready -U postgres -d dotgo"]
       interval: 5s    # Verifica a cada 5 segundos
       timeout: 5s     # Considera falha se o comando demorar mais de 5s
       retries: 10     # Tenta 10 vezes antes de marcar como "unhealthy"
+    networks:
+      - dotgo-net
 
   # Serviço da Aplicação
   app:
     # IMPORTANTE: Não usamos 'build'. A imagem será baixada do Docker Hub.
     # O nome da imagem será passado por uma variável de ambiente pelo GitHub Actions.
-    image: ${DOCKER_IMAGE}
+    build: .
     container_name: dotgo-app
     restart: always
     ports:
@@ -38,10 +38,24 @@ services:
       - SPRING_DATASOURCE_USERNAME=dotgo
       - SPRING_DATASOURCE_PASSWORD=root
     networks:
-      - dotgo-network
+      - dotgo-net
+  
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: dotgo-tunnel
+    restart: always
+    depends_on:
+      - app
+    # Você pode passar o token diretamente ou usar um arquivo .env
+    command: tunnel --no-autoupdate run --token eyJhIjoiOGQxN2ExZTAyMDk5MTQxZThiM2FiNTIzNWZmNmJjNjUiLCJ0IjoiNTY3M2E0ZTgtZjYwZi00ZTZkLTkwYjItZWI4N2IxOTU3ZTI3IiwicyI6IllUa3hZbU0yWm1NdFl6SXlPQzAwTnpkaExUZzNPV010T1RrMlpHWmpORFUzTTJObSJ9
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dotgo-net
 
 volumes:
   dotgo-data:
 
 networks:
-  dotgo-network:
+  dotgo-net:
+    name: dotgo-network
