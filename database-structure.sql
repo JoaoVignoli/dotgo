@@ -48,7 +48,7 @@ create table address (
 	complement Text
 );
 
-create table certifacates (
+create table certifacate (
 	id serial not null primary key,
 	name Varchar(255) not null,
 	start_date date not null,
