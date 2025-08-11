@@ -31,7 +31,7 @@ jobs:
           # Atualize o código
           git pull
           
-          # Reconstrua e reinicie os containers
-          docker-compose up -d --force-recreate --build
+          # Reinicie os containers
+          docker-compose up -d --build
           
           echo "Deploy finalizado!"

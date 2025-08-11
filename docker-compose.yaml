@@ -1,6 +1,6 @@
 version: '3.8'
 
-services:
+services:  # Serviço do Banco de Dados
   db:
     image: postgres:16.3-alpine
     container_name: dotgo-db
@@ -38,7 +38,7 @@ services:
       - dotgo-net
   
   tunnel:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:1755-08efe4c10307
     container_name: dotgo-tunnel
     restart: always
     depends_on:
@@ -47,8 +47,61 @@ services:
     networks:
       - dotgo-net
 
+  # Serviço principal do MinIO (Simulador do S3)
+  minio:
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z
+    container_name: minio_s3_server
+    ports:
+      - "9000:9000" # Porta da API S3
+      - "9001:9001" # Porta do Console Web do MinIO
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER} # Equivalente ao seu AWS Access Key ID
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD} # Equivalente ao seu AWS Secret Access Key
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - dotgo-net
+
+  # Serviço para criar o bucket inicial automaticamente
+  create-buckets:
+    image: minio/mc:RELEASE.2025-07-21T05-28-08Z
+    container_name: minio_create_buckets
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      - MINIO_USER=${MINIO_USER}
+      - MINIO_PASSWORD=${MINIO_PASSWORD}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Aguardando o MinIO iniciar...';
+      sleep 5;
+
+      echo 'Configurando o alias para o MinIO local...';
+      /usr/bin/mc alias set local http://minio:9000 ${MINIO_USER} ${MINIO_PASSWORD};
+      
+      echo 'Criando o bucket...';
+      /usr/bin/mc mb local/${MINIO_BUCKET_NAME};
+      
+      echo 'Definindo a política do bucket como pública...';
+      /usr/bin/mc policy set public local/${MINIO_BUCKET_NAME};
+      
+      echo \"Bucket '${MINIO_BUCKET_NAME}' criado com sucesso!\";
+      exit 0;
+      "
+    networks:
+      - dotgo-net
+
 volumes:
   dotgo-data:
+  minio_data:
 
 networks:
   dotgo-net:
