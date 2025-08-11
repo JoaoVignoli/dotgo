@@ -59,13 +59,13 @@ create table certifacate (
 
 create table category (
 	id serial not null primary key,
-	name Varchar(255) not null,
+	name Varchar(255) unique not null,
 	icon Text not null
 );
 
 create table subcategory (
 	id serial not null primary key,
-	name Varchar(255) not null,
+	name Varchar(255) unique not null,
 	category_id int references category(id) not null,
 	icon text not null
 );
