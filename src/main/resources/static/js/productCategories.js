@@ -50,9 +50,9 @@ async function getCategories() {
     }    
 }
 
-function main() {
+async function main() {
 
-    const categories = getCategories();
+    const categories = await getCategories();
 
     if (categories.length > 0) {
         displayCategories(categories);
