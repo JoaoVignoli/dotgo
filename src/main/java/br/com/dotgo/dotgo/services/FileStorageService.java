@@ -24,7 +24,7 @@ public class FileStorageService {
 
     public String uploadFile(MultipartFile file, String folderPath) {
         try {
-            String uniqueFileName = UUID.randomUUID().toString() + getFileExtension(file.getOriginalFilename());
+            String uniqueFileName = UUID.randomUUID().toString() + "." + getFileExtension(file.getOriginalFilename());
             String objectKey = folderPath + "/" + uniqueFileName;
 
             minioClient.putObject(
