@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.dotgo.dotgo.dtos.CategoryResponseDto;
 import br.com.dotgo.dotgo.repositories.CategoryRepository;
 
-import java.util.Locale.Category;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,11 +25,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryResponseDto> createNewCategory(@RequestBody String entity) {
-        
-        Category categorySave = new Category();
-        
-
-        return entity;
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     
 }
