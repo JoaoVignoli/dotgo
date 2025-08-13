@@ -10,6 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/newProduct").setViewName("forward:/newProduct.html");
+        registry.addViewController("/categories").setViewName("forward:/productCategories.html");
         registry.addViewController("/forgotPassword").setViewName("forward:/forgotPassword.html");
         registry.addViewController("/profileProvider").setViewName("forward:/profileProvider.html");
     }
