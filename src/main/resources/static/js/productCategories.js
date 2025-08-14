@@ -1,25 +1,29 @@
-let selectedCategoryId = null;
-
 function handleCategoryClick(event, categoryId) {
 
-    const allCategoryItems = document.querySelectorAll('.categorie-item');
+    const nextButton = document.getElementById("botaoContinuar");
+
+    const allCategoryItems = document.querySelectorAll('.categorie-img');
     allCategoryItems.forEach(item => {
         item.classList.remove('selected');
     });
 
     event.currentTarget.classList.add('selected');
 
-    selectedCategoryId = categoryId;
+    localStorage.setItem('userSelectedCategoryId', categoryId);
 
-    console.log("Categoria selecionada! ID:", selectedCategoryId);
+    nextButton.disabled = false;
+    
+}
+
+function nextStep() {
+    window.location.href = "https://dotgo.vignoli.dev.br/productSubcategories";
 }
 
 function returnWindow() {
-    window.location.href = "https://dotgo.vignoli.dev.br/newProduct"; 
+    window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
 }
 
 function displayCategories(category) {
-    console.log("Carregando categoria: " + category.name);
 
     const categoriesContainer = document.getElementById("categories-list");
 
@@ -31,10 +35,10 @@ function displayCategories(category) {
     const categorieItem = document.createElement('div');
     categorieItem.className = 'categorie-item';
 
-    categorieItem.addEventListener('click', (event) => handleCategoryClick(event, category.id))
-
     const categorieImgDiv = document.createElement('div');
     categorieImgDiv.className = 'categorie-img';
+
+    categorieImgDiv.addEventListener('click', (event) => handleCategoryClick(event, category.id))
 
     const imgElement = document.createElement('img');
     imgElement.src = category.iconUrl; 
@@ -53,7 +57,6 @@ function displayCategories(category) {
 
 function getCategories() {
     try {
-        console.log("Iniciando requisição das categorias.");
         fetch("/categories" )
             .then((response) => response.json())
             .then((data) => {
@@ -69,8 +72,12 @@ function getCategories() {
 function main() {
     getCategories();
 
-    const returnButton = document.getElementById("botaoRetorno")
+    const returnButton = document.getElementById("botaoRetorno");
     returnButton.addEventListener("click", returnWindow);
+
+    const nextButton = document.getElementById("botaoContinuar");
+    nextButton.addEventListener("click", nextStep);
+
 }
 
 window.addEventListener("load", main);

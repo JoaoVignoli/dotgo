@@ -47,6 +47,12 @@ body {
     transform: translateY(1px);
 }
 
+.botaoContinuar:disabled {
+    background-color: #555555;
+    color: #999999;           
+    opacity: 0.7;          
+}
+
 .categories-list {
     display: flex;
     flex-wrap: wrap;
@@ -102,5 +108,5 @@ body {
 
 .selected {
     transform: translateY(1px);
-    border: 1px solid #0C0C0C;
+    border: 3px solid #0C0C0C;
 }
