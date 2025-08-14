@@ -2,6 +2,7 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
+import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.repositories.UserRepository;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,10 @@ public class UserController {
     public UserPersonalDataResponseDto cadastrarDadosPessoais(
             @RequestBody UserPersonalDataRequestDto request
             ) {
+        User novo = new User();
+
+        novo.setName(request.getName());
+
 
     }
 

@@ -26,21 +26,6 @@ public class User {
     private String biography;
     private Date created_at;
 
-    public User(String name, String tax_id, String email, String phone, Date birthday, String password, String picture, String role, String specialty, Boolean verified, String biography, Date created_at) {
-        this.name = name;
-        this.tax_id = tax_id;
-        this.email = email;
-        this.phone = phone;
-        this.birthday = birthday;
-        this.password = password;
-        this.picture = picture;
-        this.role = role;
-        this.specialty = specialty;
-        this.verified = verified;
-        this.biography = biography;
-        this.created_at = created_at;
-    }
-
     public Integer getId() {
         return id;
     }
