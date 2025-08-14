@@ -1,3 +1,23 @@
+let selectedCategoryId = null;
+
+function handleCategoryClick(event, categoryId) {
+
+    const allCategoryItems = document.querySelectorAll('.categorie-item');
+    allCategoryItems.forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    event.currentTarget.classList.add('selected');
+
+    selectedCategoryId = categoryId;
+
+    console.log("Categoria selecionada! ID:", selectedCategoryId);
+}
+
+function returnWindow() {
+    window.location.href = "https://dotgo.vignoli.dev.br/newProduct"; 
+}
+
 function displayCategories(category) {
     console.log("Carregando categoria: " + category.name);
 
@@ -10,6 +30,8 @@ function displayCategories(category) {
 
     const categorieItem = document.createElement('div');
     categorieItem.className = 'categorie-item';
+
+    categorieItem.addEventListener('click', (event) => handleCategoryClick(event, category.id))
 
     const categorieImgDiv = document.createElement('div');
     categorieImgDiv.className = 'categorie-img';
@@ -46,7 +68,9 @@ function getCategories() {
 
 function main() {
     getCategories();
-    
+
+    const returnButton = document.getElementById("botaoRetorno")
+    returnButton.addEventListener("click", returnWindow);
 }
 
 window.addEventListener("load", main);

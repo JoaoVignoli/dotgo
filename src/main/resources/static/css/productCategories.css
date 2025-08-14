@@ -99,3 +99,8 @@ body {
 .categorie-img img {
     width: 100%;
 }
+
+.selected {
+    transform: translateY(1px);
+    border: 1px solid #0C0C0C;
+}
