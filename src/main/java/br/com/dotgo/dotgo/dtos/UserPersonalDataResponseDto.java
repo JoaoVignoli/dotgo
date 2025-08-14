@@ -12,6 +12,7 @@ public class UserPersonalDataResponseDto {
     private String phone;
     private String password;
     private Date birthday;
+    private String role;
 
     public UserPersonalDataResponseDto(User user) {
         this.name = user.getName();
@@ -20,6 +21,7 @@ public class UserPersonalDataResponseDto {
         this.phone = user.getPhone();
         this.password = user.getPassword();
         this.birthday = user.getBirthday();
+        this.role = user.getRole();
     }
 
     public String getName() {
@@ -45,4 +47,6 @@ public class UserPersonalDataResponseDto {
     public String getEmail() {
         return email;
     }
+
+    public String getRole() { return role; }
 }

@@ -10,6 +10,11 @@ public class UserPersonalDataRequestDto {
     private String phone;
     private String password;
     private Date birthday;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
 
     public String getName() {
         return name;
