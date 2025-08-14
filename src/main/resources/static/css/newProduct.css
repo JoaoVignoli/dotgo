@@ -86,7 +86,6 @@ body {
     padding: 0px;
 }
 
-
 .botaoAcao:active {
     transform: translateY(1px);
 }
@@ -132,55 +131,3 @@ body {
     transform: translateY(1px);
 }
 
-.categories-list {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 87%;
-    overflow: scroll;
-    justify-content: space-around;
-    gap: 5px;
-}
-
-.categorie-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    box-sizing: border-box;
-    width: calc((100% / 2) - 5px);
-    height: 15rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-}
-
-.categorie-item span {
-    margin: 0 0 1rem 0;
-    padding: 0 16px;
-    font-size: x-large;
-    font-weight: bold;
-    font-family: "DM Sans";
-    text-align: center;
-}
-
-.categorie-img {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 75%;
-    height: 100%;
-    padding: 0 1rem;
-    border: 1px solid #CCCCCC;
-    border-radius: 10px;
-    box-shadow: 1px 4px 4px 1px rgba(0, 0, 0, 0.5);
-}
-
-.categorie-img:active {
-    transform: translateY(1px);
-    border: 1px solid #0C0C0C;
-}
-
-.categorie-img img {
-    width: 100%;
-}

@@ -95,10 +95,10 @@ services:  # Serviço do Banco de Dados
       /usr/bin/mc alias set local ${MINIO_URL} ${MINIO_USER} ${MINIO_PASSWORD};
       
       echo 'Criando o bucket...';
-      /usr/bin/mc mb local/${MINIO_BUCKET_NAME};
+      /usr/bin/mc mb local/${MINIO_BUCKET_NAME} --ignore-existing;
       
-      echo 'Definindo a política do bucket como pública...';
-      /usr/bin/mc policy set public local/${MINIO_BUCKET_NAME};
+      echo 'Definindo a política do bucket como download (leitura pública)...';
+      /usr/bin/mc anonymous set download local/${MINIO_BUCKET_NAME};
       
       echo \"Bucket '${MINIO_BUCKET_NAME}' criado com sucesso!\";
       exit 0;

@@ -1,62 +1,52 @@
-function displayCategories(categories) {
-    const categoriesContainer = document.getElementById("categories-list")
+function displayCategories(category) {
+    console.log("Carregando categoria: " + category.name);
 
-    categoriesContainer.innerHTML = '';
+    const categoriesContainer = document.getElementById("categories-list");
 
-    categories.forEach(category => {
+    if (!categoriesContainer) {
+        console.error("Elemento com id 'categories-list' não foi encontrado no DOM.");
+        return;
+    }
 
-        const categorieItem = document.createElement('div');
-        categorieItem.className = 'categorie-item';
+    const categorieItem = document.createElement('div');
+    categorieItem.className = 'categorie-item';
 
-        const categorieImgDiv = document.createElement('div');
-        categorieImgDiv.className = 'categorie-img';
+    const categorieImgDiv = document.createElement('div');
+    categorieImgDiv.className = 'categorie-img';
 
-        const imgElement = document.createElement('img');
+    const imgElement = document.createElement('img');
+    imgElement.src = category.iconUrl; 
+    imgElement.alt = `Ícone da categoria ${category.name}`; 
 
-        imgElement.src = category.iconUrl; 
-        imgElement.alt = `Ícone da categoria ${category.name}`; 
+    const spanElement = document.createElement('span');
+    spanElement.textContent = category.name;
 
-        const spanElement = document.createElement('span');
-        spanElement.textContent = category.name;
+    categorieImgDiv.appendChild(imgElement);
+    categorieImgDiv.appendChild(spanElement);
 
-        categorieImgDiv.appendChild(imgElement);
-        categorieImgDiv.appendChild(spanElement);
+    categorieItem.appendChild(categorieImgDiv);
 
-        categorieItem.appendChild(categorieImgDiv);
-
-        categoriesContainer.appendChild(categorieItem);
-    });
+    categoriesContainer.appendChild(categorieItem);
 }
 
-async function getCategories() {
+function getCategories() {
     try {
-        const response = await fetch("/categories", {
-            method: 'GET',
-            headers: {
-                'Accept':'application/json'
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
-        };
-
-        const categoriesData = await response.json();
-
-        return categoriesData;
+        console.log("Iniciando requisição das categorias.");
+        fetch("/categories" )
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach(category => {
+                    displayCategories(category);
+                });
+            });
     } catch (error) {
         console.error("Falha ao buscar categorias:", error);
-        return [];
     }    
 }
 
-async function main() {
-
-    const categories = await getCategories();
-
-    if (categories.length > 0) {
-        displayCategories(categories);
-    }
+function main() {
+    getCategories();
+    
 }
 
 window.addEventListener("load", main);
