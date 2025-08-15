@@ -12,13 +12,15 @@ import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/subcategories")
@@ -68,6 +70,27 @@ public class SubcategoryController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    @GetMapping()
+    public ResponseEntity<List<SubcategoryResponseDto>> getAllSubcategories() {
+
+        List<Subcategory> allSubcategories = this.subcategoryRepository.findAll();
+        ArrayList<SubcategoryResponseDto> responseAllSubcategories = new ArrayList<>();
+
+        for (Subcategory subcategory : allSubcategories) {
+            SubcategoryResponseDto subcategoryResponse = new SubcategoryResponseDto(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getCategory().getId(),
+                subcategory.getIcon(),
+                this.fileStorageService.getPublicFileUrl(subcategory.getIcon())
+            );
+
+            responseAllSubcategories.add(subcategoryResponse);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseAllSubcategories);
     }
     
 }

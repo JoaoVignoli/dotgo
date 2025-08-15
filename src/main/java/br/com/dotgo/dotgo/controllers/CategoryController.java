@@ -5,21 +5,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dotgo.dotgo.dtos.CategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.CategoryResponseDto;
+import br.com.dotgo.dotgo.dtos.SubcategoryResponseDto;
 import br.com.dotgo.dotgo.entities.Category;
+import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.repositories.CategoryRepository;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
-
 
 @RestController
 @RequestMapping("/categories")
@@ -83,6 +85,33 @@ public class CategoryController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+    @GetMapping("/{categoryId}/subcategories")
+    public ResponseEntity<List<SubcategoryResponseDto>> getMethodName(@PathVariable Integer categoryId) {
+
+        Optional<Category> category = this.categoryRepository.findById(categoryId);
+
+        if (category.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        List<Subcategory> subcategories = category.get().getSubcategories();
+        ArrayList<SubcategoryResponseDto> responseList = new ArrayList<>();
+        
+        for (Subcategory subcategory : subcategories) {
+            SubcategoryResponseDto subcategoryResponseDto = new SubcategoryResponseDto(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getCategory().getId(),
+                subcategory.getIcon(),
+                this.fileStorageService.getPublicFileUrl(subcategory.getIcon())
+            );
+
+            responseList.add(subcategoryResponseDto);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
     
 }
