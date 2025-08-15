@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.dotgo.dotgo.dtos.CategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.SubcategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.SubcategoryResponseDto;
 import br.com.dotgo.dotgo.entities.Category;
@@ -18,11 +17,9 @@ import jakarta.validation.Valid;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
