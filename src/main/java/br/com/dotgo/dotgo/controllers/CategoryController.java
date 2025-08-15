@@ -1,9 +1,7 @@
 package br.com.dotgo.dotgo.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.CategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.CategoryResponseDto;
@@ -38,13 +36,8 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createNewCategory(
-        @RequestParam("file") MultipartFile categoryIcon,
         @ModelAttribute @Valid CategoryRequestDto categoryRequestDto
     ) {
-        // Validando se o icone é válido.
-        if (categoryIcon.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ícone da categoria não pode ser vazio.");
-        }
 
         // Criando categoria no banco de dados.
         Category newCategory = new Category();
@@ -53,7 +46,7 @@ public class CategoryController {
 
         // Salvando icon da categoria no MinIO seu caminho será o CATEGORY_ICON_FOLDER (Padrão) + ID do objeto no banco.
         String folderPathWithId = CATEGORY_ICON_FOLDER + "/" + savedCategory.getId();
-        String objectKey = this.fileStorageService.uploadFile(categoryIcon, folderPathWithId);
+        String objectKey = this.fileStorageService.uploadFile(categoryRequestDto.getIcon(), folderPathWithId);
 
         // Atualizando objeto no Banco de Dados com o caminho do arquivo no MinIO.
         savedCategory.setIcon(objectKey);

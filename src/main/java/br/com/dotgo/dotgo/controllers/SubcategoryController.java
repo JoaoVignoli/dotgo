@@ -1,9 +1,7 @@
 package br.com.dotgo.dotgo.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.SubcategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.SubcategoryResponseDto;
@@ -41,13 +39,8 @@ public class SubcategoryController {
 
     @PostMapping
     public ResponseEntity<?> createNewSubcategory(
-        @RequestParam("file") MultipartFile subcategoryIcon,
         @ModelAttribute @Valid SubcategoryRequestDto subcategoryRequestDto
     ) {
-        
-        if (subcategoryIcon.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ícone da subcategoria não pode ser vazio."); 
-        }
 
         Optional<Category> category = this.categoryRepository.findById(subcategoryRequestDto.getCategoryId());
         
@@ -59,7 +52,7 @@ public class SubcategoryController {
 
         String folderPathWithId = SUBCATEGORY_ICON_FOLDER + "/" + savedSubcategory.getId();
 
-        String objectKey = this.fileStorageService.uploadFile(subcategoryIcon, folderPathWithId);
+        String objectKey = this.fileStorageService.uploadFile(subcategoryRequestDto.getIcon(), folderPathWithId);
 
         savedSubcategory.setIcon(objectKey);
         this.subcategoryRepository.save(savedSubcategory);
