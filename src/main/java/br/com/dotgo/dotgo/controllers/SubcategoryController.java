@@ -1,0 +1,96 @@
+package br.com.dotgo.dotgo.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.dotgo.dotgo.dtos.SubcategoryRequestDto;
+import br.com.dotgo.dotgo.dtos.SubcategoryResponseDto;
+import br.com.dotgo.dotgo.entities.Category;
+import br.com.dotgo.dotgo.entities.Subcategory;
+import br.com.dotgo.dotgo.repositories.CategoryRepository;
+import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
+import br.com.dotgo.dotgo.services.FileStorageService;
+import jakarta.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@RestController
+@RequestMapping("/subcategories")
+public class SubcategoryController {
+
+    private final SubcategoryRepository subcategoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final FileStorageService fileStorageService;
+    private static final String SUBCATEGORY_ICON_FOLDER = "icons/subcategories";
+    
+    public SubcategoryController(
+        SubcategoryRepository subcategoryRepository, CategoryRepository categoryRepository, FileStorageService fileStorageService
+    ) {
+        this.subcategoryRepository = subcategoryRepository;
+        this.categoryRepository = categoryRepository;
+        this.fileStorageService = fileStorageService;
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createNewSubcategory(
+        @ModelAttribute @Valid SubcategoryRequestDto subcategoryRequestDto
+    ) {
+
+        Optional<Category> category = this.categoryRepository.findById(subcategoryRequestDto.getCategoryId());
+        
+        Subcategory newSubcategory = new Subcategory();
+        newSubcategory.setName(subcategoryRequestDto.getName());
+        newSubcategory.setCategory(category.get());
+
+        var savedSubcategory = this.subcategoryRepository.save(newSubcategory);
+
+        String folderPathWithId = SUBCATEGORY_ICON_FOLDER + "/" + savedSubcategory.getId();
+
+        String objectKey = this.fileStorageService.uploadFile(subcategoryRequestDto.getIcon(), folderPathWithId);
+
+        savedSubcategory.setIcon(objectKey);
+        this.subcategoryRepository.save(savedSubcategory);
+        
+        String iconUrl = this.fileStorageService.getPublicFileUrl(objectKey);
+
+        SubcategoryResponseDto response = new SubcategoryResponseDto(
+            savedSubcategory.getId(),
+            savedSubcategory.getName(),
+            savedSubcategory.getCategory().getId(),
+            savedSubcategory.getIcon(),
+            iconUrl
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    @GetMapping()
+    public ResponseEntity<List<SubcategoryResponseDto>> getAllSubcategories() {
+
+        List<Subcategory> allSubcategories = this.subcategoryRepository.findAll();
+        ArrayList<SubcategoryResponseDto> responseAllSubcategories = new ArrayList<>();
+
+        for (Subcategory subcategory : allSubcategories) {
+            SubcategoryResponseDto subcategoryResponse = new SubcategoryResponseDto(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getCategory().getId(),
+                subcategory.getIcon(),
+                this.fileStorageService.getPublicFileUrl(subcategory.getIcon())
+            );
+
+            responseAllSubcategories.add(subcategoryResponse);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseAllSubcategories);
+    }
+    
+}

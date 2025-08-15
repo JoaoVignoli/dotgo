@@ -4,13 +4,13 @@ body {
     padding-top: 1rem;
 }
 
-.botaoAcao {    
+.returnButton {    
     border: none;
     background-color: #FFFAF5;
     padding: 0px;
 }
 
-.botaoAcao:active {
+.returnButton:active {
     transform: translateY(1px);
 }
 
@@ -19,7 +19,7 @@ body {
     color: #0C0C0C;
 }
 
-.botaoContinuar {
+.nextButton {
     display:flex;
     align-items: center;
     justify-content: center;
@@ -35,7 +35,7 @@ body {
     margin-top: 1rem;
 }
 
-.botaoContinuar div {
+.nextButton div {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -43,11 +43,11 @@ body {
     gap: 8px;
 }
 
-.botaoContinuar:active {
+.nextButton:active {
     transform: translateY(1px);
 }
 
-.botaoContinuar:disabled {
+.nextButton:disabled {
     background-color: #555555;
     color: #999999;           
     opacity: 0.7;          

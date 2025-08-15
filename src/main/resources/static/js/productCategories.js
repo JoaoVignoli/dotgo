@@ -1,6 +1,6 @@
 function handleCategoryClick(event, categoryId) {
 
-    const nextButton = document.getElementById("botaoContinuar");
+    const nextButton = document.getElementById("nextButton");
 
     const allCategoryItems = document.querySelectorAll('.categorie-img');
     allCategoryItems.forEach(item => {
@@ -72,10 +72,10 @@ function getCategories() {
 function main() {
     getCategories();
 
-    const returnButton = document.getElementById("botaoRetorno");
+    const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
 
-    const nextButton = document.getElementById("botaoContinuar");
+    const nextButton = document.getElementById("nextButton");
     nextButton.addEventListener("click", nextStep);
 
 }

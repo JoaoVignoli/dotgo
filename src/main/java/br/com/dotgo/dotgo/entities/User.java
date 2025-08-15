@@ -27,7 +27,7 @@ public class User {
     private LocalDate created_at;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Address> adresses = new ArrayList<>();
+    List<Address> addresses = new ArrayList<>();
 
     public Integer getId() {
         return id;

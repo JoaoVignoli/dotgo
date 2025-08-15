@@ -1,27 +1,27 @@
 package br.com.dotgo.dotgo.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.CategoryRequestDto;
 import br.com.dotgo.dotgo.dtos.CategoryResponseDto;
+import br.com.dotgo.dotgo.dtos.SubcategoryResponseDto;
 import br.com.dotgo.dotgo.entities.Category;
+import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.repositories.CategoryRepository;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
-
 
 @RestController
 @RequestMapping("/categories")
@@ -38,22 +38,17 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createNewCategory(
-        @RequestParam("file") MultipartFile categoryIcon,
         @ModelAttribute @Valid CategoryRequestDto categoryRequestDto
     ) {
-        // Validando se o icone é válido.
-        if (categoryIcon.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ícone da categoria não pode ser vazio.");
-        }
 
         // Criando categoria no banco de dados.
         Category newCategory = new Category();
         newCategory.setName(categoryRequestDto.getName());
-        var savedCategory = this.categoryRepository.save(newCategory); 
+        var savedCategory = this.categoryRepository.save(newCategory);
 
         // Salvando icon da categoria no MinIO seu caminho será o CATEGORY_ICON_FOLDER (Padrão) + ID do objeto no banco.
         String folderPathWithId = CATEGORY_ICON_FOLDER + "/" + savedCategory.getId();
-        String objectKey = this.fileStorageService.uploadFile(categoryIcon, folderPathWithId);
+        String objectKey = this.fileStorageService.uploadFile(categoryRequestDto.getIcon(), folderPathWithId);
 
         // Atualizando objeto no Banco de Dados com o caminho do arquivo no MinIO.
         savedCategory.setIcon(objectKey);
@@ -69,7 +64,7 @@ public class CategoryController {
             iconUrl
         );
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     @GetMapping
@@ -90,6 +85,33 @@ public class CategoryController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+    @GetMapping("/{categoryId}/subcategories")
+    public ResponseEntity<List<SubcategoryResponseDto>> getMethodName(@PathVariable Integer categoryId) {
+
+        Optional<Category> category = this.categoryRepository.findById(categoryId);
+
+        if (category.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        List<Subcategory> subcategories = category.get().getSubcategories();
+        ArrayList<SubcategoryResponseDto> responseList = new ArrayList<>();
+        
+        for (Subcategory subcategory : subcategories) {
+            SubcategoryResponseDto subcategoryResponseDto = new SubcategoryResponseDto(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getCategory().getId(),
+                subcategory.getIcon(),
+                this.fileStorageService.getPublicFileUrl(subcategory.getIcon())
+            );
+
+            responseList.add(subcategoryResponseDto);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
     
 }

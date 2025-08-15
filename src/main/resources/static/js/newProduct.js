@@ -3,7 +3,7 @@ function addProduct() {
 }
 
 function main() {
-    const butonAddProduct = document.getElementById("botaoAdicionarProduto");
+    const butonAddProduct = document.getElementById("addProductButton");
     butonAddProduct.addEventListener("click", addProduct)
 }
 
