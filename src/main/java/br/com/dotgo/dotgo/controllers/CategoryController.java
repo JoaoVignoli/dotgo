@@ -49,7 +49,7 @@ public class CategoryController {
         // Criando categoria no banco de dados.
         Category newCategory = new Category();
         newCategory.setName(categoryRequestDto.getName());
-        var savedCategory = this.categoryRepository.save(newCategory); 
+        var savedCategory = this.categoryRepository.save(newCategory);
 
         // Salvando icon da categoria no MinIO seu caminho será o CATEGORY_ICON_FOLDER (Padrão) + ID do objeto no banco.
         String folderPathWithId = CATEGORY_ICON_FOLDER + "/" + savedCategory.getId();
@@ -69,7 +69,7 @@ public class CategoryController {
             iconUrl
         );
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     @GetMapping
