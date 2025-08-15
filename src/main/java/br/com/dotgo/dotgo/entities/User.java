@@ -25,7 +25,7 @@ public class User {
     private String specialty;
     private Boolean verified;
     private String biography;
-    private Date created_at;
+    private LocalDate created_at;
 
     public Integer getId() {
         return id;
@@ -123,7 +123,7 @@ public class User {
         this.biography = biography;
     }
 
-    public Date getCreated_at() {
+    public LocalDate getCreated_at() {
         return created_at;
     }
 
