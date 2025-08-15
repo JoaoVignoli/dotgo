@@ -4,6 +4,7 @@ import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.repositories.UserRepository;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class UserController {
 
 
     //POST para solicitar os dados pessoais de uma pessoa
+    @PostMapping
     public UserPersonalDataResponseDto cadastrarDadosPessoais(
             @RequestBody UserPersonalDataRequestDto request
             ) {
