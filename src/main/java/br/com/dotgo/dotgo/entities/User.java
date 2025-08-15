@@ -1,12 +1,11 @@
 package br.com.dotgo.dotgo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User {
@@ -25,7 +24,10 @@ public class User {
     private String specialty;
     private Boolean verified;
     private String biography;
-    private Date created_at;
+    private LocalDate created_at;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Address> adresses = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -123,7 +125,7 @@ public class User {
         this.biography = biography;
     }
 
-    public Date getCreated_at() {
+    public LocalDate getCreated_at() {
         return created_at;
     }
 
