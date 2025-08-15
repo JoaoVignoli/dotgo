@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>New Product</title>
+    <title>Novo Produto</title>
     <link rel="stylesheet" href="./css/newProduct.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
@@ -17,7 +17,7 @@
 
 <body>
     <header>
-        <button class="botaoAcao" id="botaoRetorno">
+        <button class="actionButton" id="returnButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="currentcolor"
                 style="color: #0C0C0C">
                 <path
@@ -27,7 +27,7 @@
         <H1 class="title">Produtos:</H1>
     </header>
     <div class="product-list">
-        <button class="botaoAcao" id="botaoAdicionarProduto">
+        <button class="actionButton" id="addProductButton">
             <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="currentColor"
                 style="color: #0C0C0C">
                 <path
@@ -37,14 +37,9 @@
         </button>
     </div>
     <div>
-        <button class="botaoContinuar" id="botaoContinuar">
-            <div class="conteúdoBotaoContinuar">
-                <span>Próximo</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
-                    style="color: #E6E6E6;">
-                    <path
-                        d="M2.62509 12C2.62509 11.7016 2.74362 11.4155 2.9546 11.2045C3.16557 10.9935 3.45172 10.875 3.75009 10.875H17.5313L12.7013 6.04593C12.49 5.83459 12.3713 5.54794 12.3713 5.24906C12.3713 4.95017 12.49 4.66353 12.7013 4.45218C12.9127 4.24084 13.1993 4.1221 13.4982 4.1221C13.7971 4.1221 14.0837 4.24084 14.2951 4.45218L21.0451 11.2022C21.15 11.3067 21.2332 11.4309 21.29 11.5676C21.3467 11.7044 21.376 11.851 21.376 11.9991C21.376 12.1471 21.3467 12.2937 21.29 12.4305C21.2332 12.5672 21.15 12.6914 21.0451 12.7959L14.2951 19.5459C14.1904 19.6506 14.0662 19.7336 13.9295 19.7902C13.7928 19.8469 13.6462 19.876 13.4982 19.876C13.3502 19.876 13.2037 19.8469 13.0669 19.7902C12.9302 19.7336 12.806 19.6506 12.7013 19.5459C12.5967 19.4413 12.5137 19.317 12.457 19.1803C12.4004 19.0436 12.3713 18.897 12.3713 18.7491C12.3713 18.6011 12.4004 18.4545 12.457 18.3178C12.5137 18.1811 12.5967 18.0568 12.7013 17.9522L17.5313 13.125H3.75009C3.45172 13.125 3.16557 13.0065 2.9546 12.7955C2.74362 12.5845 2.62509 12.2984 2.62509 12Z" />
-                </svg>
+        <button disabled class="finishButton" id="finishButton">
+            <div>
+                <span>Finalizar</span>
             </div>
         </button>
     </div>

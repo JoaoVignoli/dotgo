@@ -1,5 +1,5 @@
 function getSubcategories() {
-    
+
 }
 
 function nextStep() {
@@ -13,10 +13,10 @@ function returnWindow() {
 function main() {
     getSubcategories();
 
-    const returnButton = document.getElementById("botaoRetorno");
+    const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
 
-    const nextButton = document.getElementById("botaoContinuar");
+    const nextButton = document.getElementById("nextButton");
     nextButton.addEventListener("click", nextStep);
 
 }
