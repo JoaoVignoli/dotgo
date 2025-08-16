@@ -20,7 +20,7 @@ function nextStep() {
 }
 
 function returnWindow() {
-    window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
+    history.back();
 }
 
 function displayCategories(category) {
@@ -42,7 +42,7 @@ function displayCategories(category) {
 
     const imgElement = document.createElement('img');
     imgElement.src = category.iconUrl; 
-    imgElement.alt = `Ícone da categoria ${category.name}`; 
+    imgElement.alt = "Ícone da categoria " + category.name; 
 
     const spanElement = document.createElement('span');
     spanElement.textContent = category.name;
