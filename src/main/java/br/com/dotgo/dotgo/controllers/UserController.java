@@ -22,10 +22,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-
-
-
-    //POST para solicitar os dados pessoais de uma pessoa
+    //POST para postar os dados pessoais de uma pessoa
     @PostMapping
     public UserPersonalDataResponseDto cadastrarDadosPessoais(
             @RequestBody UserPersonalDataRequestDto request
