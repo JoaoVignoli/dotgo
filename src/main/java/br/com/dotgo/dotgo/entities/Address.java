@@ -17,7 +17,7 @@ public class Address {
     private String city;
     private String state;
     private Integer cep;
-    private Integer adress_number;
+    private Integer address_number;
     private String observation;
     private String complement;
 
@@ -77,12 +77,12 @@ public class Address {
         this.cep = cep;
     }
 
-    public Integer getAdress_number() {
-        return adress_number;
+    public Integer getAddress_number() {
+        return address_number;
     }
 
-    public void setAdress_number(Integer adress_number) {
-        this.adress_number = adress_number;
+    public void setAddress_number(Integer address_number) {
+        this.address_number = address_number;
     }
 
     public String getObservation() {

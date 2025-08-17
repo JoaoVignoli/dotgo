@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/cadastroUsuario")
+@RequestMapping("/usuario")
 public class UserController {
 
     private final UserRepository userRepository;

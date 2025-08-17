@@ -20,7 +20,7 @@ public class AddressResponseDto {
         this.city = address.getCity();
         this.state = address.getState();
         this.cep = address.getCep();
-        this.address_number = address.getAdress_number();
+        this.address_number = address.getAddress_number();
         this.complement = address.getComplement();
         this.user = address.getUser();
     }
