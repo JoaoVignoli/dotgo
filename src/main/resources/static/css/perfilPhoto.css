@@ -1,3 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    flex-grow: 1;
+}
+
+.divImagemPerfil {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding-top: 60px;
+    box-sizing: border-box;
+}
+
+.imagemPerfil {
+    width: 335px;
+    height: 335px; 
+    border-radius: 50%;
+    background-color: #d9d9d9;
+
+}
+
 .divBotoesInsercoes {
     display: flex;
     flex-direction: row;
@@ -11,12 +35,16 @@
     border-radius: 25px;
     border: none;
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     font-family: "DM Sans", sans-serif;
     font-size: 20px;
     font-weight: bold;
     background-color: #d9d9d9;
     box-shadow: 0px 4px 4px 1px #00000040;
+}
+
+.botaoInsercao:active {
+    transform: translateY(1px);
 }
