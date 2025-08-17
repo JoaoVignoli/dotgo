@@ -1,21 +1,102 @@
-body {
-    background-color: #FFFAF5;
-    height: 100vh;
-    padding-top: 1rem;
+/* Estilo para a tela: */
+
+:root {
+    --backgroud-color: #FFFAF5;
+    --fonts-family: "DM Sans", sans-serif;
+    --black-color: #0C0C0C;
+    --page-title-size: x-large;
 }
 
-.title {
-    font-family: "DM Sans", sans-serif;
-    color: #0C0C0C;
+html, body {
+    background-color: var(--backgroud-color);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--fonts-family)
 }
+
+header {
+    flex-shrink: 0;
+}
+
+.page-title {
+    font-size: var(--page-title-size);
+    color: var(--black-color);
+    margin: 0.5rem 0;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.app-footer {
+    flex-shrink: 0;
+    padding-bottom: 0.5rem;
+}
+
+.action-button {    
+    border: none;
+    background-color: var(--backgroud-color);
+    padding: 0px;
+}
+
+.action-button:active {
+    transform: translateY(1px);
+}
+
+.finish-button {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 57px;
+    border-radius: 16px;
+    font-size: 18px;
+    color: #E6E6E6;
+    background-color: var(--black-color);
+    position: relative;
+}
+
+.finish-button div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.finish-button:active {
+    transform: translateY(1px);
+}
+
+.finish-button:disabled {
+    background-color: #555555;
+    color: #999999;           
+    opacity: 0.7;          
+}
+
+.selected {
+    transform: translateY(1px);
+    border: 3px solid var(--black-color);
+}
+
+/* ----- */
 
 .product-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 72%;
-    overflow: scroll;
+    flex-grow: 1; 
+    overflow-y: auto;
+    width: 100%;
+    justify-content: space-around;
+    gap: 5px;
+    padding-left: 0.5rem;
+    box-sizing: border-box;
+    padding-right: 0.5rem;
 }
 
 .product {
@@ -67,69 +148,4 @@ body {
     font-size: medium;
     font-weight: bold;
     color: #40BF72;
-}
-
-.actionsButtons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.7rem;
-    position: relative;
-}
-
-.actionButton {    
-    border: none;
-    background-color: #FFFAF5;
-    padding: 0px;
-}
-
-.actionButton:active {
-    transform: translateY(1px);
-}
-
-#addProductButton {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    padding: 1rem 0;
-    font-size: x-large;
-    font-weight: bold;
-    font-family: "DM Sans", sans-serif;
-    color: #0C0C0C;
-}
-
-.finishButton {
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 57px;
-    border-radius: 16px;
-    font-family: "DM Sans", sans-serif;
-    font-size: 18px;
-    color: #E6E6E6;
-    background-color: #0C0C0C;
-    position: relative;
-    border-color: none;
-    margin-top: 1rem;
-}
-
-.finishButton div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.finishButton:active {
-    transform: translateY(1px);
-}
-
-.finishButton:disabled {
-    background-color: #555555;
-    color: #999999;           
-    opacity: 0.7;          
 }
