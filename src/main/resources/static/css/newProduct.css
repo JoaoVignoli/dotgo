@@ -38,13 +38,13 @@ header {
     padding-bottom: 0.5rem;
 }
 
-.return-button {    
+.action-button {    
     border: none;
     background-color: var(--backgroud-color);
     padding: 0px;
 }
 
-.return-button:active {
+.action-button:active {
     transform: translateY(1px);
 }
 
