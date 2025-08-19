@@ -8,13 +8,15 @@
 }
 
 .container {
-    padding-left: 16px;
+    height: 35%;
+    width: 100%;
     display: inline-block;
 }
 
 .titulo {
     height: 38px;
     margin-top: 36px;
+    padding-left: 16px;
     font-family: "DM Sans", sans-serif;
     font-weight: bold;
     font-size: 32px;
@@ -22,7 +24,7 @@
 }
 
 .descricao {
-    margin-top: 146px;;
+    padding-left: 16px;
     font-family: "DM Sans", sans-serif;
     font-size: 18px;
     color: #666666;
@@ -61,4 +63,8 @@
     font-size: 18px;
     color: #E6E6E6;
     background-color: #0C0C0C;
+}
+
+.botaoDeContinuacao:active {
+    transform: translateY(1px);
 }

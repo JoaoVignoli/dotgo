@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:  # Serviço do Banco de Dados
+  db:
+    image: postgres:16.3-alpine
+    container_name: dotgo-db
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} 
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - dotgo-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d {POSTGRES_DB}"]
+      interval: 5s    # Verifica a cada 5 segundos
+      timeout: 5s     # Considera falha se o comando demorar mais de 5s
+      retries: 10     # Tenta 10 vezes antes de marcar como "unhealthy"
+    networks:
+      - dotgo-net
+
+  app:
+    build: .
+    container_name: dotgo-app
+    restart: always
+    ports:
+      - "${APP_PORT}:8080" 
+    depends_on:
+      db: # Garante que o banco de dados inicie antes da aplicação
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      # Configuração do S3/MinIO
+      - S3_ENDPOINT=${MINIO_URL}
+      - S3_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      - S3_ACCESS_KEY=${MINIO_USER}
+      - S3_SECRET_KEY=${MINIO_PASSWORD}
+      - S3_REGION=us-east-1
+    networks:
+      - dotgo-net
+  
+  tunnel:
+    image: cloudflare/cloudflared:1755-08efe4c10307
+    container_name: dotgo-tunnel
+    restart: always
+    depends_on:
+      - app
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - dotgo-net
+
+  # Serviço principal do MinIO (Simulador do S3)
+  minio:
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z
+    container_name: minio_s3_server
+    restart: always
+    ports:
+      - "9000:9000" # Porta da API S3
+      - "9001:9001" # Porta do Console Web do MinIO
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER} # Equivalente ao seu AWS Access Key ID
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD} # Equivalente ao seu AWS Secret Access Key
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - dotgo-net
+
+  # Serviço para criar o bucket inicial automaticamente
+  create-buckets:
+    image: minio/mc:RELEASE.2025-07-21T05-28-08Z
+    container_name: minio_create_buckets
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      - MINIO_USER=${MINIO_USER}
+      - MINIO_PASSWORD=${MINIO_PASSWORD}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      - MINIO_URL=${MINIO_URL}
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Aguardando o MinIO iniciar...';
+      sleep 5;
+
+      echo 'Configurando o alias para o MinIO local...';
+      /usr/bin/mc alias set local ${MINIO_URL} ${MINIO_USER} ${MINIO_PASSWORD};
+      
+      echo 'Criando o bucket...';
+      /usr/bin/mc mb local/${MINIO_BUCKET_NAME} --ignore-existing;
+      
+      echo 'Definindo a política do bucket como download (leitura pública)...';
+      /usr/bin/mc anonymous set download local/${MINIO_BUCKET_NAME};
+      
+      echo \"Bucket '${MINIO_BUCKET_NAME}' criado com sucesso!\";
+      exit 0;
+      "
+    networks:
+      - dotgo-net
+
+volumes:
+  dotgo-data:
+  minio_data:
+
+networks:
+  dotgo-net:
+    name: dotgo-network

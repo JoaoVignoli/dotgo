@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Code</title>
+    <link rel="stylesheet" href="./css/default.css">
+    <link rel="stylesheet" href="./css/newProduct.css">
+    <link rel="stylesheet" href="./css/verificationCode.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+    </style>
+</head>
+
+<body class="body">
+
+    <header class="header">
+        <button class="botaoAcao" id="botaoRetorno">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="currentcolor"
+                style="color: #1A1A1A">
+                <path
+                    d="M26.7188 15C26.7188 15.373 26.5706 15.7306 26.3069 15.9944C26.0432 16.2581 25.6855 16.4063 25.3125 16.4063H8.08595L14.1234 22.4426C14.3876 22.7068 14.536 23.0651 14.536 23.4387C14.536 23.8123 14.3876 24.1706 14.1234 24.4348C13.8593 24.6989 13.501 24.8474 13.1274 24.8474C12.7537 24.8474 12.3954 24.6989 12.1313 24.4348L3.69376 15.9973C3.56266 15.8666 3.45864 15.7114 3.38766 15.5404C3.31669 15.3695 3.28015 15.1863 3.28015 15.0012C3.28015 14.8161 3.31669 14.6328 3.38766 14.4619C3.45864 14.291 3.56266 14.1357 3.69376 14.0051L12.1313 5.56758C12.2621 5.43677 12.4174 5.33301 12.5883 5.26221C12.7592 5.19142 12.9424 5.15498 13.1274 5.15498C13.3123 5.15498 13.4955 5.19142 13.6664 5.26221C13.8373 5.33301 13.9926 5.43677 14.1234 5.56758C14.2543 5.69839 14.358 5.85368 14.4288 6.02459C14.4996 6.1955 14.536 6.37868 14.536 6.56367C14.536 6.74866 14.4996 6.93184 14.4288 7.10275C14.358 7.27366 14.2543 7.42896 14.1234 7.55977L8.08595 13.5938H25.3125C25.6855 13.5938 26.0432 13.7419 26.3069 14.0056C26.5706 14.2694 26.7188 14.627 26.7188 15Z" />
+            </svg>
+        </button>
+    </header>
+
+    <div class="container">
+        <div>
+            <h2 class="titulo">
+                Código de 4 dígitos:
+            </h2>
+            <p class="descricao">
+                Digite o código de 4 dígitos que você recebeu em seu e-mail
+                <span class="emailEmPreto">
+                    (cody.fisher45@example.com)
+                </span>
+            </p>
+        </div>
+
+        <form class="verificationCodeForm">
+            <input class="inputVerificationCode" type="number" placeholder="0">
+            <input class="inputVerificationCode" type="number" placeholder="0">
+            <input class="inputVerificationCode" type="number" placeholder="0">
+            <input class="inputVerificationCode" type="number" placeholder="0">
+        </form>
+
+
+
+        <div class="containerReenvio">
+            <span class="descricao">
+                Não recebeu um código?
+                <button class="reenviar">
+                    Reenviar
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div>
+        <button class="botaoContinuar">
+            Continuar
+        </button>
+    </div>
+
+
+</body>
+
+</html>

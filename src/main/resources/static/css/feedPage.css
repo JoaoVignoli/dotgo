@@ -10,6 +10,12 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #FFFAF5;
+  height: 52rem;
+  padding-top: 1rem;
+  overflow: hidden;
+}
 
 .logo {
   font-size: 30px;
@@ -212,5 +218,9 @@
   color: #000;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6ea8384e41a63002a934a28cf9cf28c5095f4ed0
 
 
