@@ -1,6 +1,7 @@
 package br.com.dotgo.dotgo.dtos;
 
 import br.com.dotgo.dotgo.entities.User;
+import br.com.dotgo.dotgo.enums.UserRole;
 
 import java.util.Date;
 
@@ -8,16 +9,16 @@ public class UserPersonalDataResponseDto {
 
     private String name;
     private String email;
-    private String tax_id;
+    private String taxId;
     private String phone;
     private String password;
     private Date birthday;
-    private String role;
+    private UserRole role;
 
     public UserPersonalDataResponseDto(User user) {
         this.name = user.getName();
         this.email = user.getEmail();
-        this.tax_id = user.getTax_id();
+        this.taxId = user.getTax_id();
         this.phone = user.getPhone();
         this.password = user.getPassword();
         this.birthday = user.getBirthday();
@@ -40,13 +41,13 @@ public class UserPersonalDataResponseDto {
         return phone;
     }
 
-    public String getTax_id() {
-        return tax_id;
+    public String getTaxId() {
+        return taxId;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getRole() { return role; }
+    public UserRole getRole() { return role; }
 }

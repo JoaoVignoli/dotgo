@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.dotgo.dotgo.enums.UserRole;
+
 @Entity
 public class User {
 
@@ -14,17 +16,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String tax_id;
+    private String taxId;
     private String email;
     private String phone;
     private Date birthday;
     private String password;
     private String picture;
-    private String role;
+    private UserRole role;
     private String specialty;
     private Boolean verified;
     private String biography;
-    private LocalDate created_at;
+    private LocalDate createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Address> addresses = new ArrayList<>();
@@ -46,11 +48,11 @@ public class User {
     }
 
     public String getTax_id() {
-        return tax_id;
+        return taxId;
     }
 
     public void setTax_id(String tax_id) {
-        this.tax_id = tax_id;
+        this.taxId = tax_id;
     }
 
     public String getEmail() {
@@ -93,11 +95,11 @@ public class User {
         this.picture = picture;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -126,11 +128,11 @@ public class User {
     }
 
     public LocalDate getCreated_at() {
-        return created_at;
+        return createdAt;
     }
 
     public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
+        this.createdAt = created_at;
     }
 
 }

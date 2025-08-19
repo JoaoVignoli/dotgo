@@ -1,7 +1,5 @@
 package br.com.dotgo.dotgo.dtos;
 
-import br.com.dotgo.dotgo.entities.User;
-
 public class AddressRequestDto {
 
     private String street;
