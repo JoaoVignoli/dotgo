@@ -2,17 +2,19 @@ package br.com.dotgo.dotgo.dtos;
 
 import java.util.Date;
 
+import br.com.dotgo.dotgo.enums.UserRole;
+
 public class UserPersonalDataRequestDto {
 
     private String name;
     private String email;
-    private String tax_id;
+    private String taxId;
     private String phone;
     private String password;
     private Date birthday;
-    private String role;
+    private UserRole role;
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
@@ -24,8 +26,8 @@ public class UserPersonalDataRequestDto {
         return email;
     }
 
-    public String getTax_id() {
-        return tax_id;
+    public String getTaxId() {
+        return taxId;
     }
 
     public String getPhone() {
