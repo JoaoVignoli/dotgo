@@ -3,7 +3,7 @@ function returnWindow() {
 }
 
 function nextStep() {
-    window.location.href = "https://dotgo.vignoli.dev.br/productSubcategories";
+    window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
 }
 
 function main() {
