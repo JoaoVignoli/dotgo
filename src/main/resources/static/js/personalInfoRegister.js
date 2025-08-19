@@ -6,6 +6,8 @@ function nextStep() {
     window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
 }
 
+
+
 function main() {
 
     const returnButton = document.getElementById("returnButton");

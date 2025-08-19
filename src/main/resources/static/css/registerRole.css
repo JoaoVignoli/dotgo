@@ -1,0 +1,13 @@
+.buttonContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.roleButton {
+
+}
+
+.roleCategory {
+    font-family: "DM Sans", sans-serif;
+}
