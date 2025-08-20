@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login", "/users/register", "/home", "/login", "/mainFeed.html").permitAll()  
+                .requestMatchers("/auth/login", "/users/register", "/home", "/login", "/mainFeed.html", "/css/**", "/js/**").permitAll()  
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
