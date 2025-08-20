@@ -1,4 +1,24 @@
 
+function registerAddress() {
+    const cep = document.getElementById("cep");
+    const street = document.getElementById("street");
+    const neighborhood = document.getElementById("neighborhood");
+    const city = document.getElementById("city"); 
+    const state = document.getElementById("state"); 
+    const addressNumber = document.getElementById("addressNumber"); 
+    const complement = document.getElementById("complement");
+
+    const addressData = {
+        "cep": cep.value,
+        "street": street.value,
+        "neighborhood": neighborhood.value,
+        "city": city.value,
+        "state": state.value,
+        "addressNumber": addressNumber.value,
+        "complement": complement.value
+    }
+}
+
 function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
@@ -15,10 +35,6 @@ function personalInfoRegister() {
         "password": password.value,
         "birthday": birthday.value
     }
-}
-
-function registerAddress() {
-
 }
 
 function nextStep() {
