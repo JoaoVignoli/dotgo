@@ -1,6 +1,3 @@
-function returnWindow() {
-    history.back();
-}
 
 function nextStep() {
     const name = document.getElementById("name");
@@ -20,6 +17,32 @@ function nextStep() {
     }
 
     window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+}
+
+function nextStep() {
+    switch (window.location.pathname) {
+        case "/personalInfoRegister":
+            window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+            break;
+        case "/addressRegister":
+            window.location.href = 
+            break;
+    }
+    window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
+}
+
+function registerClient() {
+    localStorage.setItem("userRole", "CLIENT");
+    nextStep();
+}
+
+function registerServiceHolder() {
+    localStorage.setItem("userRole", "SERVICE_HOLDER");
+    nextStep();
+}
+
+function returnWindow() {
+    history.back();
 }
 
 function main() {
