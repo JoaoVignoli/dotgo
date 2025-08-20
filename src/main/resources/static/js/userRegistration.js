@@ -1,5 +1,5 @@
 
-function nextStep() {
+function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
     const taxId = document.getElementById("taxId");
@@ -7,7 +7,7 @@ function nextStep() {
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
 
-    const data = {
+    const userData = {
         "name": name.value,
         "email": email.value,
         "taxId": taxId.value,
@@ -15,20 +15,35 @@ function nextStep() {
         "password": password.value,
         "birthday": birthday.value
     }
+}
 
-    window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+function registerAddress() {
+
 }
 
 function nextStep() {
     switch (window.location.pathname) {
+        case "/registerRole":
+            window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
+            break;
         case "/personalInfoRegister":
+            personalInfoRegister();
             window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
             break;
         case "/addressRegister":
-            window.location.href = 
+            registerAddress();
+            window.location.href = "https://dotgo.vignoli.dev.br/perfilPhoto";
             break;
+        case "/perfilPhoto":
+            if ("userRole" == "SERVICE_HOLDER") {
+                window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
+            } else {
+                window.location.href = "https://dotgo.vignoli.dev.br/home";
+            }
+            break;
+        default:
+            window.location.href = "https://dotgo.vignoli.dev.br/registerRole";
     }
-    window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
 }
 
 function registerClient() {
