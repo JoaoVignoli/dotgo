@@ -85,10 +85,24 @@ function main() {
     nextButton.addEventListener("click", nextStep);
 
     const clientRoleButton = document.getElementById("clientRoleButton");
-    clientRoleButton.addEventListener("click", registerClient)
+    clientRoleButton?.addEventListener("click", registerClient)
 
     const serviceHolderRoleButton = document.getElementById("serviceHolderRoleButton");
-    serviceHolderRoleButton.addEventListener("click", registerServiceHolder);
+    serviceHolderRoleButton?.addEventListener("click", registerServiceHolder);
+
+    const openGalary = document.getElementById("openGalary");
+    const inputImagem = document.getElementById("galaryPhoto");
+    openGalary.addEventListener("click", () => {
+        inputImagem.click();
+    });
+
+    inputImagem.addEventListener("change", () => {
+        const file = inputImagem.files[0];
+
+        document.getElementById("photoExibition").src = URL.createObjectURL(file);
+    });
+
+
 }
 
 window.addEventListener("load", main);
