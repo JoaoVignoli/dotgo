@@ -37,6 +37,20 @@ function personalInfoRegister() {
     }
 }
 
+function registerClient() {
+    localStorage.setItem("userRole", "CLIENT");
+    nextStep();
+}
+
+function registerServiceHolder() {
+    localStorage.setItem("userRole", "SERVICE_HOLDER");
+    nextStep();
+}
+
+function returnWindow() {
+    history.back();
+}
+
 function nextStep() {
     switch (window.location.pathname) {
         case "/registerRole":
@@ -58,20 +72,6 @@ function nextStep() {
             }
             break;
     }
-}
-
-function registerClient() {
-    localStorage.setItem("userRole", "CLIENT");
-    nextStep();
-}
-
-function registerServiceHolder() {
-    localStorage.setItem("userRole", "SERVICE_HOLDER");
-    nextStep();
-}
-
-function returnWindow() {
-    history.back();
 }
 
 function main() {
