@@ -28,6 +28,7 @@ function personalInfoRegister() {
     const birthday = document.getElementById("birthday");
 
     const userData = {
+        "role": localStorage.getItem("userRole"),
         "name": name.value,
         "email": email.value,
         "taxId": taxId.value,
@@ -35,6 +36,22 @@ function personalInfoRegister() {
         "password": password.value,
         "birthday": birthday.value
     }
+
+    fetch("/users", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+    })
+    .then((data) => data.json())
+    .then((response) => {
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+        alert("Erro ao cadastrar dados")
+    });
 }
 
 function returnWindow() {
