@@ -19,11 +19,6 @@ function registerAddress() {
     }
 }
 
-function formatDateToSQL(birthday) {
-    const [day, month, year] = birthday.split("/");
-    return `${year}/${month}/${day}`;
-}
-
 function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
