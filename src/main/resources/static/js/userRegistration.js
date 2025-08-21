@@ -1,8 +1,25 @@
-function returnWindow() {
-    history.back();
+
+function registerAddress() {
+    const cep = document.getElementById("cep");
+    const street = document.getElementById("street");
+    const neighborhood = document.getElementById("neighborhood");
+    const city = document.getElementById("city"); 
+    const state = document.getElementById("state"); 
+    const addressNumber = document.getElementById("addressNumber"); 
+    const complement = document.getElementById("complement");
+
+    const addressData = {
+        "cep": cep.value,
+        "street": street.value,
+        "neighborhood": neighborhood.value,
+        "city": city.value,
+        "state": state.value,
+        "addressNumber": addressNumber.value,
+        "complement": complement.value
+    }
 }
 
-function nextStep() {
+function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
     const taxId = document.getElementById("taxId");
@@ -10,7 +27,7 @@ function nextStep() {
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
 
-    const data = {
+    const userData = {
         "name": name.value,
         "email": email.value,
         "taxId": taxId.value,
@@ -18,8 +35,43 @@ function nextStep() {
         "password": password.value,
         "birthday": birthday.value
     }
+}
 
-    window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+function nextStep() {
+    switch (window.location.pathname) {
+        case "/registerRole":
+            window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
+            break;
+        case "/personalInfoRegister":
+            personalInfoRegister();
+            window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+            break;
+        case "/addressRegister":
+            registerAddress();
+            window.location.href = "https://dotgo.vignoli.dev.br/perfilPhoto";
+            break;
+        case "/perfilPhoto":
+            if ("userRole" == "SERVICE_HOLDER") {
+                window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
+            } else {
+                window.location.href = "https://dotgo.vignoli.dev.br/home";
+            }
+            break;
+    }
+}
+
+function registerClient() {
+    localStorage.setItem("userRole", "CLIENT");
+    nextStep();
+}
+
+function registerServiceHolder() {
+    localStorage.setItem("userRole", "SERVICE_HOLDER");
+    nextStep();
+}
+
+function returnWindow() {
+    history.back();
 }
 
 function main() {
@@ -31,10 +83,24 @@ function main() {
     nextButton.addEventListener("click", nextStep);
 
     const clientRoleButton = document.getElementById("clientRoleButton");
-    clientRoleButton.addEventListener("click", registerClient)
+    clientRoleButton?.addEventListener("click", registerClient)
 
     const serviceHolderRoleButton = document.getElementById("serviceHolderRoleButton");
-    serviceHolderRoleButton.addEventListener("click", registerServiceHolder);
+    serviceHolderRoleButton?.addEventListener("click", registerServiceHolder);
+
+    const openGalary = document.getElementById("openGalary");
+    const inputImagem = document.getElementById("galaryPhoto");
+    openGalary.addEventListener("click", () => {
+        inputImagem.click();
+    });
+
+    inputImagem.addEventListener("change", () => {
+        const file = inputImagem.files[0];
+
+        document.getElementById("photoExibition").src = URL.createObjectURL(file);
+    });
+
+
 }
 
 window.addEventListener("load", main);
