@@ -57,8 +57,6 @@ function nextStep() {
                 window.location.href = "https://dotgo.vignoli.dev.br/home";
             }
             break;
-        default:
-            window.location.href = "https://dotgo.vignoli.dev.br/registerRole";
     }
 }
 
