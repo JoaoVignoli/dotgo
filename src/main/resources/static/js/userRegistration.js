@@ -37,16 +37,6 @@ function personalInfoRegister() {
     }
 }
 
-function registerClient() {
-    localStorage.setItem("userRole", "CLIENT");
-    nextStep();
-}
-
-function registerServiceHolder() {
-    localStorage.setItem("userRole", "SERVICE_HOLDER");
-    nextStep();
-}
-
 function returnWindow() {
     history.back();
 }
@@ -54,6 +44,7 @@ function returnWindow() {
 function nextStep() {
     switch (window.location.pathname) {
         case "/registerRole":
+            console.log("Funciona");
             window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
             break;
         case "/personalInfoRegister":
@@ -74,13 +65,23 @@ function nextStep() {
     }
 }
 
+function registerClient() {
+    localStorage.setItem("userRole", "CLIENT");
+    nextStep();
+}
+
+function registerServiceHolder() {
+    localStorage.setItem("userRole", "SERVICE_HOLDER");
+    nextStep();
+}
+
 function main() {
 
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
 
     const nextButton = document.getElementById("nextButton");
-    nextButton.addEventListener("click", nextStep);
+    nextButton?.addEventListener("click", nextStep);
 
     const clientRoleButton = document.getElementById("clientRoleButton");
     clientRoleButton?.addEventListener("click", registerClient)
@@ -90,11 +91,11 @@ function main() {
 
     const openGalary = document.getElementById("openGalary");
     const inputImagem = document.getElementById("galaryPhoto");
-    openGalary.addEventListener("click", () => {
+    openGalary?.addEventListener("click", () => {
         inputImagem.click();
     });
 
-    inputImagem.addEventListener("change", () => {
+    inputImagem?.addEventListener("change", () => {
         const file = inputImagem.files[0];
 
         document.getElementById("photoExibition").src = URL.createObjectURL(file);
