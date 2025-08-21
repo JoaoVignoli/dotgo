@@ -154,7 +154,7 @@ header {
 
 /* Esconde o modal */
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 /* Fundo escurecido que cobre a tela inteira */

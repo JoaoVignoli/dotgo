@@ -1,6 +1,6 @@
 function closeModal() {
     const modal = document.getElementById("add-product-modal");
-    modal.classList.add("hidden")
+    modal.classList.remove("modal-overlay")
 
     localStorage.removeItem("userId");
     localStorage.removeItem("userSelectedSubcategoryId")
@@ -9,7 +9,7 @@ function closeModal() {
 
 function showModal() {
     const modal = document.getElementById("add-product-modal");
-    modal.classList.remove("hidden")
+    modal.classList.add("hidden")
 }
 
 function returnWindow() {
