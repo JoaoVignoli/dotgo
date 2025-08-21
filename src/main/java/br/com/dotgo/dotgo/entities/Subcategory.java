@@ -24,7 +24,8 @@ public class Subcategory {
     private Category category;
 
     @OneToMany(mappedBy = "subcategory", cascade=CascadeType.ALL)
-    private List<ProductAssigment> productAssigments = new ArrayList<>();
+    private List<ProductAssignment> productAssignments = new ArrayList<>();
+
 
     public Integer getId() {
         return id;

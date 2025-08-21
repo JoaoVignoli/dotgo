@@ -8,7 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class ProductAssigment {
+public class ProductAssignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,6 +18,9 @@ public class ProductAssigment {
     @ManyToOne
     @JoinColumn(name = "service_holder_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public Integer getId() {
         return id;
@@ -41,6 +44,14 @@ public class ProductAssigment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

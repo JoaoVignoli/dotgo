@@ -2,20 +2,24 @@ package br.com.dotgo.dotgo.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.ProductCreateDto;
 import br.com.dotgo.dotgo.entities.Product;
-import br.com.dotgo.dotgo.entities.ProductAssigment;
+import br.com.dotgo.dotgo.entities.ProductAssignment;
+import br.com.dotgo.dotgo.entities.ProductPicture;
 import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.entities.User;
-import br.com.dotgo.dotgo.repositories.ProductAssigmentRepository;
+import br.com.dotgo.dotgo.repositories.ProductAssignmentRepository;
 import br.com.dotgo.dotgo.repositories.ProductPictureRepository;
 import br.com.dotgo.dotgo.repositories.ProductRepository;
 import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
+import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,21 +35,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private final ProductAssigmentRepository productAssigmentRepository;
+    private final ProductAssignmentRepository productAssigmentRepository;
     private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
     private final SubcategoryRepository subcategoryRepository;
-    private static final String CATEGORY_PICTURES_FOLDER = "pictures/products"; 
+    private final FileStorageService fileStorageService;
+    private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products"; 
 
     public ProductController(
-        ProductRepository productRepository, ProductAssigmentRepository productAssigmentRepository, 
-        ProductPictureRepository productPictureRepository, UserRepository userRepository, SubcategoryRepository subcategoryRepository
+        ProductRepository productRepository, ProductAssignmentRepository productAssigmentRepository, 
+        ProductPictureRepository productPictureRepository, UserRepository userRepository, 
+        SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
     ) {
         this.productRepository = productRepository;
         this.productAssigmentRepository = productAssigmentRepository;
         this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
         this.subcategoryRepository = subcategoryRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping
@@ -79,9 +86,40 @@ public class ProductController {
         newProduct.setTimeToBeAgreed(productCreateDto.getTimeToBeAgreed());
         newProduct.setCreatedAt(LocalDateTime.now());
 
-        var savedProduct = this.productRepository.save(newProduct);
+        var productSaved = this.productRepository.save(newProduct);
 
-        ProductAssigment newProductAssigment = new ProductAssigment();
+        ProductAssignment newProductAssigment = new ProductAssignment();
+        newProductAssigment.setSubcategory(subcategory.get());
+        newProductAssigment.setUser(serviceHolder.get());
+        newProductAssigment.setProduct(productSaved);
+
+        this.productAssigmentRepository.save(newProductAssigment);
+
+        ArrayList<MultipartFile> productPictures = productCreateDto.getPictures();
+
+        if (productPictures == null) {
+            productPictures = new ArrayList<>();
+        }
+
+        ArrayList<String> picturesUrls = new ArrayList<>();
+        String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
+        
+        if (productPictures.size() == 0) {
+            picturesUrls.add(subcategory.get().getIcon());
+        } else {
+            for (MultipartFile picture : productPictures) {
+                picturesUrls.add(this.fileStorageService.uploadFile(picture, folderPathWithId));
+            }
+        }
+
+        for (String url : picturesUrls) {
+            ProductPicture productPicture = new ProductPicture();
+            productPicture.setProduct(productSaved);
+            productPicture.setUrl(url);
+            this.productPictureRepository.save(productPicture);
+        }
+
+
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

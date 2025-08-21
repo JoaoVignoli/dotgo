@@ -2,6 +2,8 @@ package br.com.dotgo.dotgo.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,8 +27,11 @@ public class Product {
     private Boolean timeToBeAgreed;
     private LocalDateTime createdAt;
 
-    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductPicture> pictures = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductAssignment> productAssignments = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -105,6 +110,14 @@ public class Product {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<ProductPicture> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<ProductPicture> pictures) {
+        this.pictures = pictures;
     }
 
 }

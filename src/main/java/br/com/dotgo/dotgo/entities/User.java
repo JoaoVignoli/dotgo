@@ -2,7 +2,7 @@ package br.com.dotgo.dotgo.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
 import br.com.dotgo.dotgo.enums.UserRole;
 
 @Entity
+@Table(name = "\"user\"")
 public class User {
 
     @Id
@@ -22,14 +23,18 @@ public class User {
     private Date birthday;
     private String password;
     private String picture;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
     private String specialty;
     private Boolean verified;
     private String biography;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Address> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<ProductAssignment> productAssigments = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -47,12 +52,12 @@ public class User {
         this.name = name;
     }
 
-    public String getTax_id() {
+    public String getTaxId() {
         return taxId;
     }
 
-    public void setTax_id(String tax_id) {
-        this.taxId = tax_id;
+    public void setTaxId(String taxId) {
+        this.taxId = taxId;
     }
 
     public String getEmail() {
@@ -64,7 +69,7 @@ public class User {
     }
 
     public String getPhone() {
-        return this.phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
@@ -127,12 +132,29 @@ public class User {
         this.biography = biography;
     }
 
-    public LocalDate getCreated_at() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreated_at(LocalDate created_at) {
-        this.createdAt = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<ProductAssignment> getProductAssigments() {
+        return productAssigments;
+    }
+
+    public void setProductAssigments(List<ProductAssignment> productAssigments) {
+        this.productAssigments = productAssigments;
+    }
+
+    
 }
