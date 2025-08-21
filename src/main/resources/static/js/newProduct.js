@@ -3,6 +3,7 @@ function closeModal() {
     modal.classList.remove("modal-overlay")
 
     localStorage.removeItem("userId");
+    localStorage.removeItem("userSelectedSubcategoryId")
     localStorage.removeItem("userSelectedCategoryId")
 }
 
@@ -23,12 +24,12 @@ function main() {
     const userId = localStorage.getItem("userId");
     const subcategoryId = localStorage.getItem("userSelectedSubcategoryId");
 
-    if (userId && subcategoryId) {
+    if (userId != null && subcategoryId != null) {
         showModal();
     }
 
     const closeModalButton = document.getElementById("closeModalButton");
-    closeModalButton.addEventListener("click", closeModal())
+    closeModalButton.addEventListener("click", closeModal)
 
     const butonAddProduct = document.getElementById("addProductButton");
     butonAddProduct.addEventListener("click", addProduct)
