@@ -29,8 +29,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login", "/users/register", "/home", "/login", "/mainFeed.html", "/css/**", "/js/**", "/registerRole", "/personalInfoRegister", "/addressRegister", "/perfilPhoto",
-                "/newProduct", "/productCategories", "/productSubcategories", "/home").permitAll()  
+                .requestMatchers("/auth/login", "/users/register", "/home", "/login", "/mainFeed.html", "/css/**", "/js/**", "/registerRole", "/registerRole.html", "/personalInfoRegister", "/personalInfoRegister.html", "/addressRegister", "/addressRegister.html", 
+                "/perfilPhoto", "/perfilPhoto.html", "/newProduct", "/newProduct.html", "/productCategories", "/productCategories.html",
+                 "/productSubcategories", "/productSubcategories.html").permitAll()  
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
