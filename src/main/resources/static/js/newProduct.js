@@ -1,3 +1,16 @@
+function closeModal() {
+    const modal = document.getElementById("add-product-modal");
+    modal.classList.remove("modal-overlay")
+
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userSelectedCategoryId")
+}
+
+function showModal() {
+    const modal = document.getElementById("add-product-modal");
+    modal.classList.add("modal-overlay")
+}
+
 function returnWindow() {
     history.back();
 }
@@ -7,6 +20,16 @@ function addProduct() {
 }
 
 function main() {
+    const userId = localStorage.getItem("userId");
+    const subcategoryId = localStorage.getItem("userSelectedCategoryId");
+
+    if (userId && subcategoryId) {
+        showModal();
+    }
+
+    const closeModalButton = document.getElementById("closeModalButton");
+    closeModalButton.addEventListener("click", closeModal())
+
     const butonAddProduct = document.getElementById("addProductButton");
     butonAddProduct.addEventListener("click", addProduct)
 
