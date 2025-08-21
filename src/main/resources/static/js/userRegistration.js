@@ -56,7 +56,7 @@ function nextStep() {
             window.location.href = "https://dotgo.vignoli.dev.br/perfilPhoto";
             break;
         case "/perfilPhoto":
-            if ("userRole" == "SERVICE_HOLDER") {
+            if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
                 window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
             } else {
                 window.location.href = "https://dotgo.vignoli.dev.br/home";
