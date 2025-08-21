@@ -34,9 +34,10 @@ function personalInfoRegister() {
         "taxId": taxId.value,
         "phone": phoneNumber.value,
         "password": password.value,
-        "birthday": birthday.value
+        "birthday": new Date(birthday.value).toISOString()
     }
 
+    console.log(userData)
     fetch("/users", {
         method: "POST",
         headers: {
