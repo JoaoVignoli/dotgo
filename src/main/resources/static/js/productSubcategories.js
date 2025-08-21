@@ -9,7 +9,7 @@ function handleCategoryClick(event, subcategoryId) {
 
     event.currentTarget.classList.add('selected');
 
-    localStorage.setItem('userSelectedSubategoryId', subcategoryId);
+    localStorage.setItem('userSelectedSubcategoryId', subcategoryId);
 
     nextButton.disabled = false;
     
