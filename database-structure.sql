@@ -85,7 +85,7 @@ create table product (
 
 create table product_picture (
 	id Serial not null primary key,
-	url Text not null ,
+	url Text not null,
 	product_id int references product(id) not null
 );
 
