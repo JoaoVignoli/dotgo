@@ -34,7 +34,7 @@ function personalInfoRegister() {
         "taxId": taxId.value,
         "phone": phoneNumber.value,
         "password": password.value,
-        "birthday": birthday.value.toISOString()
+        "birthday": birthday.value
     }
 
     fetch("/users", {
