@@ -1,3 +1,20 @@
+function handleCategoryClick(event, subcategoryId) {
+
+    const nextButton = document.getElementById("nextButton");
+
+    const allCategoryItems = document.querySelectorAll('.categorie-img');
+    allCategoryItems.forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    event.currentTarget.classList.add('selected');
+
+    localStorage.setItem('userSelectedSubategoryId', subcategoryId);
+
+    nextButton.disabled = false;
+    
+}
+
 function displaySubcategories(subcategory) {
 
     const subcategoryList = document.getElementById('subcategoriesList');
@@ -21,6 +38,8 @@ function displaySubcategories(subcategory) {
     subcategoryItem.appendChild(containerSubcategoryTitle);
 
     subcategoryList.appendChild(subcategoryItem);
+
+    subcategoryItem.addEventListener('click', (event) => handleCategoryClick(event, subcategory.id))
     
 }
 
