@@ -1,14 +1,21 @@
+:root {
+    --backgroud-color: #FFFAF5;
+    --fonts-family: "DM Sans", sans-serif;
+    --black-color: #0C0C0C;
+    --page-title-size: x-large;
+}
+
 /* === CONFIGURAÇÃO GLOBAL === */
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
-  overflow-y: auto; /* garante a rolagem */
-  background-color: #FFFAF5; /* fundo bege */
+  background-color: var(--backgroud-color);
+  box-sizing: border-box;
+  font-family: var(--fonts-family)
 }
 
 /* === BLOCO 1 - HEADER DO PERFIL DO PRESTADOR === */
-.provider-header {
+header {
   display: flex;
   justify-content: center; /* Centraliza o logo em relação à tela */
   align-items: center;
@@ -18,6 +25,23 @@ html, body {
   top: 0;
   z-index: 1000;
   box-sizing: border-box;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding: 0.5rem;
+    box-sizing: border-box;
+
+}
+
+.infos-containers {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  width: 100%;
 }
 
 /* Centraliza a logo de verdade */
@@ -231,17 +255,12 @@ html, body {
 
 /* ===== FEED - NAVIGATION-BAR ===== */
 .bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
   background-color: #ffffff;
   border-top: 1px solid #ddd;
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 8px 0;
-  z-index: 1000;
 }
   
 .nav-item {
