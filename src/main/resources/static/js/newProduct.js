@@ -21,7 +21,7 @@ function addProduct() {
 
 function main() {
     const userId = localStorage.getItem("userId");
-    const subcategoryId = localStorage.getItem("userSelectedCategoryId");
+    const subcategoryId = localStorage.getItem("userSelectedSubcategoryId");
 
     if (userId && subcategoryId) {
         showModal();
