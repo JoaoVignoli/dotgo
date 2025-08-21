@@ -141,6 +141,12 @@ header {
   width: 20px;
   height: 20px;
 }
+
+.provider-name-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
   
 /* === MENU DE ABAS === */
 .tab-menu {
@@ -288,3 +294,4 @@ header {
   padding: 16px;
   margin: 12px;
 }
+

@@ -16,22 +16,19 @@ html, body {
   background-color: var(--background-color);
   box-sizing: border-box;
   font-family: var(--fonts-family);
-  height: 100vh;
-  overflow: hidden;
 }
 
-/* === BLOCO 1 - HEADER FIXO === */
+/* === BLOCO 1 - HEADER DO PERFIL DO PRESTADOR === */
 header {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Centraliza o logo em relação à tela */
   align-items: center;
-  padding: 15px 14px;
-  background-color: var(--background-color);
+  padding: 15px 14px; /* reduz altura do header */
+  background-color: #FFFAF5;
   position: sticky;
   top: 0;
   z-index: 1000;
   box-sizing: border-box;
-  /* border-bottom: 1px solid var(--border-color); */
 }
 
 .app-container {
@@ -77,11 +74,9 @@ header {
   margin-left: auto;
 }
 
-/* === BLOCO 2 - PERFIL DO PRESTADOR (RESUMIDO) === */
-.provider-profile-summary {
+/* === BLOCO 2 - PERFIL DO PRESTADOR === */
+.provider-profile {
   padding: 16px;
-  background-color: var(--background-color);
-  /* border-bottom: 1px solid var(--border-color); */
 }
   
 .profile-main {
@@ -94,7 +89,6 @@ header {
   position: relative;
   width: 80px;
   height: 80px;
-  flex-shrink: 0;
 }
   
 .profile-photo {
@@ -104,27 +98,40 @@ header {
   border-radius: 50%;
 }
   
+.verified-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+}
+  
 .profile-info {
   flex-grow: 1;
 }
   
 .provider-name {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #1a1a1a;
 }
   
 .provider-profession {
   margin: 2px 0;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: 0.9rem;
+  color: #666;
 }
   
 .provider-rating {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   margin-top: 4px;
+}
+  
+.provider-rating img {
+  width: 20px;
+  height: 20px;
 }
 
 .provider-name-container {
@@ -133,15 +140,12 @@ header {
   gap: 6px;
 }
 
-/* === BLOCO 3 - MENU DE ABAS === */
+/* === MENU DE ABAS === */
 .tab-menu {
   display: flex;
   justify-content: space-around;
-  background-color: var(--background-color);
-  /* border-bottom: 1px solid var(--border-color); */
-  position: sticky;
-  top: 0;
-  z-index: 999;
+  margin-top: 20px;
+  border-bottom: 1px solid #ddd;
 }
   
 .tab {
@@ -152,29 +156,24 @@ header {
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-  position: relative;
+  color: #555;
 }
   
 .tab.active {
   font-weight: bold;
+  border-bottom: 2px solid #1a1a1a;
   color: #1a1a1a;
 }
 
-.tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #1a1a1a;
+.provider-name-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-
-.tab:hover:not(.active) {
-  color: #1a1a1a;
-  opacity: 0.7;
+  
+.verified-inline-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* === BLOCO 4 - CONTAINER DE CONTEÚDO SCROLLÁVEL === */
@@ -287,20 +286,14 @@ header {
   font-weight: 600;
 }
 
-/* === BLOCO 6 - BARRA DE NAVEGAÇÃO INFERIOR FIXA === */
+/* ===== FEED - NAVIGATION-BAR ===== */
 .bottom-nav {
   background-color: #ffffff;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #ddd;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 12px 0;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  padding: 8px 0;
 }
   
 .nav-item {
@@ -308,57 +301,16 @@ header {
   flex-direction: column;
   align-items: center;
   font-size: 10px;
-  color: var(--text-secondary);
+  color: #555;
   text-decoration: none;
-  padding: 4px 8px;
-  transition: color 0.2s ease;
-  min-width: 60px;
 }
   
 .nav-item svg {
   margin-bottom: 2px;
-  width: 20px;
-  height: 20px;
 }
   
 .nav-item.active {
-  color: #1a1a1a;
-}
-
-.nav-item:hover:not(.active) {
-  color: #1a1a1a;
-  opacity: 0.7;
-}
-
-/* === RESPONSIVIDADE === */
-@media (max-width: 480px) {
-  .product-card {
-    padding: 12px;
-    gap: 12px;
-  }
-  
-  .product-image {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .product-title {
-    font-size: 15px;
-  }
-  
-  .product-description {
-    font-size: 12px;
-  }
-  
-  .nav-item {
-    font-size: 9px;
-    min-width: 50px;
-  }
-  
-  .nav-item svg {
-    width: 18px;
-    height: 18px;
-  }
+  color: #000;
 }
 
 /* === ANIMAÇÕES E TRANSIÇÕES === */
