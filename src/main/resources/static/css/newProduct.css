@@ -149,3 +149,121 @@ header {
     font-weight: bold;
     color: #40BF72;
 }
+
+/* Modal CSS */
+
+/* Esconde o modal */
+.hidden {
+    display: none;
+}
+
+/* Fundo escurecido que cobre a tela inteira */
+.modal-overlay {
+    position: fixed; /* Fica fixo na tela, mesmo com scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo preto com 50% de opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que o modal fique na frente de tudo */
+}
+
+/* O conteúdo do modal (o card branco) */
+.modal-content {
+    background-color: var(--backgroud-color); /* Cor de fundo do modal, um branco suave */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 85%;
+    height: 80%;
+    max-width: 400px; /* Largura máxima para telas maiores */
+    position: relative;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Cabeçalho do modal com o placeholder de imagem */
+.modal-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.image-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: #E0E0E0; /* Cinza claro */
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    color: #555;
+}
+
+/* Formulário dentro do modal */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.modal-form input {
+    padding: 12px;
+    border: 1px solid #CCC;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+/* Estilos para os checkboxes */
+.checkbox-group {
+    margin-top: 5px;
+    margin-bottom: 6px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+}
+
+/* Botão de confirmar */
+.confirm-button {
+    background-color: var(--black-color); /* Preto */
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.confirm-button:hover {
+    background-color: #333;
+}
