@@ -19,6 +19,11 @@ function registerAddress() {
     }
 }
 
+function formatDateToSQL(birthday) {
+    const [day, month, year] = dateStr.split("-");
+    return `${year}-${month}-${day}`;
+}
+
 function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
@@ -34,7 +39,7 @@ function personalInfoRegister() {
         "taxId": taxId.value,
         "phone": phoneNumber.value,
         "password": password.value,
-        "birthday": birthday.value
+        "birthday": formatDateToSQL(birthday)
     }
 
     fetch("/users", {
