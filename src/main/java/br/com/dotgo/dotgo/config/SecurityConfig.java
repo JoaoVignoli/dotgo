@@ -2,8 +2,6 @@ package br.com.dotgo.dotgo.config;
 
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,10 +33,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable( )) // Forma moderna de desabilitar o CSRF
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Essencial para APIs REST com JWT
                 .authorizeHttpRequests(auth -> auth                      
-                        // Suas outras rotas públicas
+                        // Rotas públicas //
                         .requestMatchers(
                             "/auth/login", "/login", "/login.html",
-                            "/users", // Mantenha isso se houver outras rotas GET públicas em /users
+                            "/users",
                             "/registerRole", "/registerRole.html",
                             "/personalInfoRegister", "/personalInfoRegister.html",
                             "/perfilPhoto", "/perfilPhoto.html",
@@ -50,7 +48,7 @@ public class SecurityConfig {
                             "/css/**", "/js/**"
                         ).permitAll()
                         
-                        // Exija autenticação para todas as outras rotas
+                        // Autenticação para todas as outras rotas //
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

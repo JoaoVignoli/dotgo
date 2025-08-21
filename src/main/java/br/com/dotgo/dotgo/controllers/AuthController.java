@@ -2,7 +2,6 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.LoginRequestDto;
 import br.com.dotgo.dotgo.dtos.LoginResponseDto;
-import br.com.dotgo.dotgo.repositories.UserRepository;
 import br.com.dotgo.dotgo.services.JWTService;
 
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,15 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     public AuthController(
-        UserRepository usuarioRepository, UserDetailsService userDetailsService, JWTService jwtService, PasswordEncoder passwordEncoder
+        UserDetailsService userDetailsService, JWTService jwtService, PasswordEncoder passwordEncoder
     ) {
-        this.userRepository = usuarioRepository;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;

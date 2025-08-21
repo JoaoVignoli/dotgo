@@ -1,7 +1,6 @@
 package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
-import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/users")
