@@ -20,8 +20,8 @@ function registerAddress() {
 }
 
 function formatDateToSQL(birthday) {
-    const [day, month, year] = dateStr.split("-");
-    return `${year}-${month}-${day}`;
+    const [day, month, year] = birthday.split("/");
+    return `${year}/${month}/${day}`;
 }
 
 function personalInfoRegister() {
