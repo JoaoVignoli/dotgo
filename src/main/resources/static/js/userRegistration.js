@@ -31,7 +31,6 @@ function personalInfoRegister() {
     const phoneNumber = document.getElementById("phoneNumber");
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
-    const dataFormatada = formatDateToSQL(birthday);
 
     const userData = {
         "role": localStorage.getItem("userRole"),
@@ -40,7 +39,7 @@ function personalInfoRegister() {
         "taxId": taxId.value,
         "phone": phoneNumber.value,
         "password": password.value,
-        "birthday": dataFormatada.value
+        "birthday": birthday.value.toISOString()
     }
 
     fetch("/users", {
