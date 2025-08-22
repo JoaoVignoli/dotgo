@@ -2,10 +2,10 @@ function verifyUserStatus() {
     fetch("/auth/status")
         .then((response) => {
             // Verifica especificamente se o status é 200
-            if (response.status === 200) {
-                return response.json();
+            if (response.status === 403) {
+                console.log("Usuário não autenticado.");
             } else {
-                console.log("Usuário não autenticado.")
+                console.log(response.json());
             }
         })
         .catch((error) => {
