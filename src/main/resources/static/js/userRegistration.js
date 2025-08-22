@@ -52,7 +52,6 @@ function personalInfoRegister() {
     })
     .catch((error) => {
         console.log(error);
-        alert("Erro ao cadastrar dados")
     });
 }
 
