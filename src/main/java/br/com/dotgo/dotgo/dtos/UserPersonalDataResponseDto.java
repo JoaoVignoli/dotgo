@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class UserPersonalDataResponseDto {
 
+    private Integer id;
     private String name;
     private String email;
     private String taxId;
@@ -19,6 +20,7 @@ public class UserPersonalDataResponseDto {
     private UserRole role;
 
     public UserPersonalDataResponseDto(User user) {
+        this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
         this.taxId = user.getTaxId();
@@ -27,6 +29,8 @@ public class UserPersonalDataResponseDto {
         this.birthday = user.getBirthday();
         this.role = user.getRole();
     }
+
+    public Integer getId() { return id; }
 
     public String getName() {
         return name;

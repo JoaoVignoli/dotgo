@@ -2,6 +2,7 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.ServiceHoldersResponseDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
+import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
 import br.com.dotgo.dotgo.repositories.UserRepository;
@@ -66,7 +67,7 @@ public class UserController {
         this.userRepository.save(newUser);
         
         // Ajustar retorno para que retorne um DTO
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserPersonalDataResponseDto(newUser));
     }
 
     @GetMapping
