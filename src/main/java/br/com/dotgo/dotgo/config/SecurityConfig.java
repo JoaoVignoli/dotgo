@@ -40,7 +40,7 @@ public class SecurityConfig {
                             // Home Page
                             "/", "/home", "/home.html", 
                             // Users Register Pages
-                            "/users/**",
+                            "/users/**", "/address/**",
                             "/register", "/register/**",
                             "/registerRole.html", "/personalInfoRegister.html",
                             "/addressRegister.html", "/perfilPhoto.html",
