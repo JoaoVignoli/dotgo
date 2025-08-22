@@ -94,7 +94,7 @@ function nextStep() {
             break;
         case "/register/address":
             registerAddress();
-            window.location.href = "https://dotgo.vignoli.dev.br/register/profile-photo";
+            //window.location.href = "https://dotgo.vignoli.dev.br/register/profile-photo";
             break;
         case "/register/profile-photo":
             if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
