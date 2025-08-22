@@ -62,12 +62,11 @@ function returnWindow() {
 function nextStep() {
     switch (window.location.pathname) {
         case "/register":
-            console.log("Funciona");
             window.location.href = "https://dotgo.vignoli.dev.br/register/personal";
             break;
         case "/register/personal":
             personalInfoRegister();
-            //window.location.href = "https://dotgo.vignoli.dev.br/register/address";
+            window.location.href = "https://dotgo.vignoli.dev.br/register/address";
             break;
         case "/register/address":
             registerAddress();

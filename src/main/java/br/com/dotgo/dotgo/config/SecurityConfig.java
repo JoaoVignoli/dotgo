@@ -50,7 +50,7 @@ public class SecurityConfig {
                             "/subcategories/**", "/register/products/subcategory", "/productSubcategories.html",
                             // Forgot Password Pages
                             "/forgot-password", "/forgot-password/**",
-                            "forgotPassword.html", "verificationCode.html", "resetPassword.html", 
+                            "/forgotPassword.html", "/verificationCode.html", "/resetPassword.html", 
                             // Static Resources (CSS, JS, Imagens, etc.)
                             "/css/**", 
                             "/js/**", 
