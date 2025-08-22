@@ -38,7 +38,8 @@ function personalInfoRegister() {
     }
 
     console.log(userData)
-    fetch("/users", {
+
+    fetch("https://dotgo.vignoli.dev.br/users", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
