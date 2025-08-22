@@ -15,8 +15,31 @@ function registerAddress() {
         "city": city.value,
         "state": state.value,
         "addressNumber": addressNumber.value,
-        "complement": complement.value
+        "complement": complement.value,
+        "idUsuario": localStorage.getItem("userId")
     }
+
+    console.log(addressData);
+
+    fetch("https://dotgo.vignoli.dev.br/address", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(addressData),
+    })
+    .then((data) => data.json())
+    .then((response) => {
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+function saveUserId(response) {
+    const userId = response.id;
+    localStorage.setItem("userId", userId);
 }
 
 function personalInfoRegister() {
@@ -48,6 +71,7 @@ function personalInfoRegister() {
     })
     .then((data) => data.json())
     .then((response) => {
+        saveUserId(response);
         console.log(response);
     })
     .catch((error) => {
