@@ -16,7 +16,7 @@ function handleCategoryClick(event, categoryId) {
 }
 
 function nextStep() {
-    window.location.href = "https://dotgo.vignoli.dev.br/productSubcategories";
+    window.location.href = "https://dotgo.vignoli.dev.br/register/products/subcategory";
 }
 
 function returnWindow() {

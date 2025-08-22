@@ -61,23 +61,23 @@ function returnWindow() {
 
 function nextStep() {
     switch (window.location.pathname) {
-        case "/registerRole":
+        case "/register":
             console.log("Funciona");
-            window.location.href = "https://dotgo.vignoli.dev.br/personalInfoRegister";
+            window.location.href = "https://dotgo.vignoli.dev.br/register/personal";
             break;
-        case "/personalInfoRegister":
+        case "/register/personal":
             personalInfoRegister();
-            //window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+            //window.location.href = "https://dotgo.vignoli.dev.br/register/address";
             break;
-        case "/addressRegister":
+        case "/register/address":
             registerAddress();
-            window.location.href = "https://dotgo.vignoli.dev.br/perfilPhoto";
+            window.location.href = "https://dotgo.vignoli.dev.br/register/profile-photo";
             break;
-        case "/perfilPhoto":
+        case "/register/profile-photo":
             if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
-                window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
+                window.location.href = "https://dotgo.vignoli.dev.br/register/products";
             } else {
-                window.location.href = "https://dotgo.vignoli.dev.br/home";
+                window.location.href = "https://dotgo.vignoli.dev.br";
             }
             break;
     }

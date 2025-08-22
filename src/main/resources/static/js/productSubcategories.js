@@ -62,7 +62,7 @@ function getSubcategories() {
 }
 
 function nextStep() {
-    window.location.href = "https://dotgo.vignoli.dev.br/newProduct";
+    window.location.href = "https://dotgo.vignoli.dev.br/register/products";
 }
 
 function returnWindow() {

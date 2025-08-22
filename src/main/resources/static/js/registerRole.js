@@ -1,5 +1,5 @@
 function nextStep() {
-    window.location.href = "https://dotgo.vignoli.dev.br//personalInfoRegister";
+    window.location.href = "https://dotgo.vignoli.dev.br/register/users/personal";
 }
 
 function registerClient() {

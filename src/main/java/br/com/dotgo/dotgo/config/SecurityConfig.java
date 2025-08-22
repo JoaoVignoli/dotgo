@@ -35,17 +35,27 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth                      
                         // Rotas públicas //
                         .requestMatchers(
+                            // Login Page
                             "/auth/login", "/login", "/login.html",
-                            "/users",
-                            "/registerRole", "/registerRole.html",
-                            "/personalInfoRegister", "/personalInfoRegister.html",
-                            "/perfilPhoto", "/perfilPhoto.html",
-                            "/addressRegister", "/addressRegister.html",
-                            "/home", "/home.html",  
-                            "/products/**","/newProduct", "/newProduct.html", 
-                            "/categories/**", "/productCategories", "/productCategories.html",
-                            "/subcategories/**", "/productSubcategories", "/productSubcategories.html",
-                            "/css/**", "/js/**"
+                            // Home Page
+                            "/", "/home", "/home.html", 
+                            // Users Register Pages
+                            "/users/**",
+                            "/register", "/register/**",
+                            "/registerRole.html", "/personalInfoRegister.html",
+                            "/addressRegister.html", "/perfilPhoto.html",
+                            // Products Register Pages
+                            "/products/**","/register/products", "/newProduct.html", 
+                            "/categories/**", "/register/products/category", "/productCategories.html",
+                            "/subcategories/**", "/register/products/subcategory", "/productSubcategories.html",
+                            // Forgot Password Pages
+                            "/forgot-password", "/forgot-password/**",
+                            "forgotPassword.html", "verificationCode.html", "resetPassword.html", 
+                            // Static Resources (CSS, JS, Imagens, etc.)
+                            "/css/**", 
+                            "/js/**", 
+                            "/images/**", 
+                            "/favicon.ico"
                         ).permitAll()
                         
                         // Autenticação para todas as outras rotas //
