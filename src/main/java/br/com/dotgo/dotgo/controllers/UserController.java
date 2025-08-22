@@ -1,11 +1,15 @@
 package br.com.dotgo.dotgo.controllers;
 
+import br.com.dotgo.dotgo.dtos.ServiceHoldersResponseDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.entities.User;
+import br.com.dotgo.dotgo.enums.UserRole;
 import br.com.dotgo.dotgo.repositories.UserRepository;
+import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/users")
@@ -27,10 +33,12 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService; 
 
-    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder, FileStorageService fileStorageService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping
@@ -54,18 +62,34 @@ public class UserController {
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setBirthday(request.getBirthday());
         newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setVerified(false);
 
         this.userRepository.save(newUser);
         
-        // Ajustar para deixar o verificado como false
         // Ajustar retorno para que retorne um DTO
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<User> getAllUsers() {
         return this.userRepository.findAll();
     }
+
+    @GetMapping("/serviceHolders")
+    public ResponseEntity<List<ServiceHoldersResponseDto>> getServiceHolders() {
+
+        List<User> serviceHolders = this.userRepository.findByRole(UserRole.SERVICE_HOLDER);
+        ArrayList<ServiceHoldersResponseDto> responseList = new ArrayList<>();
+
+        for (User serviceHolder : serviceHolders) {
+            responseList.add(new ServiceHoldersResponseDto(
+                serviceHolder.getId(), serviceHolder.getName(), serviceHolder.getSpecialty(), serviceHolder.getVerified(), 
+                this.fileStorageService.getPublicFileUrl(serviceHolder.getPicture()), 5));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+    
     
 
 }
