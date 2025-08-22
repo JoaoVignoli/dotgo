@@ -6,7 +6,9 @@ import br.com.dotgo.dotgo.repositories.UserRepository;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,9 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody @Valid UserPersonalDataRequestDto request) {
 
         if (this.userRepository.findByEmail(request.getEmail()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "User not found.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
 
         User newUser = new User();
