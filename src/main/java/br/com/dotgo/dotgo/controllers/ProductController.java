@@ -11,7 +11,6 @@ import br.com.dotgo.dotgo.entities.ProductPicture;
 import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.repositories.ProductAssignmentRepository;
-import br.com.dotgo.dotgo.repositories.ProductAssignmentRepository;
 import br.com.dotgo.dotgo.repositories.ProductPictureRepository;
 import br.com.dotgo.dotgo.repositories.ProductRepository;
 import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
