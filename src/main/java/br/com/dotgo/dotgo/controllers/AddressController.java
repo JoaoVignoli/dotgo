@@ -34,9 +34,9 @@ public class AddressController {
         novo.setNeighborhood(request.getNeighborhood());
         novo.setCity(request.getCity());
         novo.setState(request.getState());
-        novo.setAddress_number(request.getAddress_number());
+        novo.setAddress_number(request.getaddressNumber());
 
-        novo.setUser(userRepository.findById(request.getIdUsuario()).get());
+        novo.setUser(userRepository.findById(request.getUserId()).get());
 
         this.addressRepository.save(novo);
         return new AddressResponseDto(novo);
