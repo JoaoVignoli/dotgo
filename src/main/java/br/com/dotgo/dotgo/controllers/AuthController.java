@@ -95,7 +95,7 @@ public class AuthController {
         if (isAuthenticated) {
             // Se autenticado, adicione informações do usuário
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            response.put("username", userDetails.getUsername());
+            response.put("userName", userDetails.getUsername());
             // Você pode adicionar mais dados do usuário aqui, se precisar no frontend
         }
 
