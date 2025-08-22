@@ -67,7 +67,7 @@ function nextStep() {
             break;
         case "/personalInfoRegister":
             personalInfoRegister();
-            window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
+            //window.location.href = "https://dotgo.vignoli.dev.br/addressRegister";
             break;
         case "/addressRegister":
             registerAddress();
