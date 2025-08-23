@@ -70,9 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleActionClick() {
     if (currentAction === 'schedule') {
       // Redireciona para a nova tela de agendamento
-      // (Vamos criar essa tela no próximo passo)
-      alert('Redirecionando para a tela de agendamento...');
-      // window.location.href = 'agendamento.html'; 
+      
+      // Linha incorreta:
+      // window.location.href = scheduling.css; 
+
+      // Linha correta:
+      window.location.href = 'scheduling.html'; 
+
     } else if (currentAction === 'contact' && currentPhone) {
       // Redireciona para o WhatsApp
       const message = encodeURIComponent(`Olá, vi o serviço "${modalTitle.textContent}" e gostaria de mais informações.`);
