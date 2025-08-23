@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> saveProfilePicture (@RequestParam MultipartFile picture, @RequestParam Integer userId) {
+    public ResponseEntity<?> saveProfilePicture (@RequestParam("picture") MultipartFile picture, @RequestParam("userID") Integer userId) {
 
         Optional<User> user = this.userRepository.findById(userId);
 
