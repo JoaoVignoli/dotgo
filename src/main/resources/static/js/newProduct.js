@@ -1,3 +1,14 @@
+function hideTimeInput() {
+    const checkBoxTime = document.getElementById("time-tbd");
+    const containerTime = document.getElementById("product-time")
+
+    containerTime.disabled = this.checked;
+
+    if (this.checked) {
+        containerTime.value = 0;
+    }
+}
+
 function hideValueInput() {
     const checkBoxValue = document.getElementById("value-tbd");
     const containerValue = document.getElementById("product-value")
@@ -5,7 +16,7 @@ function hideValueInput() {
     containerValue.disabled = this.checked;
 
     if (this.checked) {
-        containerValue.value = "";
+        containerValue.value = 0;
     }
 
 }
@@ -51,6 +62,9 @@ function main() {
 
     const hideValue = document.getElementById("value-tbd");
     hideValue.addEventListener('change', hideValueInput);
+
+    const hideTime = document.getElementById("time-tbd");
+    hideTime.addEventListener('change', hideTimeInput);
 }
 
 window.addEventListener("load", main);
