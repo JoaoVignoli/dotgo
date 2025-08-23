@@ -46,3 +46,32 @@ modalOverlay.addEventListener("click", (e) => {
     closeModal();
   }
 });
+
+function openModal() {
+  document.getElementById('serviceModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden'; // Previne scroll do body
+}
+
+function closeModal() {
+  document.getElementById('serviceModal').style.display = 'none';
+  document.body.style.overflow = 'auto'; // Restaura scroll do body
+}
+
+function openContact() {
+  // Aqui você pode adicionar a lógica para abrir o contato
+  alert('Abrindo contato...');
+}
+
+// Fechar modal ao clicar no overlay
+document.getElementById('serviceModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+// Fechar modal com tecla ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
