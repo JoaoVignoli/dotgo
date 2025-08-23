@@ -347,45 +347,54 @@ header {
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* Modal Styles */
+/* MODAL STYLES */
+
+/* Overlay que cobre a tela inteira */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: none;
-  opacity: 0;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 20px;
+  /* Aumenta o espaço nas laterais da tela */
+  padding: 0 24px; 
   box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .modal-overlay.active {
-  display: flex; /* Torna visível */
+  display: flex;
   opacity: 1;
 }
 
+/* O container principal do modal */
 .modal-container {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
-  max-width: 400px;
+  background: #FFFAF5;
+  border-radius: 28px;
+  /* Deixa o modal um pouco mais estreito */
+  max-width: 360px; 
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   animation: modalSlideIn 0.3s ease-out;
+  text-align: center;
+  padding: 24px;
+  /* Adiciona a borda preta e fina */
+  border: 1px solid #1a1a1a; 
 }
 
 @keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(30px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -393,7 +402,7 @@ header {
   }
 }
 
-/* Botão de fechar */
+/* Botão de fechar (X) */
 .modal-close-btn {
   position: absolute;
   top: 16px;
@@ -406,28 +415,23 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
-  transition: all 0.2s ease;
-}
-
-.modal-close-btn:hover {
-  background-color: #f3f4f6;
   color: #333;
 }
 
 .modal-close-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
-/* Imagem do serviço */
+/* Placeholder da imagem do serviço */
 .service-image-placeholder {
-  width: 100%;
-  height: 120px;
-  background-color: #d1d5db;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 2px solid #9ca3af;
+  width: 140px;
+  height: 140px;
+  background-color: #E5E5E5;
+  border-radius: 24px;
+  margin: 12px auto 24px;
+  /* Adiciona a borda preta e fina */
+  border: 1px solid #1a1a1a; 
 }
 
 /* Título do serviço */
@@ -435,55 +439,51 @@ header {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0 0 16px 0;
-  text-align: center;
-  line-height: 1.3;
+  margin: 0 auto 20px;
+  max-width: 80%;
 }
 
-/* Descrição */
+/* Container da descrição */
 .service-description {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  text-align: left;
 }
 
 .service-description h3 {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: bold;
   color: #1a1a1a;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
 }
 
 .service-description ul {
   margin: 0;
-  padding-left: 0;
+  padding: 0;
   list-style: none;
 }
 
 .service-description li {
   font-size: 14px;
   color: #4b5563;
-  margin-bottom: 4px;
-  line-height: 1.4;
-  position: relative;
-  padding-left: 0;
+  margin-bottom: 6px;
+  line-height: 1.5;
 }
 
-.service-description li:last-child {
-  margin-bottom: 0;
-}
-
-/* Preço */
+/* Preço do serviço */
 .service-price {
   font-size: 16px;
   font-weight: 600;
-  color: #059669;
+  color: #00C851;
   margin-bottom: 8px;
+  text-align: left;
 }
 
 /* Tempo estimado */
 .service-time {
   font-size: 14px;
   color: #6b7280;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  text-align: left;
 }
 
 /* Botão de contato */
@@ -492,7 +492,7 @@ header {
   background-color: #1a1a1a;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 16px 20px;
   font-size: 16px;
   font-weight: 600;
@@ -500,81 +500,21 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   transition: all 0.2s ease;
+  /* Adiciona a borda preta e fina ao botão também */
+  border: 1px solid #1a1a1a; 
 }
 
 .contact-btn:hover {
   background-color: #333;
-  transform: translateY(-1px);
 }
 
-.contact-btn:active {
-  transform: translateY(0);
-}
-
+/* Garante que o SVG no botão seja exibido corretamente */
 .contact-btn svg {
-  width: 18px;
-  height: 18px;
+  display: inline-block;
+  stroke: white; /* Garante que a cor da linha do ícone seja branca */
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
-  .modal-overlay {
-    padding: 16px;
-  }
-  
-  .modal-container {
-    padding: 20px;
-    border-radius: 16px;
-    max-height: 85vh;
-  }
-  
-  .service-title {
-    font-size: 16px;
-  }
-  
-  .service-description h3 {
-    font-size: 15px;
-  }
-  
-  .service-description li {
-    font-size: 13px;
-  }
-  
-  .contact-btn {
-    padding: 14px 18px;
-    font-size: 15px;
-  }
-}
-
-/* Animação de saída */
-.modal-overlay.closing {
-  animation: modalFadeOut 0.2s ease-in forwards;
-}
-
-.modal-overlay.closing .modal-container {
-  animation: modalSlideOut 0.2s ease-in forwards;
-}
-
-@keyframes modalFadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes modalSlideOut {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-}
 
 
