@@ -105,7 +105,7 @@ async function nextStep() {
             window.location.pathname = "/register/profile-photo";
             break;
         case "/register/profile-photo":
-            const status = registerProfilePicture();
+            const status = await registerProfilePicture();
             if (status == 201) {
                 if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
                 window.location.pathname = "/register/products";
