@@ -64,10 +64,10 @@ public class UserController {
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setVerified(false);
 
-        this.userRepository.save(newUser);
+        var userSaved = this.userRepository.save(newUser);
         
         // Ajustar retorno para que retorne um DTO
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserPersonalDataResponseDto(newUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserPersonalDataResponseDto(userSaved));
     }
 
     @GetMapping

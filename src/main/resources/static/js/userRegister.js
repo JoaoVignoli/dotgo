@@ -16,12 +16,12 @@ function registerAddress() {
         "state": state.value,
         "addressNumber": addressNumber.value,
         "complement": complement.value,
-        "idUsuario": localStorage.getItem("userId")
+        "userId": localStorage.getItem("userId")
     }
 
     console.log(addressData);
 
-    fetch("https://dotgo.vignoli.dev.br/address", {
+    fetch("/address", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -37,12 +37,7 @@ function registerAddress() {
     });
 }
 
-function saveUserId(response) {
-    const userId = response.id;
-    localStorage.setItem("userId", userId);
-}
-
-function personalInfoRegister() {
+async function personalInfoRegister() {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
     const taxId = document.getElementById("taxId");
@@ -62,45 +57,43 @@ function personalInfoRegister() {
 
     console.log(userData)
 
-    fetch("https://dotgo.vignoli.dev.br/users", {
+
+    const response = await fetch("/users", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
     })
-    .then((data) => data.json())
-    .then((response) => {
-        saveUserId(response);
-        console.log(response);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+
+    const json = await response.json();
+
+    return json.id;
 }
 
 function returnWindow() {
     history.back();
 }
 
-function nextStep() {
+async function nextStep() {
     switch (window.location.pathname) {
         case "/register":
-            window.location.href = "https://dotgo.vignoli.dev.br/register/personal";
+            window.location.pathname = "/register/personal";
             break;
         case "/register/personal":
-            personalInfoRegister();
-            window.location.href = "https://dotgo.vignoli.dev.br/register/address";
+            const userId = await personalInfoRegister();
+            localStorage.setItem("userId", userId);
+            window.location.pathname = "/register/address";
             break;
         case "/register/address":
             registerAddress();
-            //window.location.href = "https://dotgo.vignoli.dev.br/register/profile-photo";
+            window.location.pathname = "/register/profile-photo";
             break;
         case "/register/profile-photo":
             if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
-                window.location.href = "https://dotgo.vignoli.dev.br/register/products";
+                window.location.pathname = "/register/products";
             } else {
-                window.location.href = "https://dotgo.vignoli.dev.br";
+                window.location.pathname = "/";
             }
             break;
     }

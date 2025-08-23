@@ -62,7 +62,7 @@ function getSubcategories() {
 }
 
 function nextStep() {
-    window.location.href = "https://dotgo.vignoli.dev.br/register/products";
+    window.location.pathname = "/register/products";
 }
 
 function returnWindow() {
