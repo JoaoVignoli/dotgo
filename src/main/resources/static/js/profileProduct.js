@@ -1,90 +1,101 @@
-// Aguarda o DOM carregar completamente antes de executar o script
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- SELEÇÃO DOS ELEMENTOS DO MODAL ---
+  // --- SELEÇÃO DOS ELEMENTOS ---
   const modalOverlay = document.getElementById('serviceModal');
-  const modalContainer = modalOverlay.querySelector('.modal-container');
-  
-  // Seleciona os elementos dentro do modal para preenchimento
   const modalTitle = modalOverlay.querySelector('.service-title');
   const modalDescriptionList = modalOverlay.querySelector('.service-description ul');
   const modalPrice = modalOverlay.querySelector('.service-price');
   const modalTime = modalOverlay.querySelector('.service-time');
-  
-  // --- SELEÇÃO DOS ELEMENTOS DE INTERAÇÃO ---
   const productCards = document.querySelectorAll('.product-card');
   const closeButton = modalOverlay.querySelector('.modal-close-btn');
+  const actionButton = modalOverlay.querySelector('.contact-btn');
+  const actionButtonText = actionButton.querySelector('span');
+  const actionButtonIcon = actionButton.querySelector('svg');
+
+  // Variável para guardar a ação atual do modal
+  let currentAction = null;
+  let currentPhone = null;
 
   // --- FUNÇÕES ---
 
-  /**
-   * Abre o modal e preenche com as informações do produto clicado.
-   * @param {HTMLElement} card - O card do produto que foi clicado.
-   */
   function openModal(card) {
-    // Pega os dados do card usando os atributos data-*
+    // Pega todos os dados do card
     const title = card.dataset.title;
     const description = card.dataset.description;
     const price = card.dataset.price;
     const time = card.dataset.time;
+    const action = card.dataset.action;
+    const phone = card.dataset.phone;
 
-    // Preenche o modal com as informações
+    // Guarda a ação e o telefone atuais
+    currentAction = action;
+    currentPhone = phone;
+
+    // Preenche as informações básicas do modal
     modalTitle.textContent = title;
     modalPrice.textContent = price;
     modalTime.textContent = time;
 
-    // Limpa a lista de descrição antiga e cria a nova
-    modalDescriptionList.innerHTML = ''; // Limpa itens anteriores
-    const descriptionItems = description.split(';'); // Divide a descrição em itens
+    // Preenche a lista de descrição
+    modalDescriptionList.innerHTML = '';
+    const descriptionItems = description.split(';');
     descriptionItems.forEach(itemText => {
-      if (itemText.trim()) { // Garante que não cria li para itens vazios
+      if (itemText.trim()) {
         const listItem = document.createElement('li');
         listItem.textContent = itemText.trim();
         modalDescriptionList.appendChild(listItem);
       }
     });
 
+    // --- LÓGICA DINÂMICA DO BOTÃO ---
+    if (action === 'schedule') {
+      actionButtonText.textContent = 'Agendar';
+      // (Opcional) Trocar o ícone se desejar
+      actionButtonIcon.innerHTML = `<path d="M8 2v4m8-4v4M3 10h18M4 6h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"></path>`;
+    } else { // 'contact' ou padrão
+      actionButtonText.textContent = 'Entrar em Contato';
+      actionButtonIcon.innerHTML = `<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>`;
+    }
+
     // Exibe o modal
     modalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Impede o scroll da página
+    document.body.style.overflow = 'hidden';
   }
 
-  /**
-   * Fecha o modal.
-   */
   function closeModal() {
     modalOverlay.classList.remove('active');
-    document.body.style.overflow = 'auto'; // Restaura o scroll da página
+    document.body.style.overflow = 'auto';
   }
 
-  // --- EVENT LISTENERS (ADICIONANDO OS EVENTOS) ---
+  function handleActionClick() {
+    if (currentAction === 'schedule') {
+      // Redireciona para a nova tela de agendamento
+      // (Vamos criar essa tela no próximo passo)
+      alert('Redirecionando para a tela de agendamento...');
+      // window.location.href = 'agendamento.html'; 
+    } else if (currentAction === 'contact' && currentPhone) {
+      // Redireciona para o WhatsApp
+      const message = encodeURIComponent(`Olá, vi o serviço "${modalTitle.textContent}" e gostaria de mais informações.`);
+      window.open(`https://wa.me/${currentPhone}?text=${message}`, '_blank' );
+    }
+  }
 
-  // 1. Adiciona um evento de clique para cada card de produto
+  // --- EVENT LISTENERS ---
+
   productCards.forEach(card => {
     card.addEventListener('click', () => openModal(card));
   });
 
-  // 2. Fecha o modal ao clicar no botão "X"
   closeButton.addEventListener('click', closeModal);
+  actionButton.addEventListener('click', handleActionClick);
 
-  // 3. Fecha o modal ao clicar fora da área do conteúdo (no overlay)
   modalOverlay.addEventListener('click', (event) => {
-    if (event.target === modalOverlay) {
-      closeModal();
-    }
+    if (event.target === modalOverlay) closeModal();
   });
 
-  // 4. Fecha o modal ao pressionar a tecla "Escape" (ESC)
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
       closeModal();
     }
   });
-  
-  // 5. Lógica para o botão de contato (exemplo)
-  const contactButton = modalOverlay.querySelector('.contact-btn');
-  contactButton.addEventListener('click', () => {
-      alert('Lógica de contato aqui!');
-      // Ex: window.location.href = 'https://wa.me/5511999999999';
-  } );
 });
