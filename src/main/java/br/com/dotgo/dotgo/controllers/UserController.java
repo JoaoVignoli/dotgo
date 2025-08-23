@@ -100,7 +100,7 @@ public class UserController {
 
         String folderPathWithId = USERS_PICTURES_FOLDER + "/" + userId;
 
-        String status = fileStorageService.uploadFile(picture, USERS_PICTURES_FOLDER);
+        String status = fileStorageService.uploadFile(picture, folderPathWithId);
 
         user.get().setPicture(status);
 
