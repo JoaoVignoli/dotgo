@@ -2,10 +2,10 @@ function hideValueInput() {
     const checkBoxValue = document.getElementById("value-tbd");
     const containerValue = document.getElementById("product-value")
 
+    containerValue.disabled = this.checked;
+
     if (this.checked) {
-        containerValue.disabled;
-    } else {
-        containerValue.style.display = "flex";
+        containerValue.value = "";
     }
 
 }
