@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/login.css">
+    <script src="js/login.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
     </style>
@@ -25,10 +26,11 @@
                 <input class="default-input" name="user" type="email" id="email"/>
                 <label class="input-title" for="password">Senha</label>
                 <input class="default-input" name="password" type="password" id="password"/>
+                <span class="error-login hidden" id="error-login">Usuário ou senha incorretos, tente novamente.</span>
                 <div class="link-forgot-password">
                     <a href="forgot-password">Esqueceu a sua senha?</a>
                 </div>
-                <button class="login-button" id="login">Login</button>
+                <button class="login-button" id="loginButton">Login</button>
             </div>
         </div>
         <div class="link-register">

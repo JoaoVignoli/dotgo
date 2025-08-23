@@ -1,3 +1,44 @@
+async function logout() {
+    const response = await fetch("/auth/logout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: 'include'
+    })
+
+    if (response.status === 200) {
+        window.location.reload();
+    } 
+}
+
+function displayCategories(category){
+    
+}
+
+function getCategories() {
+    fetch("/categories" )
+        .then((response) => response.json())
+        .then((data) => {
+            data.forEach(category => {
+                displayCategories(category);
+            });
+        });
+}
+
+function showLoggedUserButtons() {
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton.classList.remove("hidden");
+    const favoritesButton = document.getElementById("favoritesButton");
+    favoritesButton.classList.remove("hidden");
+    const ordersButton = document.getElementById("ordersButton");
+    ordersButton.classList.remove("hidden");
+    const profileButton = document.getElementById("profileButton");
+    profileButton.classList.remove("hidden");
+    const loginButton = document.getElementById("loginButton");
+    loginButton.classList.add("hidden");
+}
+
 async function verifyUserStatus() {
     try {
         // Faz a requisição para o endpoint que retorna o status da autenticação
@@ -33,13 +74,13 @@ async function main() {
     const userData = await verifyUserStatus();
 
     if (userData) {
-        // Se 'dadosUsuario' não for nulo, o usuário está autenticado.
-        console.log(userData)
-    } else {
-        // Se for nulo, o usuário não está autenticado ou ocorreu um erro.
-        console.log("Usuário não autenticado: " + userData)
-    }
-    verifyUserStatus();
+        showLoggedUserButtons();
+    } 
+
+    getCategories();
+
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener("click", logout)
 }
 
 window.addEventListener("load", main);

@@ -1,8 +1,10 @@
 :root {
     --backgroud-color: #FFFAF5;
+    --backgorud-color-nav-bar: #ffffff;
     --fonts-family: "DM Sans", sans-serif;
     --black-color: #0C0C0C;
     --page-title-size: x-large;
+    --error-color: #ae0000;
 }
 
 html, body {
@@ -19,18 +21,17 @@ header {
     align-items: center;
     padding: 16px;
     background-color: var(--backgroud-color);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
     box-sizing: border-box;
     flex-shrink: 0;
 }
 
 .logo {
-  font-size: 30px;
-  font-weight: bold;
-  color: #1a1a1a;
-  margin: 0;
-  font-family: 'Georgia', serif; /* Igual ao login */
+    font-size: 30px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 0;
+    font-family: 'Georgia', serif; /* Igual ao login */
 }
 
 .login-title {
@@ -93,6 +94,15 @@ header {
     padding: 1rem 0;
 }
 
+.hidden {
+    display: none;
+}
+
+.error-login {
+    color: var(--error-color);
+    font-size: small;
+}
+
 .link-forgot-password a {
     color: var(--black-color);
 }
@@ -110,29 +120,29 @@ header {
 
 /* Barra de Navegação */
 .bottom-nav {
-  background-color: #ffffff;
-  border-top: 1px solid #ddd;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 8px 0;
+    background-color: var(--backgorud-color-nav-bar);
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
 }
 
 .nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 10px;
-  color: #555;
-  text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+    color: #555;
+    text-decoration: none;
 }
 
 .nav-item svg {
-  margin-bottom: 2px;
+    margin-bottom: 2px;
 }
 
 .nav-item.active {
-  color: #000;
+    color: var(--black-color);
 }
 
 
