@@ -1,20 +1,17 @@
 
-function registerProfilePicture(file) {
+async function registerProfilePicture() {
+    const inputImagem = document.getElementById("galaryPhoto")
+    const file = inputImagem.files[0];
     const formData = new FormData();
     formData.append("picture", file);
     formData.append("userId", localStorage.getItem("userId"));
 
-    fetch("/upload", {
+    const response = await fetch("/upload", {
         method: "POST",
         body: formData
     })
-    .then((data) => data.json())
-    .then((response) => {
-        console.log(response);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+
+    return response.status;
 }
 
 function registerAddress() {
@@ -108,15 +105,15 @@ async function nextStep() {
             window.location.pathname = "/register/profile-photo";
             break;
         case "/register/profile-photo":
-            const inputImagem = document.getElementById("galaryPhoto")
-            const file = inputImagem.files[0];
-            registerProfilePicture(file);
-            if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
-                window.location.pathname = "/register/products";
-            } else {
-                window.location.pathname = "/";
-            }
-            break;
+            const status = registerProfilePicture();
+
+            console.log(status);
+            //if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
+            //    window.location.pathname = "/register/products";
+            //} else {
+            //    window.location.pathname = "/";
+           // }
+            //break;
     }
 }
 
