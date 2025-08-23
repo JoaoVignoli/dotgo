@@ -106,13 +106,14 @@ async function nextStep() {
             break;
         case "/register/profile-photo":
             const status = registerProfilePicture();
-
-            console.log(status);
-            if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
+            if (status == 201) {
+                if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
                 window.location.pathname = "/register/products";
             } else {
                 window.location.pathname = "/";
             }
+            }
+            console.log(status)
             break;
     }
 }
