@@ -19,12 +19,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -33,7 +29,8 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final FileStorageService fileStorageService; 
+    private final FileStorageService fileStorageService;
+    private static final String USERS_PICTURES_FOLDER = "pictures/users";
 
     public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder, FileStorageService fileStorageService) {
         this.userRepository = userRepository;
@@ -89,7 +86,27 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
-    
-    
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> saveProfilePicture (@RequestParam MultipartFile picture, @RequestParam Integer userId) {
+
+        Optional<User> user = this.userRepository.findById(userId);
+
+        if (user.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Usuário não localizado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        String folderPathWithId = USERS_PICTURES_FOLDER + "/" + userId;
+
+        String status = fileStorageService.uploadFile(picture, USERS_PICTURES_FOLDER);
+
+        user.get().setPicture(status);
+
+        this.userRepository.save(user.get());
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
 }

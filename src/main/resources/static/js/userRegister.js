@@ -1,4 +1,22 @@
 
+function registerProfilePicture(file) {
+    const formData = new FormData();
+    formData.append("picture", file);
+    formData.append("userId", localStorage.getItem("userId"));
+
+    fetch("/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then((data) => data.json())
+    .then((response) => {
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 function registerAddress() {
     const cep = document.getElementById("cep");
     const street = document.getElementById("street");
@@ -90,6 +108,9 @@ async function nextStep() {
             window.location.pathname = "/register/profile-photo";
             break;
         case "/register/profile-photo":
+            const inputImagem = document.getElementById("galaryPhoto")
+            const file = inputImagem.files[0];
+            registerProfilePicture(file);
             if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
                 window.location.pathname = "/register/products";
             } else {
@@ -131,7 +152,6 @@ function main() {
 
     inputImagem?.addEventListener("change", () => {
         const file = inputImagem.files[0];
-
         document.getElementById("photoExibition").src = URL.createObjectURL(file);
     });
 
