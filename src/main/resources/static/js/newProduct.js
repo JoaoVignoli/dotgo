@@ -3,7 +3,7 @@ function hideValueInput() {
     const containerValue = document.getElementById("product-value")
 
     if (this.checked) {
-        containerValue.style.display = "none";
+        containerValue.disabled;
     } else {
         containerValue.style.display = "flex";
     }
