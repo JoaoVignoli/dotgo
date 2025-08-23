@@ -6,7 +6,7 @@ async function registerProfilePicture() {
     formData.append("picture", file);
     formData.append("userId", localStorage.getItem("userId"));
 
-    const response = await fetch("/upload", {
+    const response = await fetch("/users/upload", {
         method: "POST",
         body: formData
     })
