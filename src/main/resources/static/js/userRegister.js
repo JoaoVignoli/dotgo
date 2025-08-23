@@ -108,12 +108,12 @@ async function nextStep() {
             const status = registerProfilePicture();
 
             console.log(status);
-            //if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
-            //    window.location.pathname = "/register/products";
-            //} else {
-            //    window.location.pathname = "/";
-           // }
-            //break;
+            if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
+                window.location.pathname = "/register/products";
+            } else {
+                window.location.pathname = "/";
+            }
+            break;
     }
 }
 
