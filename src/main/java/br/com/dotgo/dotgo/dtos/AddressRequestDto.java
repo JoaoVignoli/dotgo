@@ -7,9 +7,9 @@ public class AddressRequestDto {
     private String city;
     private String state;
     private Integer cep;
-    private Integer address_number;
+    private Integer addressNumber;
     private String complement;
-    private Integer idUsuario;
+    private Integer userId;
 
     public String getStreet() {
         return street;
@@ -31,15 +31,15 @@ public class AddressRequestDto {
         return cep;
     }
 
-    public Integer getAddress_number() {
-        return address_number;
+    public Integer getaddressNumber() {
+        return addressNumber;
     }
 
     public String getComplement() {
         return complement;
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
+    public Integer getUserId() {
+        return userId;
     }
 }

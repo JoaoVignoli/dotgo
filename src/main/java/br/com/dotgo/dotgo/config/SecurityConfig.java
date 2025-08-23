@@ -36,7 +36,7 @@ public class SecurityConfig {
                         // Rotas públicas //
                         .requestMatchers(
                             // Login Page
-                            "/auth/login", "/login", "/login.html",
+                            "/auth/login", "/login", "/login.html", "/auth/status",
                             // Home Page
                             "/", "/home", "/home.html", 
                             // Users Register Pages

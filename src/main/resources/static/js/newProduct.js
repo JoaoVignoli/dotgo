@@ -17,7 +17,7 @@ function returnWindow() {
 }
 
 function addProduct() {
-    window.location.href = "https://dotgo.vignoli.dev.br/register/products/category";
+    window.location.pathname = "/register/products/category";
 }
 
 function main() {
