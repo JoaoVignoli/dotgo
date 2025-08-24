@@ -2,6 +2,7 @@
     --backgroud-color: #FFFAF5;
     --fonts-family: "DM Sans", sans-serif;
     --black-color: #0C0C0C;
+    --border-color: #0000007d;
     --page-title-size: x-large;
 }
 
@@ -34,10 +35,12 @@ header {
 
 .logo {
   font-size: 30px;
-  font-weight: bold;
   color: #1a1a1a;
   margin: 0;
-  font-family: 'Georgia', serif; /* Igual ao login */
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
 
 /* Ícone de logout posicionado à direita */
@@ -94,7 +97,6 @@ header {
 /* ===== FEED - CATEGORIES ===== */
 .categories-section {
   padding: 12px 8px;
-  overflow-x: auto;
 }
 
 .category-list {
@@ -116,8 +118,8 @@ header {
 .category-icon {
   width: 55px;
   height: 55px;
-  background-color: #eee;
   border-radius: 50%;
+  border: 1px solid var(--border-color) ;
   margin-bottom: 6px;
 }
 
@@ -190,12 +192,13 @@ header {
 }
 
 .favorite-button {
+  display: flex;
   background: none;
   border: none;
   padding: 0;
   position: absolute;
   right: 1rem;
-  top: 1rem;
+  top: 2rem;
 }
 
 .heart-icon {
@@ -238,4 +241,19 @@ header {
 
 .hidden {
   display: none;
+}
+
+.star-icon {
+  color: #FFB65C; /* Cor original do seu código */
+}
+
+.heart-icon {
+  color: #E53935; /* Cor vermelha para o coração */
+  transition: transform 0.2s ease-in-out, color 0.2s;
+}
+
+.heart-icon:hover {
+  color: #C62828; /* Um vermelho mais escuro ao passar o mouse */
+  transform: scale(1.1); /* Aumenta um pouco o tamanho */
+  cursor: pointer;
 }

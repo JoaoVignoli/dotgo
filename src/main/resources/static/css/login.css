@@ -27,11 +27,13 @@ header {
 }
 
 .logo {
-    font-size: 30px;
-    font-weight: bold;
-    color: #1a1a1a;
-    margin: 0;
-    font-family: 'Georgia', serif; /* Igual ao login */
+  font-size: 30px;
+  color: #1a1a1a;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
 
 .login-title {

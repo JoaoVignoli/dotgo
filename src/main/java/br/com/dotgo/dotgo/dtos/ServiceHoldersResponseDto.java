@@ -6,16 +6,16 @@ public class ServiceHoldersResponseDto {
     String specialty;
     Boolean verified;
     String urlProfilePhoto;
-    Integer stars;
+    Integer rating;
 
     public ServiceHoldersResponseDto(Integer id, String name, String specialty, Boolean verified,
-            String urlProfilePhoto, Integer stars) {
+            String urlProfilePhoto, Integer rating) {
         this.id = id;
         this.name = name;
         this.specialty = specialty;
         this.verified = verified;
         this.urlProfilePhoto = urlProfilePhoto;
-        this.stars = stars;
+        this.rating = rating;
     }
 
     public ServiceHoldersResponseDto() {
@@ -61,12 +61,12 @@ public class ServiceHoldersResponseDto {
         this.urlProfilePhoto = urlProfilePhoto;
     }
 
-    public Integer getStars() {
-        return stars;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setStars(Integer stars) {
-        this.stars = stars;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
 }

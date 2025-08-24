@@ -72,7 +72,7 @@ public class UserController {
         return this.userRepository.findAll();
     }
 
-    @GetMapping("/serviceHolders")
+    @GetMapping("/service-holders")
     public ResponseEntity<List<ServiceHoldersResponseDto>> getServiceHolders() {
 
         List<User> serviceHolders = this.userRepository.findByRole(UserRole.SERVICE_HOLDER);
