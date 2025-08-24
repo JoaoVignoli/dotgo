@@ -122,6 +122,10 @@ function loadSpeciality() {
     const userRole = localStorage.getItem("userRole");
     const specialityContainer = document.getElementById("specialityContainer");
 
+    if (!specialityContainer) {
+        return;
+    }
+
     if (userRole === "CLIENT") {
         specialityContainer.style.display = "none";
     }
