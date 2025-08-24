@@ -123,7 +123,7 @@ function loadSpeciality() {
     const specialityContainer = document.getElementById("specialityContainer");
 
     if (userRole === "CLIENT") {
-        specialityContainer?.style.display = "none";
+        specialityContainer.style.display = "none";
     }
 }
 
