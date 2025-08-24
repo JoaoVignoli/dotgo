@@ -12,10 +12,10 @@ public class PublicServiceProviderDto {
     private String phone;
     private String biography;
 
-    public PublicServiceProviderDto(User user) {
+    public PublicServiceProviderDto(User user, String publicUrlPicture) {
         this.id = user.getId();
         this.name = user.getName();
-        this.urlProfilePhoto = user.getPicture();
+        this.urlProfilePhoto = publicUrlPicture;
         this.specialty = user.getSpecialty();
         this.verified = user.getVerified();
         this.rating = 5;

@@ -36,6 +36,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Favorites> favorites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
+    List<Favorites> serviceProvidersLikeds = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
@@ -154,6 +160,22 @@ public class User {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public List<Favorites> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorites> favorites) {
+        this.favorites = favorites;
+    }
+
+    public List<Favorites> getServiceProvidersLikeds() {
+        return serviceProvidersLikeds;
+    }
+
+    public void setServiceProvidersLikeds(List<Favorites> serviceProvidersLikeds) {
+        this.serviceProvidersLikeds = serviceProvidersLikeds;
     }
 
     

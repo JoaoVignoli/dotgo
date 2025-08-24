@@ -82,35 +82,37 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserPersonalDataResponseDto(userSaved));
     }
 
-    @GetMapping("/summary")
-    public ResponseEntity<Page<UserSummaryResponseDto>> getAllUsersSummary(
+     @GetMapping("/summary")
+    public ResponseEntity<?> getUsersSummary(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(required = false) UserRole role
-    ) {
+        @RequestParam(required = false) UserRole role) {
+        
         try {
-            // Usar o método renomeado
+            // Verificar permissões
             List<UserRole> accessibleRoles = authService.getAccessibleRoles();
             
-            // Verificar se a role solicitada é acessível
-            if (role != null && !authService.canAccessRole(role)) {
+            if (role != null && !accessibleRoles.contains(role)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Page.empty());
+                    .body(Map.of("error", "Acesso negado para esta role"));
             }
             
             Pageable pageable = PageRequest.of(page, size);
             Page<User> users;
             
             if (role != null) {
-                users = userRepository.findByRoleAndVerified(role, true, pageable);
+                // Filtrar pela role específica (sem verificar verified)
+                users = userRepository.findByRole(role, pageable);
             } else {
-                // Filtrar pelas roles acessíveis
+                // Filtrar pelas roles acessíveis (sem verificar verified)
                 if (accessibleRoles.isEmpty()) {
                     return ResponseEntity.ok(Page.empty());
                 }
-                users = userRepository.findByRoleInAndVerified(accessibleRoles, true, pageable);
+                
+                users = userRepository.findByRoleIn(accessibleRoles, pageable);
             }
             
+            // Converter para DTO
             Page<UserSummaryResponseDto> summaryPage = users.map(user -> {
                 String publicUrl = fileStorageService.getPublicFileUrl(user.getPicture());
                 return new UserSummaryResponseDto(user, publicUrl);
@@ -118,9 +120,13 @@ public class UserController {
             
             return ResponseEntity.ok(summaryPage);
             
-        } catch (Exception e) {;
+        } catch (Exception e) {
+            // Log do erro
+            System.err.println("Erro ao buscar usuários: " + e.getMessage());
+            e.printStackTrace();
+            
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Page.empty());
+                .body(Map.of("error", "Erro interno do servidor"));
         }
     }
 
@@ -134,16 +140,17 @@ public class UserController {
             }
             
             User user = userOpt.get();
+
+            // Se é prestador, dados públicos
+            if (user.getRole() == UserRole.SERVICE_HOLDER) {
+                // Prestadores de serviço têm dados públicos - qualquer um pode acessar
+                return ResponseEntity.status(HttpStatus.OK).body(new PublicServiceProviderDto(user, this.fileStorageService.getPublicFileUrl(user.getPicture())));
+            }
             
             // Verificar se pode acessar esta role
             if (!authService.canAccessRole(user.getRole())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("error", "Acesso negado para este tipo de usuário"));
-            }
-            
-            // Se é prestador, dados públicos
-            if (user.getRole() == UserRole.SERVICE_HOLDER) {
-                return ResponseEntity.status(HttpStatus.OK).body(new PublicServiceProviderDto(user));
             }
             
             // Para outros tipos, verificar acesso específico
