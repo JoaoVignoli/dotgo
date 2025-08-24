@@ -105,10 +105,6 @@ header {
     box-sizing: border-box;
 }
 
-.hidden {
-    display : flex;
-}
-
 .inputComImagem {
     width: 100%;
     padding: 12px;
