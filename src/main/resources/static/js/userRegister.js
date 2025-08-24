@@ -139,7 +139,7 @@ function loadSpeciality() {
 
 function main() {
 
-    document.addEventListener("DOMContentLoaded", loadSpeciality);
+    loadSpeciality();
 
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
