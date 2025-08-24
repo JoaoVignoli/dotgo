@@ -16,7 +16,7 @@ create table "user" (
 
 create table social_media (
 	id SERIAL not null primary key,
-	service_holder_id int not null references "user"(id),
+	service_provider_id int not null references "user"(id),
 	type Varchar(255) not null,
 	url Text not null
 );
@@ -26,12 +26,12 @@ create table bank_details (
 	bank int not null,
 	agency int not null,
 	tax_id_account_manager Varchar(14) not null,
-	service_holder_id int references "user"(id)
+	service_provider_id int references "user"(id)
 );
 
 create table feed (
 	id serial not null primary key,
-	service_holder_id int references "user"(id) not null,
+	service_provider_id int references "user"(id) not null,
 	picture_url Text not null
 );
 
@@ -54,20 +54,20 @@ create table certifacate (
 	start_date date not null,
 	end_date date,
 	description Text,
-	service_holder_id int references "user"(id) not null
+	service_provider_id int references "user"(id) not null
 );
 
 create table category (
 	id serial not null primary key,
 	name Varchar(255) unique not null,
-	icon Text not null
+	icon Text
 );
 
 create table subcategory (
 	id serial not null primary key,
 	name Varchar(255) unique not null,
 	category_id int references category(id) not null,
-	icon text not null
+	icon text 
 );
 
 create table product (
@@ -80,7 +80,9 @@ create table product (
 	auto_approve Boolean,
 	price_to_be_agreed Boolean,
 	time_to_be_agreed Boolean,
-	created_at timestamp not null
+	created_at timestamp not null,
+	subcategory_id int references subcategory(id) not null,
+	service_provider_id int not null references "user"(id)
 );
 
 create table product_picture (
@@ -89,16 +91,10 @@ create table product_picture (
 	product_id int references product(id) not null
 );
 
-create table product_assignment (
-	id Serial not null primary key,
-	service_holder_id int not null references "user"(id),
-	subcategory int not null references subcategory(id),
-	product_id int not null references product(id)
-);
 
 create table service_order (
 	id Serial not null primary key,
-	product_assigment_id int not null references product_assignment(id),
+	product_id int not null references product(id),
 	client_id int not null references "user"(id),
 	total_value Decimal(10, 2) not null,
 	observation Text,
@@ -120,3 +116,9 @@ create table review (
 	comment text,
 	created_at timestamp not null
 );
+
+create table favorites (
+	id Serial not null primary key,
+	service_provider_id int not null references "user"(id),
+	client_id int nott null references "user"(id)
+) 

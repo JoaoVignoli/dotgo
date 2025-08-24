@@ -6,11 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.ProductCreateDto;
 import br.com.dotgo.dotgo.entities.Product;
-import br.com.dotgo.dotgo.entities.ProductAssignment;
 import br.com.dotgo.dotgo.entities.ProductPicture;
 import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.entities.User;
-import br.com.dotgo.dotgo.repositories.ProductAssignmentRepository;
 import br.com.dotgo.dotgo.repositories.ProductPictureRepository;
 import br.com.dotgo.dotgo.repositories.ProductRepository;
 import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
@@ -35,7 +33,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private final ProductAssignmentRepository productAssignmentRepository;
     private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
     private final SubcategoryRepository subcategoryRepository;
@@ -43,12 +40,10 @@ public class ProductController {
     private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products"; 
 
     public ProductController(
-        ProductRepository productRepository, ProductAssignmentRepository productAssignmentRepository, 
-        ProductPictureRepository productPictureRepository, UserRepository userRepository, 
-        SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
+        ProductRepository productRepository, ProductPictureRepository productPictureRepository, 
+        UserRepository userRepository, SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
     ) {
         this.productRepository = productRepository;
-        this.productAssignmentRepository = productAssignmentRepository;
         this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
         this.subcategoryRepository = subcategoryRepository;
@@ -88,13 +83,6 @@ public class ProductController {
 
         var productSaved = this.productRepository.save(newProduct);
 
-        ProductAssignment newProductAssigment = new ProductAssignment();
-        newProductAssigment.setSubcategory(subcategory.get());
-        newProductAssigment.setUser(serviceHolder.get());
-        newProductAssigment.setProduct(productSaved);
-
-        this.productAssignmentRepository.save(newProductAssigment);
-
         ArrayList<MultipartFile> productPictures = productCreateDto.getPictures();
 
         if (productPictures == null) {
@@ -118,8 +106,6 @@ public class ProductController {
             productPicture.setUrl(url);
             this.productPictureRepository.save(productPicture);
         }
-
-
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -27,11 +29,16 @@ public class Product {
     private Boolean timeToBeAgreed;
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
+
+    @ManyToOne
+    @JoinColumn(name = "service_provider_id")
+    private User user;
+    
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPicture> pictures = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductAssignment> productAssignments = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -118,6 +125,22 @@ public class Product {
 
     public void setPictures(List<ProductPicture> pictures) {
         this.pictures = pictures;
+    }
+
+    public Subcategory getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(Subcategory subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

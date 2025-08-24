@@ -34,7 +34,7 @@ public class User {
     List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<ProductAssignment> productAssigments = new ArrayList<>();
+    List<Product> products = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -148,12 +148,12 @@ public class User {
         this.addresses = addresses;
     }
 
-    public List<ProductAssignment> getProductAssigments() {
-        return productAssigments;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProductAssigments(List<ProductAssignment> productAssigments) {
-        this.productAssigments = productAssigments;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     
