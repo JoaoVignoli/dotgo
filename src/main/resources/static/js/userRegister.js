@@ -129,10 +129,10 @@ function registerServiceHolder() {
 }
 
 function loadSpeciality() {
-    const speciality = localStorage.getItem("userRole");
+    const userRole = localStorage.getItem("userRole");
     const specialityContainer = getElementById("specialityContainer")
 
-    if (speciality == "CLIENT") {
+    if (userRole === "CLIENT") {
         specialityContainer.style.display = "none";
     } else {
         specialityContainer.style.display = "flex";
@@ -141,8 +141,7 @@ function loadSpeciality() {
 
 function main() {
 
-    const speciality = document.getElementById(localStorage.getItem("userRole"));
-    speciality.addEventListener("load", loadSpeciality)
+    document.addEventListener("DOMContentLoaded", loadSpeciality);
 
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
