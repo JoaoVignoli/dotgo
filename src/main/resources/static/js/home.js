@@ -13,6 +13,31 @@ async function logout() {
     } 
 }
 
+// Necessário alterar para que dados venham do banco
+// Verificar se está favoritado
+function checkIfFavorited(providerId) {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    return favorites.includes(providerId);
+}
+
+// Necessário alterar para que dados venham do banco
+// Adicionar aos favoritos
+function addFavorite(providerId) {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    if (!favorites.includes(providerId)) {
+        favorites.push(providerId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+}
+
+// Necessário alterar para que dados venham do banco
+// Remover dos favoritos
+function removeFavorite(providerId) {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const updatedFavorites = favorites.filter(id => id !== providerId);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+}
+
 // Função para renderizar uma lista de categorias (ou subcategorias)
 function renderCategories(categories) {
 
@@ -97,8 +122,9 @@ async function navigateToParentCategory() {
     renderCategories(categories);
 }
 
+// Redireciona para o perfil do prestador
 function showProviderProfile(providerId) {
-    window.location.pathname = `/service-providers/${providerId}`
+    window.location.pathname = `/service-providers/profile`
 }
 
 function reduceName(name, maxLength, suffix = '...') {
@@ -150,12 +176,27 @@ function createStarIcon() {
     return starSvg;
 }
 
-function createHeartIcon() {
+function createHeartIconOutline() {
     const heartSvg = createSvgIcon(
         { xmlns: "http://www.w3.org/2000/svg", width: "25", height: "25", viewBox: "0 0 25 25", fill: "currentColor" },
-        [{ d: "M16.6875 2.625C14.8041 2.625 13.1325 3.36844 12 4.64625C10.8675 3.36844 9.19594 2.625 7.3125 2.625C5.67208 2.62698 4.09942 3.27952 2.93947 4.43947C1.77952 5.59942 1.12698 7.17208 1.125 8.8125C1.125 15.5944 11.0447 21.0131 11.4666 21.2409C11.6305 21.3292 11.8138 21.3754 12 21.3754C12.1862 21.3754 12.3695 21.3292 12.5334 21.2409C12.9553 21.0131 22.875 15.5944 22.875 8.8125C22.873 7.17208 22.2205 5.59942 21.0605 4.43947C19.9006 3.27952 18.3279 2.62698 16.6875 2.625ZM16.1728 15.9713C14.8671 17.0792 13.4714 18.0764 12 18.9525C10.5286 18.0764 9.13287 17.0792 7.82719 15.9713C5.79562 14.2284 3.375 11.5706 3.375 8.8125C3.375 7.76821 3.78984 6.76669 4.52827 6.02827C5.26669 5.28984 6.26821 4.875 7.3125 4.875C8.98125 4.875 10.3781 5.75625 10.9584 7.17562C11.0429 7.38254 11.1871 7.55961 11.3726 7.68425C11.5581 7.80889 11.7765 7.87545 12 7.87545C12.2235 7.87545 12.4419 7.80889 12.6274 7.68425C12.8129 7.55961 12.9571 7.38254 13.0416 7.17562C13.6219 5.75625 15.0188 4.875 16.6875 4.875C17.7318 4.875 18.7333 5.28984 19.4717 6.02827C20.2102 6.76669 20.625 7.76821 20.625 8.8125C20.625 11.5706 18.2044 14.2284 16.1728 15.9713Z" }] // Path do coração (resumido )
+        [{ 
+            d: "M16.6875 2.625C14.8041 2.625 13.1325 3.36844 12 4.64625C10.8675 3.36844 9.19594 2.625 7.3125 2.625C5.67208 2.62698 4.09942 3.27952 2.93947 4.43947C1.77952 5.59942 1.12698 7.17208 1.125 8.8125C1.125 15.5944 11.0447 21.0131 11.4666 21.2409C11.6305 21.3292 11.8138 21.3754 12 21.3754C12.1862 21.3754 12.3695 21.3292 12.5334 21.2409C12.9553 21.0131 22.875 15.5944 22.875 8.8125C22.873 7.17208 22.2205 5.59942 21.0605 4.43947C19.9006 3.27952 18.3279 2.62698 16.6875 2.625ZM16.1728 15.9713C14.8671 17.0792 13.4714 18.0764 12 18.9525C10.5286 18.0764 9.13287 17.0792 7.82719 15.9713C5.79562 14.2284 3.375 11.5706 3.375 8.8125C3.375 7.76821 3.78984 6.76669 4.52827 6.02827C5.26669 5.28984 6.26821 4.875 7.3125 4.875C8.98125 4.875 10.3781 5.75625 10.9584 7.17562C11.0429 7.38254 11.1871 7.55961 11.3726 7.68425C11.5581 7.80889 11.7765 7.87545 12 7.87545C12.2235 7.87545 12.4419 7.80889 12.6274 7.68425C12.8129 7.55961 12.9571 7.38254 13.0416 7.17562C13.6219 5.75625 15.0188 4.875 16.6875 4.875C17.7318 4.875 18.7333 5.28984 19.4717 6.02827C20.2102 6.76669 20.625 7.76821 20.625 8.8125C20.625 11.5706 18.2044 14.2284 16.1728 15.9713Z",
+            fill: "#0C0C0C"
+        }]
     );
-    heartSvg.classList.add("heart-icon");
+    heartSvg.classList.add("heart-icon", "heart-outline");
+    return heartSvg;
+}
+
+function createHeartIconFilled() {
+    const heartSvg = createSvgIcon(
+        { xmlns: "http://www.w3.org/2000/svg", width: "25", height: "25", viewBox: "0 0 25 25", fill: "currentColor" },
+        [{ 
+            d: "M16.6875 2.625C14.8041 2.625 13.1325 3.36844 12 4.64625C10.8675 3.36844 9.19594 2.625 7.3125 2.625C5.67208 2.62698 4.09942 3.27952 2.93947 4.43947C1.77952 5.59942 1.12698 7.17208 1.125 8.8125C1.125 15.5944 11.0447 21.0131 11.4666 21.2409C11.6305 21.3292 11.8138 21.3754 12 21.3754C12.1862 21.3754 12.3695 21.3292 12.5334 21.2409C12.9553 21.0131 22.875 15.5944 22.875 8.8125C22.873 7.17208 22.2205 5.59942 21.0605 4.43947C19.9006 3.27952 18.3279 2.62698 16.6875 2.625Z",
+            fill: "#E53935"
+        }]
+    );
+    heartSvg.classList.add("heart-icon", "heart-filled");
     return heartSvg;
 }
 
@@ -193,7 +234,44 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
 
     const favoriteButton = document.createElement("button");
     favoriteButton.classList.add("favorite-button");
-    favoriteButton.appendChild(createHeartIcon());
+    favoriteButton.setAttribute("data-provider-id", serviceHolder.id);
+
+    const isFavorited = checkIfFavorited(serviceHolder.id);
+    if (isFavorited) {
+        favoriteButton.appendChild(createHeartIconFilled()); // Coração preenchido
+        favoriteButton.classList.add("favorited");
+    } else {
+        favoriteButton.appendChild(createHeartIconOutline()); // Coração vazio
+    }
+
+    favoriteButton.addEventListener('click', (event) => {
+
+        event.stopPropagation(); 
+        event.preventDefault();
+
+        const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
+    
+        favoriteButton.innerHTML = '';
+    
+        if (isCurrentlyFavorited) {
+            // Desfavoritar: coração vazio
+            favoriteButton.appendChild(createHeartIconOutline());
+            favoriteButton.classList.remove("favorited");
+            removeFavorite(serviceHolder.id);
+        } else {
+            // Favoritar: coração preenchido
+            favoriteButton.appendChild(createHeartIconFilled());
+            favoriteButton.classList.add("favorited");
+            addFavorite(serviceHolder.id);
+        }
+    
+    
+        // Feedback visual temporário
+        favoriteButton.classList.add("clicked");
+        setTimeout(() => {
+            favoriteButton.classList.remove("clicked");
+        }, 200);
+    });
 
     if (!isUserLoggedIn) {
         favoriteButton.style.display = "none";
@@ -220,16 +298,16 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
     providerCard.appendChild(providerInfo);
     providerCard.appendChild(favoriteButton);
 
-    favoriteButton.addEventListener('click', (event) => {
-        // IMPEDE que o clique "borbulhe" para o providerCard
-        event.stopPropagation(); 
-    
-    });
  
     // 5. Adiciona o card completo à lista
     serviceProvidersList.appendChild(providerCard);
 
-    providerCard.addEventListener('click', () => showProviderProfile(serviceHolder.id))
+    providerCard.addEventListener('click', (event) => {
+    if (event.target.closest('button') || event.target.closest('.favorite-button')) {
+        return; 
+    }
+    showProviderProfile(serviceHolder.id);
+});
 }
 
 function createCategoryItem(category){
@@ -249,19 +327,33 @@ function createCategoryItem(category){
     categoryItem.appendChild(categoryIcon);
     categoryItem.appendChild(categoryLabel);
 
-    categoryItem.addEventListener('click', (event) => {
+ categoryItem.addEventListener('click', (event) => {
         
         if (event.target.closest('button')) {
+            console.log('Click intercepted on button within category item');
             return; 
         }
 
-        const allCategoryIcons = document.querySelectorAll('.category-icon');
+        const categoryList = categoryItem.closest('.category-list');
+        if (categoryList) {
+            const allCategoryIcons = categoryList.querySelectorAll('.category-icon');
+            
+            allCategoryIcons.forEach(icon => {
+                icon.classList.remove('category-icon--selected'); 
+            });
+        } else {
+            const allCategoryIcons = document.querySelectorAll('.category-icon');
+            allCategoryIcons.forEach(icon => {
+                icon.classList.remove('category-icon--selected'); 
+            });
+        }
         
-        allCategoryIcons.forEach(icon => {
-            icon.classList.remove('category-icon--selected'); 
-        });
-        
-        categoryIcon.classList.add('category-icon--selected');
+        if (!categoryIcon.classList.contains('category-icon--selected')) {
+            categoryIcon.classList.add('category-icon--selected');
+            console.log('Added selected class to category:', category.name);
+        } else {
+            console.log('Category already selected:', category.name);
+        }
 
         if (category.isLeaf) {
             // Futuramente: filterProvidersByCategory(category.id);

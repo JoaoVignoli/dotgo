@@ -43,7 +43,6 @@ header {
   font-style: normal;
 }
 
-/* Ícone de logout posicionado à direita */
 .logout-icon {
   position: absolute;
   right: 16px;
@@ -97,7 +96,6 @@ header {
 /* ===== FEED - CATEGORIES ===== */
 .back-categories-button, .categories-title {
   font-size: small;
-  padding-bottom: 1rem;
   color: var(--black-color);
 }
 
@@ -112,7 +110,7 @@ header {
   padding-bottom: 8px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding-top: 0.5rem;
+  padding-top: 1rem;
 }
 
 .category-item {
@@ -121,17 +119,20 @@ header {
   align-items: center;
   min-width: 70px;
   cursor: pointer;
+  padding: 1px;
 }
 
-.category-item:hover .category-icon {
+.category-item:hover .category-icon:not(.category-icon--selected) {
     transform: scale(1.05);
 }
 
 .category-icon--selected {
-  transform: scale(1.30); /* Fica um pouco maior */
-  border-color: 2px solid var(--border-color); ; /* Adiciona a borda escura */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Opcional: sombra para destacar */
-  padding: 0.3rem;
+
+  transform: scale(1.30) !important; 
+  border: 2px solid var(--border-color) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important; 
+  padding: 0.3rem !important;
+  transition: transform 0.2s ease-in-out, border 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
 }
 
 .category-icon {
@@ -139,13 +140,33 @@ header {
   height: 55px;
   border: 1px solid var(--border-color); 
   border-radius: 50%; 
-  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out; 
+  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transform: scale(1);
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .category-label {
   font-size: 13px;
   text-align: center;
   color: #333;
+  padding: 0.5rem;
+}
+
+.category-icon--selected {
+  animation: categorySelect 0.3s ease-in-out;
+}
+
+@keyframes categorySelect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1.30);
+  }
 }
 
 /* ===== FEED - SERVICE-PROVIDERS ===== */
@@ -167,6 +188,13 @@ header {
   padding: 1rem;
   position: relative;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.provider-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
 }
 
 .provider-photo {
@@ -210,20 +238,64 @@ header {
   fill: #FFB65C;
 }
 
+.heart-icon {
+  color: #E53935; /* Cor vermelha para o coração */
+  transition: transform 0.2s ease-in-out, color 0.2s;
+}
+
+.heart-icon:hover {
+  color: #C62828; /* Um vermelho mais escuro ao passar o mouse */
+  transform: scale(1.1); /* Aumenta um pouco o tamanho */
+  cursor: pointer;
+}
+
+.heart-icon {
+  width: 30px !important;
+  height: 30px !important;
+  fill: #E65B48;
+}
+
+/* Coração vazio (contorno) */
+/* .heart-icon.heart-outline path {
+  stroke: var(--black-color);
+  stroke-width: 1.5;
+  fill: none;
+} */
+
+/* Coração preenchido */
+.heart-icon.heart-filled path {
+  fill: #E53935;
+  stroke: none;
+}
+
+@keyframes heartClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
 .favorite-button {
   display: flex;
   background: none;
   border: none;
-  padding: 0;
+  padding: 8px;
   position: absolute;
   right: 1rem;
-  top: 2rem;
+  top: 1rem;
+  z-index: 10;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
 }
 
-.heart-icon {
-  width: 24px;
-  height: 24px;
-  fill: #E65B48;
+.favorite-button:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Animação de clique */
+.favorite-button.clicked {
+  animation: heartClick 0.3s ease-in-out;
 }
 
 /* ===== FEED - NAVIGATION-BAR ===== */
@@ -262,17 +334,17 @@ header {
   display: none;
 }
 
+.category-item,
+.provider-card,
+.favorite-button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.category-icon,
+.heart-icon,
 .star-icon {
-  color: #FFB65C; /* Cor original do seu código */
-}
-
-.heart-icon {
-  color: #E53935; /* Cor vermelha para o coração */
-  transition: transform 0.2s ease-in-out, color 0.2s;
-}
-
-.heart-icon:hover {
-  color: #C62828; /* Um vermelho mais escuro ao passar o mouse */
-  transform: scale(1.1); /* Aumenta um pouco o tamanho */
-  cursor: pointer;
+  pointer-events: none;
 }
