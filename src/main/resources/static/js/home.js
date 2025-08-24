@@ -32,8 +32,15 @@ function renderCategories(categories) {
         existingBackButton.remove();
     }
 
+
     // 2. Adiciona um botão "Voltar" se não estivermos no nível principal
     if (window.currentCategoryLevel > 0) { // Usaremos uma variável global simples para rastrear o nível
+
+        const existingCategoriesTitle = categoriesSection.querySelector(".categories-title");
+        if (existingCategoriesTitle) {
+            existingCategoriesTitle.remove();
+        }
+
         const backButton = document.createElement("div");
         backButton.classList.add("back-categories-button")
 
@@ -41,6 +48,14 @@ function renderCategories(categories) {
         backButton.innerText = `< ${currentCategory.name}`;
         backButton.addEventListener('click', navigateToParentCategory);
         categoriesSection.prepend(backButton);
+
+    } else {
+
+        const categoriesTitle = document.createElement("div");
+        categoriesTitle.classList.add("categories-title")
+        categoriesTitle.innerText = "Categorias"
+        categoriesSection.prepend(categoriesTitle);
+
     }
 
     // 3. Cria e adiciona cada item da lista
@@ -53,6 +68,8 @@ function renderCategories(categories) {
 // Função para navegar para as subcategorias
 async function navigateToSubcategories(category) {
     window.currentCategoryLevel++; // Aumenta o nível de profundidade
+
+    // Valida se é uma categoria ou subcategoria
     window.categoryHistory.push(category); // Guarda o histórico para o botão "Voltar"
 
     const subcategories = await getCategories(`/categories/${category.id}/subcategories`);
@@ -207,14 +224,7 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
         // IMPEDE que o clique "borbulhe" para o providerCard
         event.stopPropagation(); 
     
-        // Exemplo: Mudar a cor do ícone ao clicar
-        const heartIcon = favoriteButton.querySelector('.heart-icon');
-        if (heartIcon.style.color === 'red') {
-            heartIcon.style.color = 'currentColor'; // Volta para a cor padrão
-        } else {
-            heartIcon.style.color = 'red'; // Fica vermelho
-        }
-        });
+    });
  
     // 5. Adiciona o card completo à lista
     serviceProvidersList.appendChild(providerCard);
@@ -239,7 +249,27 @@ function createCategoryItem(category){
     categoryItem.appendChild(categoryIcon);
     categoryItem.appendChild(categoryLabel);
 
-    categoryItem.addEventListener('click', () => navigateToSubcategories(category))
+    categoryItem.addEventListener('click', (event) => {
+        
+        if (event.target.closest('button')) {
+            return; 
+        }
+
+        const allCategoryIcons = document.querySelectorAll('.category-icon');
+        
+        allCategoryIcons.forEach(icon => {
+            icon.classList.remove('category-icon--selected'); 
+        });
+        
+        categoryIcon.classList.add('category-icon--selected');
+
+        if (category.isLeaf) {
+            // Futuramente: filterProvidersByCategory(category.id);
+        } else {
+            navigateToSubcategories(category);
+        }
+    });
+
 
     return categoryItem
 

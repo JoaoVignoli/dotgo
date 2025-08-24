@@ -5,6 +5,7 @@ public class CategoryResponseDto {
     private String name;
     private String icon;
     private String iconUrl;
+    private Boolean isLeaf;
 
     public CategoryResponseDto() {
     }
@@ -14,6 +15,7 @@ public class CategoryResponseDto {
         this.name = name;
         this.icon = icon;
         this.iconUrl = iconUrl;
+        this.isLeaf = false;
     }
 
     public Integer getId() {
@@ -46,6 +48,14 @@ public class CategoryResponseDto {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
+    }
+
+    public Boolean getIsLeaf() {
+        return isLeaf;
+    }
+
+    public void setIsLeaf(Boolean isLeaf) {
+        this.isLeaf = isLeaf;
     }
     
 }

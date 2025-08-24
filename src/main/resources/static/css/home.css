@@ -95,7 +95,7 @@ header {
 }
 
 /* ===== FEED - CATEGORIES ===== */
-.back-categories-button {
+.back-categories-button, .categories-title {
   font-size: small;
   padding-bottom: 1rem;
   color: var(--black-color);
@@ -112,6 +112,7 @@ header {
   padding-bottom: 8px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  padding-top: 0.5rem;
 }
 
 .category-item {
@@ -119,14 +120,26 @@ header {
   flex-direction: column;
   align-items: center;
   min-width: 70px;
+  cursor: pointer;
+}
+
+.category-item:hover .category-icon {
+    transform: scale(1.05);
+}
+
+.category-icon--selected {
+  transform: scale(1.30); /* Fica um pouco maior */
+  border-color: 2px solid var(--border-color); ; /* Adiciona a borda escura */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Opcional: sombra para destacar */
+  padding: 0.3rem;
 }
 
 .category-icon {
   width: 55px;
   height: 55px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color) ;
-  margin-bottom: 6px;
+  border: 1px solid var(--border-color); 
+  border-radius: 50%; 
+  transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out; 
 }
 
 .category-label {
