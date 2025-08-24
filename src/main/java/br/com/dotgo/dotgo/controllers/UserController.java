@@ -72,11 +72,7 @@ public class UserController {
         newUser.setPhone(request.getPhone());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setBirthday(request.getBirthday());
-        if (request.getSpecialty() != null) {
-            newUser.setSpecialty(request.getSpecialty());
-        } else {
-            newUser.setSpecialty("None");
-        }
+        newUser.setSpecialty(request.getSpecialty());
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setVerified(false);
 
