@@ -74,6 +74,8 @@ public class UserController {
         newUser.setBirthday(request.getBirthday());
         if (request.getSpecialty() != null) {
             newUser.setSpecialty(request.getSpecialty());
+        } else {
+            newUser.setSpecialty("None");
         }
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setVerified(false);
