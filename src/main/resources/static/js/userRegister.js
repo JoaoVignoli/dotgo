@@ -132,10 +132,8 @@ function loadSpeciality() {
     const userRole = localStorage.getItem("userRole");
     const specialityContainer = getElementById("specialityContainer")
 
-    if (userRole === "CLIENT") {
-        specialityContainer.style.display = "none";
-    } else {
-        specialityContainer.style.display = "flex";
+    if (userRole === "SERVICE_HOLDER") {
+        specialityContainer.classList.remove("hidden")
     }
 }
 
