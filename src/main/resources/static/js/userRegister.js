@@ -118,16 +118,16 @@ async function nextStep() {
     }
 }
 
-function loadSpeciality() {
+function loadSpecialty() {
     const userRole = localStorage.getItem("userRole");
-    const specialityContainer = document.getElementById("specialityContainer");
+    const specialtyContainer = document.getElementById("specialtyContainer");
 
-    if (!specialityContainer) {
+    if (!specialtyContainer) {
         return;
     }
 
     if (userRole === "CLIENT") {
-        specialityContainer.style.display = "none";
+        specialtyContainer.style.display = "none";
     }
 }
 
@@ -143,7 +143,7 @@ function registerServiceHolder() {
 
 function main() {
 
-    loadSpeciality();
+    loadSpecialty();
 
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
