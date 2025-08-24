@@ -118,6 +118,15 @@ async function nextStep() {
     }
 }
 
+function loadSpeciality() {
+    const userRole = localStorage.getItem("userRole");
+    const specialityContainer = document.getElementById("specialityContainer");
+
+    if (userRole === "CLIENT") {
+        specialityContainer?.style.display = "none";
+    }
+}
+
 function registerClient() {
     localStorage.setItem("userRole", "CLIENT");
     nextStep();
@@ -126,15 +135,6 @@ function registerClient() {
 function registerServiceHolder() {
     localStorage.setItem("userRole", "SERVICE_HOLDER");
     nextStep();
-}
-
-function loadSpeciality() {
-    const userRole = localStorage.getItem("userRole");
-    const specialityContainer = document.getElementById("specialityContainer");
-
-    if (userRole === "CLIENT") {
-        specialityContainer.style.display = "none";
-    }
 }
 
 function main() {
