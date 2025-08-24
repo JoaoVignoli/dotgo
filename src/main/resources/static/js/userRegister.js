@@ -59,7 +59,11 @@ async function personalInfoRegister() {
     const phoneNumber = document.getElementById("phoneNumber");
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
-    const specialty = document.getElementById("specialty")
+    if (document.getElementById(specialty) === null) {
+        const specialty = "None";
+    } else {
+        const specialty = document.getElementById("specialty")
+    }
 
     const userData = {
         "role": localStorage.getItem("userRole"),
