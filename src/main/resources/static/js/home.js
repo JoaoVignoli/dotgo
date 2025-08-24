@@ -125,7 +125,7 @@ async function navigateToParentCategory() {
 // Redireciona para o perfil do prestador
 function showProviderProfile(providerId) {
     localStorage.setItem("providerId", providerId)
-    window.location.pathname = `/profile`
+    window.location.pathname = "/service-providers/profile"
 }
 
 function reduceName(name, maxLength, suffix = '...') {
@@ -368,9 +368,9 @@ function createCategoryItem(category){
 
 }
 
-async function getServiceProviders(page = 0, size = 10) {
+async function getServiceProviders() {
 
-    const url = '/users/summary?role=SERVICE_HOLDER'
+    const url = '/users/summary'
 
     try {
         const response = await fetch(url);
