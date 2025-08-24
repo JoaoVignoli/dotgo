@@ -130,7 +130,7 @@ function registerServiceHolder() {
 
 function loadSpeciality() {
     const userRole = localStorage.getItem("userRole");
-    const specialityContainer = getElementById("specialityContainer");
+    const specialityContainer = document.getElementById("specialityContainer");
 
     if (userRole === "CLIENT") {
         specialityContainer.style.display = "none";
