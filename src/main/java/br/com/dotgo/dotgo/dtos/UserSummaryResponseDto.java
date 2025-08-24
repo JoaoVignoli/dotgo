@@ -1,24 +1,31 @@
 package br.com.dotgo.dotgo.dtos;
 
-public class ServiceHoldersResponseDto {
-    Integer id;
-    String name;
-    String specialty;
-    Boolean verified;
-    String urlProfilePhoto;
-    Integer rating;
+import br.com.dotgo.dotgo.entities.User;
+import br.com.dotgo.dotgo.enums.UserRole;
 
-    public ServiceHoldersResponseDto(Integer id, String name, String specialty, Boolean verified,
-            String urlProfilePhoto, Integer rating) {
-        this.id = id;
-        this.name = name;
-        this.specialty = specialty;
-        this.verified = verified;
-        this.urlProfilePhoto = urlProfilePhoto;
-        this.rating = rating;
+public class UserSummaryResponseDto {
+
+    private Integer id;
+    private String name;
+    private String urlProfilePhoto;
+    private String specialty;
+    private Boolean verified;
+    private Integer rating;
+
+    public UserSummaryResponseDto(User user, String publicPictureUrl) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.urlProfilePhoto = publicPictureUrl;
+
+        if (user.getRole() == UserRole.SERVICE_HOLDER) {
+            this.rating = 5;
+            this.verified = user.getVerified();
+            this.specialty = user.getSpecialty();
+        }
+
     }
 
-    public ServiceHoldersResponseDto() {
+    public UserSummaryResponseDto() {
     }
 
     public Integer getId() {

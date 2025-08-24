@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/forgot-password/new-password").setViewName("forward:/resetPassword.html");
 
 
-        registry.addViewController("/service-providers/**").setViewName("forward:/profileProvider.html");
+        registry.addViewController("/service-providers/profile").setViewName("forward:/profileProvider.html");
         
     }
 } 

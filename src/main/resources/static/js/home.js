@@ -124,7 +124,8 @@ async function navigateToParentCategory() {
 
 // Redireciona para o perfil do prestador
 function showProviderProfile(providerId) {
-    window.location.pathname = `/service-providers/profile`
+    localStorage.setItem("providerId", providerId)
+    window.location.pathname = `/profile`
 }
 
 function reduceName(name, maxLength, suffix = '...') {
@@ -367,14 +368,17 @@ function createCategoryItem(category){
 
 }
 
-async function getServiceProviders(url) {
+async function getServiceProviders(page = 0, size = 10) {
+
+    const url = '/users/summary?role=SERVICE_HOLDER'
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Erro ao buscar prestadores: ${response.status}`);
         }
         const data = await response.json();
-        return data; 
+        return data.content; 
     } catch (error) {
         console.error("Falha ao buscar prestadores de serviço:", error);
         return []; // Retorna um array vazio em caso de erro para não quebrar o código
