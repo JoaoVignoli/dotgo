@@ -18,6 +18,7 @@ public class UserPersonalDataResponseDto {
     private Date birthday;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private String specialty;
 
     public UserPersonalDataResponseDto(User user) {
         this.id = user.getId();
@@ -28,6 +29,7 @@ public class UserPersonalDataResponseDto {
         this.password = user.getPassword();
         this.birthday = user.getBirthday();
         this.role = user.getRole();
+        this.specialty = user.getSpecialty();
     }
 
     public Integer getId() { return id; }
@@ -57,4 +59,8 @@ public class UserPersonalDataResponseDto {
     }
 
     public UserRole getRole() { return role; }
+
+    public String getSpecialty() {
+        return specialty;
+    }
 }

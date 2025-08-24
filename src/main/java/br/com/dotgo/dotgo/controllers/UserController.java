@@ -72,6 +72,7 @@ public class UserController {
         newUser.setPhone(request.getPhone());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setBirthday(request.getBirthday());
+        newUser.setSpecialty(request.getSpecialty());
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setVerified(false);
 

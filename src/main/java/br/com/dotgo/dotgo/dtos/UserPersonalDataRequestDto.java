@@ -30,6 +30,7 @@ public class UserPersonalDataRequestDto {
     @NotNull(message = "A role não pode ser nula.")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private String specialty;
 
     public UserRole getRole() {
         return role;
@@ -57,5 +58,9 @@ public class UserPersonalDataRequestDto {
 
     public Date getBirthday() {
         return birthday;
+    }
+
+    public String getSpecialty() {
+        return specialty;
     }
 }
