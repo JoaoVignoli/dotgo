@@ -95,6 +95,12 @@ header {
 }
 
 /* ===== FEED - CATEGORIES ===== */
+.back-categories-button {
+  font-size: small;
+  padding-bottom: 1rem;
+  color: var(--black-color);
+}
+
 .categories-section {
   padding: 12px 8px;
 }

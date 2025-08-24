@@ -1,3 +1,4 @@
+
 async function logout() {
     const response = await fetch("/auth/logout", {
         method: "POST",
@@ -10,6 +11,77 @@ async function logout() {
     if (response.status === 200) {
         window.location.reload();
     } 
+}
+
+// Função para renderizar uma lista de categorias (ou subcategorias)
+function renderCategories(categories) {
+
+    const categorieList = document.getElementById("category-list");
+    const categoriesSection = document.getElementById("categories-section");
+
+    // Adicione uma verificação de segurança (guarda)
+    if (!categorieList) {
+        console.error("Elemento #category-list não encontrado no DOM. A renderização de categorias foi abortada.");
+        return; // Interrompe a função para evitar mais erros.
+    }
+    // 1. Limpa a lista atual antes de adicionar novos itens
+    categorieList.innerHTML = '';
+
+    const existingBackButton = categoriesSection.querySelector(".back-categories-button");
+    if (existingBackButton) {
+        existingBackButton.remove();
+    }
+
+    // 2. Adiciona um botão "Voltar" se não estivermos no nível principal
+    if (window.currentCategoryLevel > 0) { // Usaremos uma variável global simples para rastrear o nível
+        const backButton = document.createElement("div");
+        backButton.classList.add("back-categories-button")
+
+        const currentCategory = window.categoryHistory[window.categoryHistory.length - 1];
+        backButton.innerText = `< ${currentCategory.name}`;
+        backButton.addEventListener('click', navigateToParentCategory);
+        categoriesSection.prepend(backButton);
+    }
+
+    // 3. Cria e adiciona cada item da lista
+    categories.forEach(category => {
+        const categoryItem = createCategoryItem(category);
+        categorieList.appendChild(categoryItem);
+    });
+}
+
+// Função para navegar para as subcategorias
+async function navigateToSubcategories(category) {
+    window.currentCategoryLevel++; // Aumenta o nível de profundidade
+    window.categoryHistory.push(category); // Guarda o histórico para o botão "Voltar"
+
+    const subcategories = await getCategories(`/categories/${category.id}/subcategories`);
+    if (subcategories.length > 0) {
+        renderCategories(subcategories);
+    } else {
+        // Se não houver subcategorias, talvez você queira buscar os prestadores dessa categoria final
+        console.log(`Nenhuma subcategoria encontrada. Buscando prestadores para a categoria ID: ${category.id}`);
+        // Aqui você chamaria uma função para buscar e exibir os prestadores filtrados.
+    }
+}
+
+// Função para o botão "Voltar"
+async function navigateToParentCategory() {
+    window.currentCategoryLevel--;
+    window.categoryHistory.pop(); // Remove o nível atual do histórico
+
+    let parentUrl = "/categories"; // URL padrão para o nível raiz
+    if (window.categoryHistory.length > 0) {
+        const parent = window.categoryHistory[window.categoryHistory.length - 1];
+        parentUrl = `/categories/${parent.id}/subcategories`;
+    }
+    
+    const categories = await getCategories(parentUrl);
+    renderCategories(categories);
+}
+
+function showProviderProfile(providerId) {
+    window.location.pathname = `/service-providers/${providerId}`
 }
 
 function reduceName(name, maxLength, suffix = '...') {
@@ -130,14 +202,27 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
     providerCard.appendChild(providerPhoto);
     providerCard.appendChild(providerInfo);
     providerCard.appendChild(favoriteButton);
+
+    favoriteButton.addEventListener('click', (event) => {
+        // IMPEDE que o clique "borbulhe" para o providerCard
+        event.stopPropagation(); 
+    
+        // Exemplo: Mudar a cor do ícone ao clicar
+        const heartIcon = favoriteButton.querySelector('.heart-icon');
+        if (heartIcon.style.color === 'red') {
+            heartIcon.style.color = 'currentColor'; // Volta para a cor padrão
+        } else {
+            heartIcon.style.color = 'red'; // Fica vermelho
+        }
+        });
  
     // 5. Adiciona o card completo à lista
     serviceProvidersList.appendChild(providerCard);
+
+    providerCard.addEventListener('click', () => showProviderProfile(serviceHolder.id))
 }
 
-function displayCategories(category){
-
-    const categorieList = document.getElementById("category-list");
+function createCategoryItem(category){
 
     const categoryItem = document.createElement("div");
     categoryItem.classList.add("category-item");
@@ -154,13 +239,15 @@ function displayCategories(category){
     categoryItem.appendChild(categoryIcon);
     categoryItem.appendChild(categoryLabel);
 
-    categorieList.appendChild(categoryItem);
+    categoryItem.addEventListener('click', () => navigateToSubcategories(category))
+
+    return categoryItem
 
 }
 
-async function getServiceHolders() {
+async function getServiceProviders(url) {
     try {
-        const response = await fetch("/users/service-holders");
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Erro ao buscar prestadores: ${response.status}`);
         }
@@ -172,9 +259,9 @@ async function getServiceHolders() {
     }    
 }
 
-async function getCategories() {
+async function getCategories(url) {
     try {
-        const response = await fetch("/categories");
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Erro ao buscar prestadores: ${response.status}`);
         }
@@ -237,17 +324,19 @@ async function verifyUserStatus() {
 
 async function main() {
 
+    window.currentCategoryLevel = 0;
+    window.categoryHistory = [];
     const userData = await verifyUserStatus();
+    const serviceProvidersUrl = "/users/service-providers"
+    const categoriesUrl = "/categories"
 
     const [categories, serviceHolders] = await Promise.all([
-        getCategories(), // Supondo que getCategories também seja async e retorne dados
-        getServiceHolders()
+        getCategories(categoriesUrl), 
+        getServiceProviders(serviceProvidersUrl)
     ]);
 
     if (categories.length > 0) {
-        categories.forEach(category => {
-            displayCategories(category);
-        });
+        renderCategories(categories);
     }
 
     if (serviceHolders.length > 0) {
