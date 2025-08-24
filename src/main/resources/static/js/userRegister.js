@@ -128,7 +128,21 @@ function registerServiceHolder() {
     nextStep();
 }
 
+function loadSpeciality() {
+    const speciality = localStorage.getItem("userRole");
+    const specialityContainer = getElementById("specialityContainer")
+
+    if (speciality == "CLIENT") {
+        specialityContainer.style.display = "none";
+    } else {
+        specialityContainer.style.display = "flex";
+    }
+}
+
 function main() {
+
+    const speciality = document.getElementById(localStorage.getItem("userRole"));
+    speciality.addEventListener("load", loadSpeciality)
 
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
