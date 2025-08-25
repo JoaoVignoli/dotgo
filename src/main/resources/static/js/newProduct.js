@@ -1,9 +1,13 @@
 function createProduct() {
     const productName = document.getElementById("product-name");
     const productDescription = document.getElementById("product-description");
-    const productValue = document.getElementById("product-value");
+    const productPrice = document.getElementById("product-value");
     const productTime = document.getElementById("product-time");
-    
+    const productAutoApprove = document.getElementById("auto-approve");
+    const productPriceToBeAgreed = document.getElementById("value-tbd");
+    const productReceiveAttachments = document.getElementById("receive-attachments");
+    const productTimeToBeAgreed = document.getElementById("time-tbd");
+
 }
 
 function hideTimeInput() {
@@ -76,6 +80,17 @@ function main() {
 
     const createProductButton = document.getElementById("createdProduct");
     createProductButton.addEventListener("click", createProduct);
+
+    const openGalary = document.getElementById("openGalary");
+    const selectPicture = document.getElementById("selectPicture")
+    openGalary?.addEventListener("click", () => {
+        selectPicture.click();
+    })
+
+    selectPicture.addEventListener("change", () => {
+        const file = selectPicture.files[0];
+        document.getElementById("selectPicture").src = URL.createObjectURL(file);
+    })
 }
 
 window.addEventListener("load", main);
