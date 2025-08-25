@@ -59,10 +59,11 @@ async function personalInfoRegister() {
     const phoneNumber = document.getElementById("phoneNumber");
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
-    if (document.getElementById(specialty) === null) {
-        const specialty = "None";
+    
+    if (document.getElementById("specialty")) {
+        const specialty = document.getElementById("specialty").value
     } else {
-        const specialty = document.getElementById("specialty")
+        const specialty = null;
     }
 
     const userData = {
@@ -73,7 +74,7 @@ async function personalInfoRegister() {
         "phone": phoneNumber.value,
         "password": password.value,
         "birthday": new Date(birthday.value).toISOString(),
-        "specialty": specialty.value
+        "specialty": specialty
     }
 
     console.log(userData)
