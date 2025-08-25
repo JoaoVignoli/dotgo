@@ -90,7 +90,9 @@ function main() {
     selectPicture.addEventListener("change", () => {
         const file = selectPicture.files[0];
         const addPicture = document.getElementById("addPicture");
+        const exibitionPicture = document.getElementById("picture-placeholder");
         addPicture.style.display = "none";
+        exibitionPicture.style.display = "flex";
         document.getElementById("exibitionPicture").src = URL.createObjectURL(file);
     })
 }
