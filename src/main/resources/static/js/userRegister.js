@@ -59,12 +59,7 @@ async function personalInfoRegister() {
     const phoneNumber = document.getElementById("phoneNumber");
     const password = document.getElementById("password");
     const birthday = document.getElementById("birthday");
-    
-    if (document.getElementById("specialty")) {
-        const specialty = document.getElementById("specialty").value
-    } else {
-        const specialty = null;
-    }
+    const specialty = document.getElementById("specialty");
 
     const userData = {
         "role": localStorage.getItem("userRole"),
@@ -74,7 +69,7 @@ async function personalInfoRegister() {
         "phone": phoneNumber.value,
         "password": password.value,
         "birthday": new Date(birthday.value).toISOString(),
-        "specialty": specialty
+        "specialty": specialty.value
     }
 
     console.log(userData)
