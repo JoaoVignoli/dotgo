@@ -1,4 +1,4 @@
-function createProduct() {
+async function createProduct() {
     const productName = document.getElementById("product-name");
     const productDescription = document.getElementById("product-description");
     const productPrice = document.getElementById("product-value");
@@ -7,6 +7,29 @@ function createProduct() {
     const productPriceToBeAgreed = document.getElementById("value-tbd");
     const productReceiveAttachments = document.getElementById("receive-attachments");
     const productTimeToBeAgreed = document.getElementById("time-tbd");
+    const productPicture = document.getElementById("selectPicture");
+    const productPictureFile = productPicture.files;
+
+    const formData = new FormData();
+
+    formData.append("name", productName.value);
+    formData.append("description", productDescription.value);
+    formData.append("price", productPrice.value);
+    formData.append("estimatedTime", productTime.value);
+    formData.append("receiveAttachments", productReceiveAttachments.value);
+    formData.append("autoApprove", productAutoApprove.value)
+    formData.append("priceToBeAgreed", productPriceToBeAgreed.value);
+    formData.append("timeToBeAgreed", productPriceToBeAgreed.value);
+    formData.append("subcategoryId", localStorage.getItem("userSelectedSubcategoryId"));
+    formData.append("pictures", productPictureFile)
+    formData.append("serviceHolderId", localStorage.getItem("userId"));
+
+    const response = await fetch("/products", {
+        method: "POST",
+        body: formData
+    })
+
+    return response.status;
 
 }
 
