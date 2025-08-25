@@ -1,10 +1,12 @@
 package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserSummaryResponseDto;
+import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
 import br.com.dotgo.dotgo.dtos.PrivateUserDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
+import br.com.dotgo.dotgo.entities.Favorites;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
 import br.com.dotgo.dotgo.repositories.UserRepository;
@@ -29,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.CacheControl;
+
 
 
 
@@ -161,10 +164,10 @@ public class UserController {
             
             // return ResponseEntity.status(HttpStatus.OK).body(new PrivateUserDto(user));
             
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(new PublicServiceProviderDto(user, this.fileStorageService.getPublicFileUrl(user.getPicture())));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
                 .body(Map.of("error", "Erro interno"));
         }
     }
@@ -192,4 +195,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/{userId}/favorites")
+    public ResponseEntity<?> getMethodName(@PathVariable Integer userId) {
+        
+        Optional<User> user = this.userRepository.findById(userId);
+
+        if (user.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Usuário não localizado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        List<Favorites> userFavorites = user.get().getServiceProvidersLikeds();
+        ArrayList<FavoritesResponseDto> responseList = new ArrayList<>();
+
+        for (Favorites favorites : userFavorites) {
+            responseList.add(new FavoritesResponseDto(favorites));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+    
 }
