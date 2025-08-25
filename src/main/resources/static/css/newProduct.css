@@ -213,6 +213,12 @@ header {
     color: #555;
 }
 
+.picture-placeholder {
+    width: 100px;
+    height: 100px;
+    display: none;
+}
+
 /* Formulário dentro do modal */
 .modal-form {
     display: flex;
