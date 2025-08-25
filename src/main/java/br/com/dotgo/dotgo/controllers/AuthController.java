@@ -4,6 +4,7 @@ import br.com.dotgo.dotgo.dtos.LoginRequestDto;
 import br.com.dotgo.dotgo.dtos.LoginResult;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.services.AuthService;
+import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
@@ -26,9 +27,11 @@ import jakarta.servlet.http.Cookie;
 public class AuthController {
 
     private final AuthService authService;
+    private final FileStorageService fileStorageService;
     
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, FileStorageService fileStorageService) {
         this.authService = authService;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping("/login")
@@ -103,13 +106,19 @@ public class AuthController {
             }
             
             User user = currentUser.get();
-            Map<String, Object> userData = Map.of(
-                "id", user.getId(),
-                "name", user.getName(),
-                "email", user.getEmail(),
-                "role", user.getRole(),
-                "verified", user.getVerified()
-            );
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("profilePicture", this.fileStorageService.getPublicFileUrl(user.getPicture()));
+            userData.put("name", user.getName());
+            userData.put("email", user.getEmail());
+            userData.put("role", user.getRole());
+            userData.put("verified", user.getVerified());
+            userData.put("favorites", user.getServiceProvidersLikeds());
+            userData.put("address", user.getAddresses());
+            userData.put("phone", user.getPhone());
+            userData.put("products", user.getProducts());
+            userData.put("biography", user.getBiography());
+            userData.put("especialty", user.getSpecialty());
             
             return ResponseEntity.ok(userData);
             

@@ -125,7 +125,7 @@ async function navigateToParentCategory() {
 // Redireciona para o perfil do prestador
 function showProviderProfile(providerId) {
     localStorage.setItem("providerId", providerId)
-    window.location.pathname = "/service-providers/profile"
+    window.location.pathname = "/provider-profile"
 }
 
 function reduceName(name, maxLength, suffix = '...') {

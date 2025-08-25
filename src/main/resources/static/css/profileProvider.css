@@ -27,6 +27,10 @@ header {
   box-sizing: border-box;
 }
 
+.hidden {
+  display: none;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
