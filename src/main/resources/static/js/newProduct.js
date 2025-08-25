@@ -19,7 +19,7 @@ async function createProduct() {
     formData.append("receiveAttachments", productReceiveAttachments.value);
     formData.append("autoApprove", productAutoApprove.value)
     formData.append("priceToBeAgreed", productPriceToBeAgreed.value);
-    formData.append("timeToBeAgreed", productPriceToBeAgreed.value);
+    formData.append("timeToBeAgreed", productTimeToBeAgreed.value);
     formData.append("subcategoryId", localStorage.getItem("userSelectedSubcategoryId"));
     formData.append("pictures", productPictureFile)
     formData.append("serviceHolderId", localStorage.getItem("userId"));
