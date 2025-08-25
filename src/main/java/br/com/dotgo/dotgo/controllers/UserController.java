@@ -2,7 +2,6 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserSummaryResponseDto;
 import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
-import br.com.dotgo.dotgo.dtos.PrivateUserDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
@@ -29,10 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.CacheControl;
-
-
 
 
 @RestController
