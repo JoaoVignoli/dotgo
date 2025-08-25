@@ -89,6 +89,8 @@ function main() {
 
     selectPicture.addEventListener("change", () => {
         const file = selectPicture.files[0];
+        const addPicture = document.getElementById("addPicture");
+        addPicture.style.display = "none";
         document.getElementById("exibitionPicture").src = URL.createObjectURL(file);
     })
 }
