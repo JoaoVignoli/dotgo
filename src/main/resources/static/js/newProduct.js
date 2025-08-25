@@ -89,7 +89,7 @@ function main() {
 
     selectPicture.addEventListener("change", () => {
         const file = selectPicture.files[0];
-        document.getElementById("selectPicture").src = URL.createObjectURL(file);
+        document.getElementById("exibitionPicture").src = URL.createObjectURL(file);
     })
 }
 
