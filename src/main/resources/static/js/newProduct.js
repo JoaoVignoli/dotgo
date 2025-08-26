@@ -8,7 +8,6 @@ async function createProduct() {
     const productReceiveAttachments = document.getElementById("receive-attachments");
     const productTimeToBeAgreed = document.getElementById("time-tbd");
     const productPicture = document.getElementById("selectPicture");
-    const productPictureFiles = productPicture.files;
 
     const formData = new FormData();
 
@@ -23,10 +22,10 @@ async function createProduct() {
     formData.append("subcategoryId", localStorage.getItem("userSelectedSubcategoryId"));
     formData.append("serviceHolderId", localStorage.getItem("userId"));
 
-    if (productPictureFiles.length > 0) {
-        for (let i = 0; i < productPictureFiles.length; i++) {
-            formData.append("pictures", productPictureFiles[i]);
-        }
+    if (productPicture.files.length > 0) {
+        Array.from(productPicture.files).forEach(file => {
+            formData.append('pictures', file);
+        });
     }
 
 

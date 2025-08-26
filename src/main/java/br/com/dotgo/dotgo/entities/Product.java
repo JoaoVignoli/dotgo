@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Product {
@@ -28,6 +29,7 @@ public class Product {
     private Boolean priceToBeAgreed;
     private Boolean timeToBeAgreed;
     private LocalDateTime createdAt;
+    private String picture;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
@@ -36,9 +38,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "service_provider_id")
     private User user;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductPicture> pictures = new ArrayList<>();
+    private List<ServiceOrder> serviceOrders = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -119,14 +121,6 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public List<ProductPicture> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<ProductPicture> pictures) {
-        this.pictures = pictures;
-    }
-
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -141,6 +135,22 @@ public class Product {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public List<ServiceOrder> getServiceOrders() {
+        return serviceOrders;
+    }
+
+    public void setServiceOrders(List<ServiceOrder> serviceOrders) {
+        this.serviceOrders = serviceOrders;
     }
 
 }

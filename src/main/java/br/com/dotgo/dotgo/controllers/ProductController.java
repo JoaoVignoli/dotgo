@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.ProductCreateDto;
+import br.com.dotgo.dotgo.dtos.ProductResponseDto;
 import br.com.dotgo.dotgo.entities.Product;
-import br.com.dotgo.dotgo.entities.ProductPicture;
 import br.com.dotgo.dotgo.entities.Subcategory;
 import br.com.dotgo.dotgo.entities.User;
-import br.com.dotgo.dotgo.repositories.ProductPictureRepository;
 import br.com.dotgo.dotgo.repositories.ProductRepository;
 import br.com.dotgo.dotgo.repositories.SubcategoryRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
@@ -33,18 +32,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
     private final SubcategoryRepository subcategoryRepository;
     private final FileStorageService fileStorageService;
     private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products"; 
 
     public ProductController(
-        ProductRepository productRepository, ProductPictureRepository productPictureRepository, 
-        UserRepository userRepository, SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
+        ProductRepository productRepository,UserRepository userRepository, SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
     ) {
         this.productRepository = productRepository;
-        this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.fileStorageService = fileStorageService;
@@ -85,27 +81,17 @@ public class ProductController {
 
         var productSaved = this.productRepository.save(newProduct);
 
-        MultipartFile[] productPictures = productCreateDto.getPictures();
-
-        ArrayList<String> picturesUrls = new ArrayList<>();
         String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
         
-        if (productPictures == null) {
-            picturesUrls.add(subcategory.get().getIcon());
+        if (productCreateDto.getPicture() == null) {
+            productSaved.setPicture(subcategory.get().getIcon());
         } else {
-            for (MultipartFile picture : productPictures) {
-                picturesUrls.add(this.fileStorageService.uploadFile(picture, folderPathWithId));
-            }
+            productSaved.setPicture(this.fileStorageService.uploadFile(productCreateDto.getPicture(), folderPathWithId));
         }
 
-        for (String url : picturesUrls) {
-            ProductPicture productPicture = new ProductPicture();
-            productPicture.setProduct(productSaved);
-            productPicture.setUrl(url);
-            this.productPictureRepository.save(productPicture);
-        }
+        ProductResponseDto response = new ProductResponseDto(productSaved, this.fileStorageService.getPublicFileUrl(productSaved.getPicture()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
 }

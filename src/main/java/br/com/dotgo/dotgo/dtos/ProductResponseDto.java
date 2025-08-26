@@ -2,15 +2,14 @@ package br.com.dotgo.dotgo.dtos;
 
 import java.math.BigDecimal;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import br.com.dotgo.dotgo.entities.Product;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public class ProductCreateDto {
-    
+public class ProductResponseDto {
+    private Integer id;
     @NotBlank(message = "O nome do produto é obrigatório.")
     private String name;
+    @NotBlank(message = "A descrição do produto é obrigatório.")
     private String description;
     private BigDecimal price;
     private Integer estimatedTime;
@@ -18,32 +17,27 @@ public class ProductCreateDto {
     private Boolean autoApprove;
     private Boolean priceToBeAgreed;
     private Boolean timeToBeAgreed;
-    @NotNull(message = "Necessário informar o id da subctegoria do produto.")
-    private Integer subcategoryId;
-    private MultipartFile picture;
-    private Integer serviceHolderId;
+    private String picture;
     
-    public ProductCreateDto(
-            @NotBlank(message = "O nome do produto é obrigatório.") String name, String description,
-            BigDecimal price, Integer estimatedTime, Boolean receiveAttachments, Boolean autoApprove,
-            Boolean priceToBeAgreed, Boolean timeToBeAgreed,
-            @NotNull(message = "Necessário informar o id da subctegoria do produto.") Integer subcategoryId,
-            MultipartFile picture, Integer serviceHolderId
-    ) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.estimatedTime = estimatedTime;
-        this.receiveAttachments = receiveAttachments;
-        this.autoApprove = autoApprove;
-        this.priceToBeAgreed = priceToBeAgreed;
-        this.timeToBeAgreed = timeToBeAgreed;
-        this.subcategoryId = subcategoryId;
-        this.picture = picture;
-        this.serviceHolderId = serviceHolderId;
+    public ProductResponseDto(Product product, String pictureUrl) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.description = product.getName();
+        this.price = product.getPrice();
+        this.estimatedTime = product.getEstimatedTime();
+        this.receiveAttachments = product.getReceiveAttachments();
+        this.autoApprove = product.getAutoApprove();
+        this.priceToBeAgreed = product.getPriceToBeAgreed();
+        this.timeToBeAgreed = product.getTimeToBeAgreed();
+        this.picture = pictureUrl;
     }
 
-    public ProductCreateDto() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -110,28 +104,11 @@ public class ProductCreateDto {
         this.timeToBeAgreed = timeToBeAgreed;
     }
 
-    public Integer getSubcategoryId() {
-        return subcategoryId;
-    }
-
-    public void setSubcategoryId(Integer subcategoryId) {
-        this.subcategoryId = subcategoryId;
-    }
-
-    public MultipartFile getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPictures(MultipartFile picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
-
-    public void setServiceHolderId(Integer serviceHolderId) {
-        this.serviceHolderId = serviceHolderId;
-    }
-
-    public Integer getServiceHolderId() {
-        return serviceHolderId;
-    }
-
 }

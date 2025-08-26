@@ -82,15 +82,9 @@ create table product (
 	time_to_be_agreed Boolean,
 	created_at timestamp not null,
 	subcategory_id int references subcategory(id) not null,
-	service_provider_id int not null references "user"(id)
+	service_provider_id int not null references "user"(id),
+	picture text not null
 );
-
-create table product_picture (
-	id Serial not null primary key,
-	url Text not null,
-	product_id int references product(id) not null
-);
-
 
 create table service_order (
 	id Serial not null primary key,
