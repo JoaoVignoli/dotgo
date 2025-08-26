@@ -128,6 +128,7 @@ function showProviderProfile(providerId) {
     window.location.pathname = "/provider-profile"
 }
 
+// Função para reduzir o nome do prestador caso seja muito grande.
 function reduceName(name, maxLength, suffix = '...') {
   if (name.length <= maxLength) {
     return name;
@@ -328,7 +329,7 @@ function createCategoryItem(category){
     categoryItem.appendChild(categoryIcon);
     categoryItem.appendChild(categoryLabel);
 
- categoryItem.addEventListener('click', (event) => {
+    categoryItem.addEventListener('click', (event) => {
         
         if (event.target.closest('button')) {
             console.log('Click intercepted on button within category item');

@@ -45,6 +45,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Feed> feed = new ArrayList<>();
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    List<ServiceOrder> serviceOrders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userApproval", cascade = CascadeType.ALL)
+    List<ServiceOrder> serviceOrdersWaitingApproval = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
