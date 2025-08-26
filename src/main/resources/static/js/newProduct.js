@@ -21,12 +21,7 @@ async function createProduct() {
     formData.append("timeToBeAgreed", productTimeToBeAgreed.value);
     formData.append("subcategoryId", localStorage.getItem("userSelectedSubcategoryId"));
     formData.append("serviceHolderId", localStorage.getItem("userId"));
-
-    if (productPicture.files.length > 0) {
-        Array.from(productPicture.files).forEach(file => {
-            formData.append('pictures', file);
-        });
-    }
+    formData.append('picture', productPicture.files[0])
 
 
     const response = await fetch("/products", {

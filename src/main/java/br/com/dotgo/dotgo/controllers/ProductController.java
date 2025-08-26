@@ -1,6 +1,7 @@
 package br.com.dotgo.dotgo.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,6 @@ import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +38,8 @@ public class ProductController {
     private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products"; 
 
     public ProductController(
-        ProductRepository productRepository,UserRepository userRepository, SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
+        ProductRepository productRepository,UserRepository userRepository, 
+        SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
     ) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -48,7 +49,8 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createNewProduct(
-        @ModelAttribute @Valid ProductCreateDto productCreateDto
+        @RequestPart("product") @Valid ProductCreateDto productCreateDto,
+        @RequestPart(value = "picture", required = false) MultipartFile picture
     ) {
 
         Optional<User> serviceHolder = userRepository.findById(productCreateDto.getServiceHolderId());
@@ -83,11 +85,13 @@ public class ProductController {
 
         String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
         
-        if (productCreateDto.getPicture() == null) {
+        if (picture == null || picture.isEmpty()) {
             productSaved.setPicture(subcategory.get().getIcon());
         } else {
-            productSaved.setPicture(this.fileStorageService.uploadFile(productCreateDto.getPicture(), folderPathWithId));
+            productSaved.setPicture(this.fileStorageService.uploadFile(picture, folderPathWithId));
         }
+
+        this.productRepository.save(productSaved);
 
         ProductResponseDto response = new ProductResponseDto(productSaved, this.fileStorageService.getPublicFileUrl(productSaved.getPicture()));
 
