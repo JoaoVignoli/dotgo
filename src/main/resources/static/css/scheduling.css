@@ -180,7 +180,7 @@ header {
 .content-container {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 80px; /* Espaço para a barra inferior */
+  padding-bottom: 50px; /* Espaço para a barra inferior */
 }
 /* === CARD DE SERVIÇO === */
 .service-card {
@@ -285,22 +285,21 @@ header {
     font-size: 1.1rem;
 }
 
-/* Wrapper para permitir o scroll */
+
 .time-slots-wrapper {
-    overflow-x: auto; /* Habilita o scroll horizontal */
-    padding-bottom: 10px; /* Espaço para a barra de scroll não cortar os botões */
-    /* Esconde a barra de scroll visualmente (opcional, mas elegante) */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    overflow-x: auto; 
+    padding-bottom: 10px; 
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 .time-slots-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, and Opera */
+    display: none; 
 }
 
 .time-slots {
     display: flex;
     gap: 12px;
-    width: max-content; /* Permite que o conteúdo interno defina a largura */
+    width: max-content; 
 }
 
 .time-slot {
@@ -312,7 +311,7 @@ header {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    white-space: nowrap; /* Impede que o texto quebre a linha */
+    white-space: nowrap; 
 }
 
 .time-slot.selected {
@@ -352,7 +351,7 @@ header {
     font-weight: 600;
     border: none;
     cursor: pointer;
-    margin-bottom: 80px; /* Espaço para a barra de navegação */
+    
 }
 
 /* ===== FEED - NAVIGATION-BAR ===== */
@@ -382,18 +381,15 @@ header {
   color: #000;
 }
 
-/* Adicione estas regras ao final do seu agendamento.css */
-
-/* === ESTILOS DO CALENDÁRIO MENSAL === */
 
 .calendar-month {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 colunas para os dias da semana */
-    gap: 8px; /* Espaço entre as bolinhas dos dias */
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 8px; 
     margin-top: 16px;
 }
 
-/* Header do calendário mensal (D, S, T, Q, Q, S, S) */
+
 .month-day-letter {
     font-weight: 600;
     text-align: center;
@@ -402,7 +398,130 @@ header {
     margin-bottom: 4px;
 }
 
-/* Classe utilitária para esconder/mostrar elementos */
+
 .hidden {
-    display: none !important; /* !important para garantir a sobreposição */
+    display: none !important; 
+}
+
+
+/* MODAL DE CONFIRMAÇÃO */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    padding: 24px;
+    box-sizing: border-box;
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease, visibility 0.3s ease; 
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay:not(.hidden) {
+    opacity: 1;
+}
+
+.modal-container {
+    background: var(--background-color, #FFFAF5);
+    border-radius: 28px;
+    max-width: 360px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    padding: 32px 24px;
+    border: 1px solid var(--black-color, #1a1a1a);
+    animation: modalSlideIn 0.3s ease-out;   
+}
+
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #333;
+}
+
+.success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #28a745; /* Verde sucesso */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.success-icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: white;
+}
+
+.confirmation-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--black-color);
+    margin: 0 0 8px;
+}
+
+.confirmation-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0 auto 24px;
+    max-width: 90%;
+    line-height: 1.5;
+}
+
+.contact-btn {
+    width: 100%;
+    background-color: var(--black-color);
+    color: white;
+    border: 1px solid var(--black-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.contact-btn:hover {
+    background-color: #333;
+}
+
+.contact-btn svg {
+    stroke: white;
+}
+
+/* Classe para esconder/mostrar o modal */
+.hidden {
+    display: none !important;
+    opacity: 0 !important;
 }
