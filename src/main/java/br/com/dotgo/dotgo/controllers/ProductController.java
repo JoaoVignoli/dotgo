@@ -83,16 +83,13 @@ public class ProductController {
 
         var productSaved = this.productRepository.save(newProduct);
 
-        ArrayList<MultipartFile> productPictures = productCreateDto.getPictures();
+        MultipartFile[] productPictures = productCreateDto.getPictures();
 
-        if (productPictures == null) {
-            productPictures = new ArrayList<>();
-        }
 
         ArrayList<String> picturesUrls = new ArrayList<>();
         String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
         
-        if (productPictures.size() == 0) {
+        if (productPictures.length == 0) {
             picturesUrls.add(subcategory.get().getIcon());
         } else {
             for (MultipartFile picture : productPictures) {
