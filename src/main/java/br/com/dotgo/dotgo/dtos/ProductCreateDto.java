@@ -21,7 +21,7 @@ public class ProductCreateDto {
     private Boolean timeToBeAgreed;
     @NotNull(message = "Necessário informar o id da subctegoria do produto.")
     private Integer subcategoryId;
-    private ArrayList<MultipartFile> pictures;
+    private MultipartFile[] pictures;
     private Integer serviceHolderId;
     
     public ProductCreateDto(
@@ -29,7 +29,7 @@ public class ProductCreateDto {
             BigDecimal price, Integer estimatedTime, Boolean receiveAttachments, Boolean autoApprove,
             Boolean priceToBeAgreed, Boolean timeToBeAgreed,
             @NotNull(message = "Necessário informar o id da subctegoria do produto.") Integer subcategoryId,
-            ArrayList<MultipartFile> pictures, Integer serviceHolderId
+            MultipartFile[] pictures, Integer serviceHolderId
     ) {
         this.name = name;
         this.description = description;
@@ -119,11 +119,11 @@ public class ProductCreateDto {
         this.subcategoryId = subcategoryId;
     }
 
-    public ArrayList<MultipartFile> getPictures() {
+    public MultipartFile[] getPictures() {
         return pictures;
     }
 
-    public void setPictures(ArrayList<MultipartFile> pictures) {
+    public void setPictures(MultipartFile[] pictures) {
         this.pictures = pictures;
     }
 
