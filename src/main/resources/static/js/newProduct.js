@@ -8,7 +8,7 @@ async function createProduct() {
     const productReceiveAttachments = document.getElementById("receive-attachments");
     const productTimeToBeAgreed = document.getElementById("time-tbd");
     const productPicture = document.getElementById("selectPicture");
-    const productPictureFile = productPicture.files;
+    const productPictureFiles = productPicture.files;
 
     const formData = new FormData();
 
@@ -21,8 +21,14 @@ async function createProduct() {
     formData.append("priceToBeAgreed", productPriceToBeAgreed.value);
     formData.append("timeToBeAgreed", productTimeToBeAgreed.value);
     formData.append("subcategoryId", localStorage.getItem("userSelectedSubcategoryId"));
-    formData.append("pictures", productPictureFile)
     formData.append("serviceHolderId", localStorage.getItem("userId"));
+
+    if (productPictureFiles.length > 0) {
+        for (let i = 0; i < productPictureFiles.length; i++) {
+            formData.append("pictures", productPictureFiles[i]);
+        }
+    }
+
 
     const response = await fetch("/products", {
         method: "POST",
