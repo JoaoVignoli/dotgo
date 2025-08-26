@@ -1,7 +1,6 @@
 package br.com.dotgo.dotgo.dtos;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 import org.springframework.web.multipart.MultipartFile;
 

@@ -80,16 +80,17 @@ public class ProductController {
         newProduct.setReceiveAttachments(productCreateDto.getReceiveAttachments());
         newProduct.setTimeToBeAgreed(productCreateDto.getTimeToBeAgreed());
         newProduct.setCreatedAt(LocalDateTime.now());
+        newProduct.setSubcategory(subcategory.get());
+        newProduct.setUser(serviceHolder.get());
 
         var productSaved = this.productRepository.save(newProduct);
 
         MultipartFile[] productPictures = productCreateDto.getPictures();
 
-
         ArrayList<String> picturesUrls = new ArrayList<>();
         String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
         
-        if (productPictures.length == 0) {
+        if (productPictures == null) {
             picturesUrls.add(subcategory.get().getIcon());
         } else {
             for (MultipartFile picture : productPictures) {
