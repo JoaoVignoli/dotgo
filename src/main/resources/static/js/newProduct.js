@@ -1,3 +1,37 @@
+function productsDisplayList(product) {
+
+    const productList = document.getElementById("product-list");
+
+    const product                   = document.createElement("div");
+    const productPicture            = document.createElement("img");
+    const productInfos              = document.createElement("div");
+    const productName               = document.createElement("span");
+    const productDescription        = document.createElement("span");
+    const productPrice              = document.createElement("span");
+    const buttonDiv                 = document.createElement("div")
+    const deleteButton              = document.createElement("button");
+    const editButton                = document.createElement("button");
+
+    product.className               = "product-item"
+    productPicture.className        = "product-picture"
+    productInfos.className          = "product-infos"
+    productName.className           = "product-name"
+    productDescription.className    = "product-description"
+    productPrice.className          = "product-price"
+    buttonDiv.className             = "button-div"
+
+    productName.textContent         = product.name;
+    productPicture.src              = product.picture;
+    productPicture.alt              = "Imagem do produto " + product.name;
+    productDescription.textContent  = product.description;
+    if (product.priceToBeAgreed == true) {
+        productPrice.textContent    = "R$: A combinar"
+    } else {
+        
+    }
+
+}
+
 async function createProduct() {
     const productName = document.getElementById("product-name");
     const productDescription = document.getElementById("product-description");
@@ -8,6 +42,7 @@ async function createProduct() {
     const productReceiveAttachments = document.getElementById("receive-attachments");
     const productTimeToBeAgreed = document.getElementById("time-tbd");
     const productPicture = document.getElementById("selectPicture");
+    const productPictureFiles = productPicture.files;
 
     const formData = new FormData();
 
@@ -36,6 +71,8 @@ async function createProduct() {
 
     if (response.status == 201) {
         closeModal();
+        const product = await response.json();
+        productsDisplayList(product);
     } else {
         console.log(response);
     }
