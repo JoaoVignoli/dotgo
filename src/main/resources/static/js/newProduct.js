@@ -35,6 +35,12 @@ async function createProduct() {
         body: formData
     })
 
+    if (response.status == 201) {
+        closeModal();
+    } else {
+        console.log(response);
+    }
+
     return response.status;
 
 }
@@ -66,7 +72,6 @@ function closeModal() {
     const modal = document.getElementById("add-product-modal");
     modal.classList.remove("modal-overlay");
 
-    localStorage.removeItem("userId");
     localStorage.removeItem("userSelectedSubcategoryId")
     localStorage.removeItem("userSelectedCategoryId")
 }
