@@ -20,7 +20,6 @@ public class ProductCreateDto {
     private Boolean timeToBeAgreed;
     @NotNull(message = "Necessário informar o id da subctegoria do produto.")
     private Integer subcategoryId;
-    private MultipartFile picture;
     private Integer serviceHolderId;
     
     public ProductCreateDto(
@@ -39,7 +38,6 @@ public class ProductCreateDto {
         this.priceToBeAgreed = priceToBeAgreed;
         this.timeToBeAgreed = timeToBeAgreed;
         this.subcategoryId = subcategoryId;
-        this.picture = picture;
         this.serviceHolderId = serviceHolderId;
     }
 
@@ -116,14 +114,6 @@ public class ProductCreateDto {
 
     public void setSubcategoryId(Integer subcategoryId) {
         this.subcategoryId = subcategoryId;
-    }
-
-    public MultipartFile getPicture() {
-        return picture;
-    }
-
-    public void setPictures(MultipartFile picture) {
-        this.picture = picture;
     }
 
     public void setServiceHolderId(Integer serviceHolderId) {
