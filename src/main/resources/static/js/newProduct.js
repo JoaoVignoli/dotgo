@@ -132,9 +132,6 @@ async function createProduct() {
             alert("Erro: " + (errorData.message || "Não foi possível criar o produto."));
         }
     }
-
-    return response.status;
-
 }
 
 function hideTimeInput() {
