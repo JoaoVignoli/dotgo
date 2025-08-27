@@ -71,14 +71,14 @@ function productsDisplayList(product) {
 }
 
 async function createProduct() {
-    const productName = document.getElementById("product-name");
-    const productDescription = document.getElementById("product-description");
-    const productPrice = document.getElementById("product-value");
-    const productTime = document.getElementById("product-time");
-    const productAutoApprove = document.getElementById("auto-approve");
-    const productPriceToBeAgreed = document.getElementById("value-tbd");
-    const productReceiveAttachments = document.getElementById("receive-attachments");
-    const productTimeToBeAgreed = document.getElementById("time-tbd");
+    const productName = document.getElementById("product-name").value;
+    const productDescription = document.getElementById("product-description").value;
+    const productPrice = document.getElementById("product-value").value;
+    const productTime = document.getElementById("product-time").value;
+    const productAutoApprove = document.getElementById("auto-approve").checked;
+    const productPriceToBeAgreed = document.getElementById("value-tbd").checked;
+    const productReceiveAttachments = document.getElementById("receive-attachments").checked;
+    const productTimeToBeAgreed = document.getElementById("time-tbd").checked;
     const productPicture = document.getElementById("selectPicture");
 
       // 2. Crie o objeto de dados (DTO) que será convertido para JSON
@@ -106,8 +106,8 @@ async function createProduct() {
 
     // 5. Adicione o arquivo de imagem, se ele existir
     // O nome "picture" deve corresponder ao @RequestPart("picture")
-    if (productPictureInput.files.length > 0) {
-        formData.append('picture', productPictureInput.files[0]);
+    if (productPicture.files.length > 0) {
+        formData.append('picture', productPicture.files[0]);
     }
 
     const response = await fetch("/products", {
@@ -115,7 +115,7 @@ async function createProduct() {
         body: formData
     })
 
-    if (response.status === 201) {
+    if (response.status == 201) {
         closeModal();
         const product = await response.json();
         console.log(product);
