@@ -55,7 +55,7 @@ function fillUserData(userData) {
 
     const providerRating = document.getElementById('provider-rating');
 
-    for (let i = 0; i < serviceProviderData.rating; i++) {
+    for (let i = 0; i < providerRating.rating; i++) {
         providerRating.appendChild(createStarIcon());
     }
 
