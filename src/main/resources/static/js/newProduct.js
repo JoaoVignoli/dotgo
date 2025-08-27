@@ -115,9 +115,10 @@ async function createProduct() {
         body: formData
     })
 
-    if (response.status == 201) {
+    if (response.status === 201) {
         closeModal();
         const product = await response.json();
+        console.log(product);
         productsDisplayList(product);
     } else {
         // Melhorar o tratamento de erro
