@@ -1,8 +1,6 @@
 package br.com.dotgo.dotgo.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.dotgo.dotgo.dtos.ProductCreateDto;
@@ -23,8 +21,6 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 
 @RestController
@@ -49,8 +45,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createNewProduct(
-        @RequestPart("product") @Valid ProductCreateDto productCreateDto,
-        @RequestPart(value = "picture", required = false) MultipartFile picture
+        @RequestBody @Valid ProductCreateDto productCreateDto
     ) {
 
         Optional<User> serviceHolder = userRepository.findById(productCreateDto.getServiceHolderId());
@@ -83,19 +78,32 @@ public class ProductController {
 
         var productSaved = this.productRepository.save(newProduct);
 
-        String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productSaved.getId();
-        
-        if (picture == null || picture.isEmpty()) {
-            productSaved.setPicture(subcategory.get().getIcon());
-        } else {
-            productSaved.setPicture(this.fileStorageService.uploadFile(picture, folderPathWithId));
-        }
-
         this.productRepository.save(productSaved);
 
-        ProductResponseDto response = new ProductResponseDto(productSaved, this.fileStorageService.getPublicFileUrl(productSaved.getPicture()));
+        ProductResponseDto response = new ProductResponseDto(productSaved);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    
+
+    @PostMapping("/{productId}/upload")
+    public ResponseEntity<?> saveProductPicture (@RequestParam("picture") MultipartFile picture, @PathVariable Integer productId) {
+
+        Optional<Product> product = this.productRepository.findById(productId);
+
+        if (product.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Produto não localizado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productId;
+
+        String status = fileStorageService.uploadFile(picture, folderPathWithId);
+
+        product.get().setPicture(status);
+
+        this.productRepository.save(product.get());
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

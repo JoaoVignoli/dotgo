@@ -17,9 +17,8 @@ public class ProductResponseDto {
     private Boolean autoApprove;
     private Boolean priceToBeAgreed;
     private Boolean timeToBeAgreed;
-    private String picture;
     
-    public ProductResponseDto(Product product, String pictureUrl) {
+    public ProductResponseDto(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getName();
@@ -29,7 +28,6 @@ public class ProductResponseDto {
         this.autoApprove = product.getAutoApprove();
         this.priceToBeAgreed = product.getPriceToBeAgreed();
         this.timeToBeAgreed = product.getTimeToBeAgreed();
-        this.picture = pictureUrl;
     }
 
     public Integer getId() {
@@ -102,13 +100,5 @@ public class ProductResponseDto {
 
     public void setTimeToBeAgreed(Boolean timeToBeAgreed) {
         this.timeToBeAgreed = timeToBeAgreed;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
     }
 }
