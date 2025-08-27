@@ -18,6 +18,11 @@ async function logout() {
 // Necessário alterar para que dados venham do banco
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
+    
+    if(favorites.includes(providerId)) {
+        console.log(providerId + " está favoritado.")
+    }
+
     return favorites.includes(providerId);
 }
 
@@ -48,6 +53,7 @@ async function addFavorite(providerId, userId) {
         if (!favorites.includes(providerId)) {
             favorites.push(providerId);
         }
+        console.log(favorites)
         console.log(`Prestador ${providerId} adicionado aos favoritos.`);
 
     } catch (error) {
@@ -77,7 +83,7 @@ async function removeFavorite(providerId) {
     }
 }
 
-async function getUserData() {
+async function getUserFavorites() {
         try {
         // Faz a requisição para o endpoint que retorna o status da autenticação
         const response = await fetch('/auth/me');
@@ -90,10 +96,12 @@ async function getUserData() {
         // Extrai o corpo da resposta como JSON
         const userData = await response.json();
 
+
         // A validação principal: verifica a propriedade "isAuthenticated" no JSON
-        if (userData.isAuthenticated) {
+        if (userData) {
+            const favoriteIds = userData.favorites.map(fav => fav.serviceProviderId);
             // Se autenticado, retorna os dados do usuário
-            return userData;
+            return favoriteIds;
         } else {
             // Se não autenticado, retorna null
             return null;
@@ -525,8 +533,12 @@ async function main() {
     window.currentCategoryLevel = 0;
     window.categoryHistory = [];
 
-    const userLogged = await verifyUserStatus();
+    const user = await verifyUserStatus();
 
+    if (user.isAuthenticated) {
+        favorites = await getUserFavorites();
+        showLoggedUserButtons();
+    }
 
     const categoriesUrl = "/categories"
 
@@ -546,13 +558,8 @@ async function main() {
 
         serviceHolders.forEach(serviceHolder => {
             // Passamos o status de login para a função que cria o card
-            displayServiceHolders(serviceHolder, userLogged);
+            displayServiceHolders(serviceHolder, user);
         });
-    }
-
-    if (userLogged) {
-        showLoggedUserButtons();
-        const userData = await getUserData();
     }
 
     const logoutButton = document.getElementById("logout-button");
