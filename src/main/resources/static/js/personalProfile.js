@@ -48,13 +48,16 @@ function fillUserData(userData) {
     }
 
     const providerProfession = document.getElementById('provider-profession');
-    providerProfession.innerText = userData.specialty;
 
-    // const providerRating = document.getElementById('provider-rating');
+    if (userData.specialty) {
+        providerProfession.innerText = userData.specialty;
+    }
 
-    // for (let i = 0; i < serviceProviderData.rating; i++) {
-    //     providerRating.appendChild(createStarIcon());
-    // }
+    const providerRating = document.getElementById('provider-rating');
+
+    for (let i = 0; i < serviceProviderData.rating; i++) {
+        providerRating.appendChild(createStarIcon());
+    }
 
     const providerDescription = document.getElementById('provider-description');
     providerDescription.innerText = userData.biography;
