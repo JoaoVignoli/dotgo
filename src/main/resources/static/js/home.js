@@ -535,7 +535,7 @@ async function main() {
 
     const user = await verifyUserStatus();
 
-    if (user.isAuthenticated) {
+    if (user) {
         favorites = await getUserFavorites();
         showLoggedUserButtons();
     }
