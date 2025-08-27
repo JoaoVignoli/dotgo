@@ -36,7 +36,8 @@ async function addFavorite(providerId, userId) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody)  // Envia o ID no corpo da requisição
+            body: JSON.stringify(requestBody),
+            credentials: 'include' 
         });
 
         if (!response.ok) {
