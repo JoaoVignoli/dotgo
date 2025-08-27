@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.dotgo.dotgo.enums.UserRole;
 
 @Entity
@@ -36,9 +38,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Favorites> favorites = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
     List<Favorites> serviceProvidersLikeds = new ArrayList<>();
 

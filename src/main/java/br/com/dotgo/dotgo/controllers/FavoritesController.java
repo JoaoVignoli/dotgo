@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,8 +30,13 @@ public class FavoritesController {
     private FavoritesRepository favoritesRepository;
     private UserRepository userRepository;
 
+    public FavoritesController(FavoritesRepository favoritesRepository, UserRepository userRepository) {
+        this.favoritesRepository = favoritesRepository;
+        this.userRepository = userRepository;
+    }
+
     @PostMapping
-    public ResponseEntity<?> postMethodName(@RequestBody @Valid FavoritesRequestDto requestDto) {
+    public ResponseEntity<?> createFavorite(@RequestBody @Valid FavoritesRequestDto requestDto) {
         
         Optional<User> serviceProvider = this.userRepository.findById(requestDto.getServiceProviderId());
         Optional<User> user = this.userRepository.findById(requestDto.getUserId());
@@ -45,6 +52,8 @@ public class FavoritesController {
             error.put("message", "Usuário não localizado.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
+
+        // Criar validação para não favoritar o mesmo prestador mais de uma vez.
         
         Favorites newFavorites = new Favorites();
         newFavorites.setServiceProvider(serviceProvider.get());
@@ -53,6 +62,22 @@ public class FavoritesController {
         var favoritesSaved = this.favoritesRepository.save(newFavorites);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new FavoritesResponseDto(favoritesSaved));
+    }
+
+    @DeleteMapping("/{favoriteId}")
+    public ResponseEntity<?> deleteFavorite(@PathVariable Integer favoriteId) {
+
+        Optional<Favorites> favoriteToDelete = this.favoritesRepository.findById(favoriteId);
+
+        if (favoriteToDelete.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Favorito não localizado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+ 
+        this.favoritesRepository.delete(favoriteToDelete.get());
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     
 }

@@ -1,14 +1,18 @@
 package br.com.dotgo.dotgo.controllers;
 
+import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
 import br.com.dotgo.dotgo.dtos.LoginRequestDto;
 import br.com.dotgo.dotgo.dtos.LoginResult;
+import br.com.dotgo.dotgo.entities.Favorites;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.services.AuthService;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -107,13 +111,18 @@ public class AuthController {
             
             User user = currentUser.get();
 
+            List<FavoritesResponseDto> favoritesDtos = new ArrayList<>();
+            for (Favorites favorite: user.getFavorites()) {
+                favoritesDtos.add(new FavoritesResponseDto(favorite));
+            }
+
             Map<String, Object> userData = new HashMap<>();
             userData.put("profilePicture", this.fileStorageService.getPublicFileUrl(user.getPicture()));
             userData.put("name", user.getName());
             userData.put("email", user.getEmail());
             userData.put("role", user.getRole());
             userData.put("verified", user.getVerified());
-            userData.put("favorites", user.getServiceProvidersLikeds());
+            userData.put("favorites", favoritesDtos);
             userData.put("address", user.getAddresses());
             userData.put("phone", user.getPhone());
             userData.put("products", user.getProducts());

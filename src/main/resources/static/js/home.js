@@ -23,21 +23,87 @@ function checkIfFavorited(providerId) {
 
 // Necessário alterar para que dados venham do banco
 // Adicionar aos favoritos
-function addFavorite(providerId) {
-    if (!favorites.includes(providerId)) {
-        favorites.push(providerId);
+async function addFavorite(providerId, userId) {
+
+    const requestBody = {
+        "serviceProviderId": providerId,
+        "userId": userId
+    }
+
+    try {
+        const response = await fetch('/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody)  // Envia o ID no corpo da requisição
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Erro ${response.status}`);
+        }
+
+        if (!favorites.includes(providerId)) {
+            favorites.push(providerId);
+        }
+        console.log(`Prestador ${providerId} adicionado aos favoritos.`);
+
+    } catch (error) {
+        console.error("Falha ao adicionar favorito:", error);
     }
 }
 
 // Necessário alterar para que dados venham do banco
 // Remover dos favoritos
-function removeFavorite(providerId) {
-    const updatedFavorites = favorites.filter(id => id !== providerId);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+async function removeFavorite(providerId) {
+    try {
+        const response = await fetch(`/favorites/${providerId}`, { 
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Erro ${response.status}`);
+        }
+
+        // Sucesso! Remove o ID da lista local para atualizar a UI.
+        favorites = favorites.filter(id => id !== providerId);
+        console.log(`Prestador ${providerId} removido dos favoritos.`);
+
+    } catch (error) {
+        console.error("Falha ao remover favorito:", error);
+    }
 }
 
 async function getUserData() {
-    
+        try {
+        // Faz a requisição para o endpoint que retorna o status da autenticação
+        const response = await fetch('/auth/me');
+
+        // Se a resposta não for "ok" (ex: erro 500, falha de rede), trata como um erro.
+        if (!response.ok) {
+            throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+        }
+
+        // Extrai o corpo da resposta como JSON
+        const userData = await response.json();
+
+        // A validação principal: verifica a propriedade "isAuthenticated" no JSON
+        if (userData.isAuthenticated) {
+            // Se autenticado, retorna os dados do usuário
+            return userData;
+        } else {
+            // Se não autenticado, retorna null
+            return null;
+        }
+
+    } catch (error) {
+        // Captura erros de rede ou o erro que lançamos acima
+        console.error("Falha crítica na verificação de autenticação:", error);
+        // Em caso de qualquer erro, consideramos o usuário como não autenticado
+        return null;
+    }
 }
 
 // Função para renderizar uma lista de categorias (ou subcategorias)
@@ -248,27 +314,29 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
         favoriteButton.appendChild(createHeartIconOutline()); // Coração vazio
     }
 
-    favoriteButton.addEventListener('click', (event) => {
+    favoriteButton.addEventListener('click', async (event) => {
 
         event.stopPropagation();
         event.preventDefault();
 
         const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
-
         favoriteButton.innerHTML = '';
 
         if (isCurrentlyFavorited) {
             // Desfavoritar: coração vazio
             favoriteButton.appendChild(createHeartIconOutline());
             favoriteButton.classList.remove("favorited");
-            removeFavorite(serviceHolder.id);
+            await removeFavorite(serviceHolder.id);
         } else {
             // Favoritar: coração preenchido
-            favoriteButton.appendChild(createHeartIconFilled());
-            favoriteButton.classList.add("favorited");
-            addFavorite(serviceHolder.id);
+            if (isUserLoggedIn && isUserLoggedIn.userId) {
+                await addFavorite(serviceHolder.id, isUserLoggedIn.userId);
+            } else {
+                console.error("Não foi possível favoritar: ID do usuário não encontrado.");
+                favoriteButton.appendChild(createHeartIconOutline());
+                favoriteButton.classList.remove("favorited");
+            }
         }
-
 
         // Feedback visual temporário
         favoriteButton.classList.add("clicked");
@@ -455,13 +523,15 @@ async function main() {
 
     window.currentCategoryLevel = 0;
     window.categoryHistory = [];
+
     const userLogged = await verifyUserStatus();
-    const serviceProvidersUrl = "/users/service-providers"
+
+
     const categoriesUrl = "/categories"
 
     const [categories, serviceHolders] = await Promise.all([
         getCategories(categoriesUrl),
-        getServiceProviders(serviceProvidersUrl)
+        getServiceProviders()
     ]);
 
     if (categories.length > 0) {
@@ -469,9 +539,13 @@ async function main() {
     }
 
     if (serviceHolders.length > 0) {
+
+        const serviceProvidersList = document.getElementById("service-providers");
+        serviceProvidersList.innerHTML = '';
+
         serviceHolders.forEach(serviceHolder => {
             // Passamos o status de login para a função que cria o card
-            displayServiceHolders(serviceHolder, !!userLogged);
+            displayServiceHolders(serviceHolder, userLogged);
         });
     }
 
