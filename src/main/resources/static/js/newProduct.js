@@ -100,7 +100,7 @@ async function createProduct() {
 
     // 4. Adicione o arquivo de imagem, se ele existir
     // O nome "picture" deve corresponder ao @RequestPart("picture")
-    if (productPicture.files.length > 0) {
+    if (productPicture.files[0]) {
         formData.append('picture', productPicture.files[0]);
     }
 
