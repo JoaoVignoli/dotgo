@@ -16,7 +16,6 @@ async function logout() {
     }
 }
 
-// Necessário alterar para que dados venham do banco
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
     
@@ -27,7 +26,6 @@ function checkIfFavorited(providerId) {
     return favorites.includes(providerId);
 }
 
-// Necessário alterar para que dados venham do banco
 // Adicionar aos favoritos
 async function addFavorite(providerId, userId) {
 
@@ -68,7 +66,6 @@ async function addFavorite(providerId, userId) {
     }
 }
 
-// Necessário alterar para que dados venham do banco
 // Remover dos favoritos
 async function removeFavorite(providerId) {
 

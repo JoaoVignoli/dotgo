@@ -1,30 +1,134 @@
+let favorites = [];
+let favoriteIdMap = {};
+
 function returnWindow() {
     history.back();
 }
 
-// Necessário alterar para que dados venham do banco
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    if(favorites.includes(providerId)) {
+        console.log(providerId + " está favoritado.")
+    }
+
     return favorites.includes(providerId);
 }
 
-// Necessário alterar para que dados venham do banco
 // Adicionar aos favoritos
-function addFavorite(providerId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    if (!favorites.includes(providerId)) {
-        favorites.push(providerId);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
+async function addFavorite(providerId, userId) {
+
+    const requestBody = {
+        "serviceProviderId": providerId,
+        "userId": userId
+    }
+
+    try {
+        const response = await fetch('/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+            credentials: 'include' 
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Erro ${response.status}`);
+        }
+
+        const newFavorite = await response.json();
+
+        if (!favorites.includes(providerId)) {
+            favorites.push(providerId);
+        }
+
+        // Adiciona a nova entrada ao mapa.
+        favoriteIdMap[newFavorite.serviceProviderId] = newFavorite.id;
+
+        console.log(`Prestador ${providerId} (Favorito ID: ${newFavorite.id}) adicionado aos favoritos.`);
+        console.log("Mapa de favoritos atualizado:", favoriteIdMap);
+
+    } catch (error) {
+        console.error("Falha ao adicionar favorito:", error);
     }
 }
 
-// Necessário alterar para que dados venham do banco
 // Remover dos favoritos
-function removeFavorite(providerId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const updatedFavorites = favorites.filter(id => id !== providerId);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+async function removeFavorite(providerId) {
+
+    const favoriteId = favoriteIdMap[providerId];
+
+    if (favoriteId === undefined) {
+        console.error(`Não foi possível encontrar o ID do favorito para o prestador ${providerId}. A remoção foi abortada.`);
+        return; 
+    }
+
+    try {
+        const response = await fetch('/favorites/' + favoriteId, { 
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ${response.status}`);
+        }
+
+        // Sucesso! Remove o ID da lista local para atualizar a UI.
+        favorites = favorites.filter(id => id !== providerId);
+
+        // Também remove a entrada do mapa.
+        delete favoriteIdMap[providerId];
+
+        console.log(`Prestador ${providerId} removido dos favoritos.`);
+
+    } catch (error) {
+        console.error("Falha ao remover favorito:", error);
+    }
+}
+
+async function getUserFavorites() {
+    try {
+        // PASSO 1: Buscar os dados do usuário (que incluem os favoritos).
+        const response = await fetch('/auth/me');
+
+        if (!response.ok) {
+            throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+        }
+
+        const userData = await response.json();
+
+        // PASSO 2: Verificar se o usuário e a propriedade 'favorites' existem.
+        // Acessamos 'userData.favorites' em vez de uma variável inexistente.
+        if (userData && Array.isArray(userData.favorites)) {
+            
+            // Limpa o mapa para evitar dados duplicados.
+            favoriteIdMap = {};
+
+            // PASSO 3: Mapear a lista 'userData.favorites'.
+            const favoriteProviderIds = userData.favorites.map(fav => {
+                // Popula o mapa para a função de remoção.
+                favoriteIdMap[fav.serviceProviderId] = fav.id; 
+                // Retorna o ID do prestador para a lista principal.
+                return fav.serviceProviderId;
+            });
+
+            console.log("Favoritos do usuário carregados a partir de /auth/me:", favoriteProviderIds);
+            // Retorna a lista de IDs de prestadores favoritados.
+            return favoriteProviderIds;
+
+        } else {
+            // Se o usuário não tiver favoritos ou a propriedade não existir,
+            // retorna um array vazio para evitar erros.
+            console.log("Usuário autenticado, mas não possui favoritos ou a propriedade 'favorites' não foi encontrada.");
+            return [];
+        }
+
+    } catch (error) {
+        console.error("Falha crítica ao obter dados do usuário e favoritos:", error);
+        // Em caso de qualquer falha, retorna um array vazio para garantir que a aplicação não quebre.
+        return [];
+    }
 }
 
 function createSvgIcon(config, paths) {
@@ -82,7 +186,7 @@ function createHeartIconFilled() {
     return heartSvg;
 }
 
-function fillProviderData(serviceProviderData, isUserLoggedIn) {
+async function fillProviderData(serviceProviderData, isUserLoggedIn) {
 
     const profilePhoto = document.getElementById('profile-photo');
     profilePhoto.src = serviceProviderData.urlProfilePhoto;
@@ -120,27 +224,40 @@ function fillProviderData(serviceProviderData, isUserLoggedIn) {
         favoriteButton.appendChild(createHeartIconOutline()); // Coração vazio
     }
 
-        favoriteButton.addEventListener('click', (event) => {
+    favoriteButton.addEventListener('click', async (event) => {
 
-        event.stopPropagation(); 
-        event.preventDefault();
+        try {
+            if (isCurrentlyFavorited) {
+                // 1. Tenta remover o favorito no backend
+                await removeFavorite(serviceHolder.id);
 
-        const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
-    
-        favoriteButton.innerHTML = '';
-    
-        if (isCurrentlyFavorited) {
-            // Desfavoritar: coração vazio
-            favoriteButton.appendChild(createHeartIconOutline());
-            favoriteButton.classList.remove("favorited");
-            removeFavorite(serviceProviderData.id);
-        } else {
-            // Favoritar: coração preenchido
-            favoriteButton.appendChild(createHeartIconFilled());
-            favoriteButton.classList.add("favorited");
-            addFavorite(serviceProviderData.id);
+                // 2. Se a remoção for bem-sucedida, atualiza a UI
+                favoriteButton.innerHTML = ''; // Limpa o ícone antigo
+                favoriteButton.appendChild(createHeartIconOutline()); // Adiciona o ícone de contorno
+                favoriteButton.classList.remove("favorited");
+
+            } else {
+                // Verifica se o usuário está logado antes de tentar favoritar
+                if (isUserLoggedIn && isUserLoggedIn.userId) {
+                    // 1. Tenta adicionar o favorito no backend
+                    await addFavorite(serviceHolder.id, isUserLoggedIn.userId);
+
+                    // 2. Se a adição for bem-sucedida, atualiza a UI
+                    favoriteButton.innerHTML = ''; // Limpa o ícone antigo
+                    favoriteButton.appendChild(createHeartIconFilled()); // Adiciona o ícone preenchido (vermelho)
+                    favoriteButton.classList.add("favorited");
+                } else {
+                    console.error("Não foi possível favoritar: ID do usuário não encontrado.");
+                    // Se o usuário não estiver logado, não fazemos nada na UI, pois o estado não mudou.
+                }
+            }
+        } catch (error) {
+            console.error("Falha ao atualizar o status de favorito:", error);
+            // Se ocorrer um erro na API, a UI não será alterada, refletindo o estado real.
+        } finally {
+            // Reativa o botão após a conclusão da operação (sucesso ou falha)
+            favoriteButton.disabled = false;
         }
-    
     
         // Feedback visual temporário
         favoriteButton.classList.add("clicked");
@@ -182,12 +299,12 @@ async function verifyUserStatus() {
         }
 
         // Extrai o corpo da resposta como JSON
-        const data = await response.json();
+        const user = await response.json();
 
         // A validação principal: verifica a propriedade "isAuthenticated" no JSON
-        if (data.isAuthenticated) {
+        if (user.isAuthenticated) {
             // Se autenticado, retorna os dados do usuário
-            return data;
+            return user;
         } else {
             // Se não autenticado, retorna null
             return null;
@@ -206,7 +323,12 @@ async function main() {
     const returnButton = document.getElementById("returnButton");
     returnButton.addEventListener("click", returnWindow);
 
-    const userData = await verifyUserStatus();
+    const user = await verifyUserStatus();
+
+    if (user) {
+        favorites = await getUserFavorites();
+        showLoggedUserButtons();
+    }
 
     const providerId = localStorage.getItem("providerId")
 
@@ -216,11 +338,7 @@ async function main() {
 
     const serviceProviderData = await getServiceProvider(providerId);
 
-    fillProviderData(serviceProviderData, !!userData)
-
-    if (userData) {
-        showLoggedUserButtons();
-    } 
+    fillProviderData(serviceProviderData, user)
 
 }
 
