@@ -22,7 +22,6 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -31,12 +30,11 @@ public class ProductController {
     private final UserRepository userRepository;
     private final SubcategoryRepository subcategoryRepository;
     private final FileStorageService fileStorageService;
-    private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products"; 
+    private static final String PRODUCTS_PICTURES_FOLDER = "pictures/products";
 
     public ProductController(
-        ProductRepository productRepository,UserRepository userRepository, 
-        SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService
-    ) {
+            ProductRepository productRepository, UserRepository userRepository,
+            SubcategoryRepository subcategoryRepository, FileStorageService fileStorageService) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.subcategoryRepository = subcategoryRepository;
@@ -45,8 +43,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createNewProduct(
-        @RequestBody @Valid ProductCreateDto productCreateDto
-    ) {
+            @RequestBody @Valid ProductCreateDto productCreateDto) {
 
         Optional<User> serviceHolder = userRepository.findById(productCreateDto.getServiceHolderId());
         Optional<Subcategory> subcategory = subcategoryRepository.findById(productCreateDto.getSubcategoryId());
@@ -56,7 +53,7 @@ public class ProductController {
             error.put("message", "Usuário não localizado.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
-        
+
         if (subcategory.isEmpty()) {
             Map<String, Object> error = new HashMap<>();
             error.put("message", "Subcategoria não localizada.");
@@ -80,30 +77,52 @@ public class ProductController {
 
         this.productRepository.save(productSaved);
 
-        ProductResponseDto response = new ProductResponseDto(productSaved);
+        ProductResponseDto response = new ProductResponseDto(productSaved, null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/{productId}/upload")
-    public ResponseEntity<?> saveProductPicture (@RequestParam("picture") MultipartFile picture, @PathVariable Integer productId) {
+    public ResponseEntity<?> saveProductPicture(@RequestParam("picture") MultipartFile picture,
+            @PathVariable Integer productId) {
+        try {
+            Optional<Product> productOptional = this.productRepository.findById(productId);
 
-        Optional<Product> product = this.productRepository.findById(productId);
+            if (productOptional.isEmpty()) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("message", "Produto não localizado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            }
 
-        if (product.isEmpty()) {
+            if (picture.isEmpty()) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("message", "Nenhum arquivo de imagem foi enviado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            }
+
+            Product product = productOptional.get();
+            String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productId;
+
+            String pictureUrl = fileStorageService.uploadFile(picture, folderPathWithId);
+
+            product.setPicture(pictureUrl);
+
+            Product updatedProduct = this.productRepository.save(product);
+
+            ProductResponseDto response = new ProductResponseDto(updatedProduct,
+                    this.fileStorageService.getPublicFileUrl(pictureUrl));
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        } catch (Exception e) {
+            // Log do erro para debugging
+            System.err.println("Erro no upload da imagem: " + e.getMessage());
+            e.printStackTrace();
+
             Map<String, Object> error = new HashMap<>();
-            error.put("message", "Produto não localizado.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            error.put("message", "Erro interno do servidor durante o upload da imagem");
+            error.put("details", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
-
-        String folderPathWithId = PRODUCTS_PICTURES_FOLDER + "/" + productId;
-
-        String status = fileStorageService.uploadFile(picture, folderPathWithId);
-
-        product.get().setPicture(status);
-
-        this.productRepository.save(product.get());
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
