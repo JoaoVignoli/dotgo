@@ -1,0 +1,503 @@
+:root {
+    --background-color: #FFFAF5;
+    --fonts-family: "DM Sans", sans-serif;
+    --black-color: #0C0C0C;
+    --card-background: #FFFFFF;
+    --border-color: #E5E5E5;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --success-color: #00C851;
+    --warning-color: #FFB65C;
+    --danger-color: #FF4444;
+    --pending-color: #2196F3;
+}
+
+/* === CONFIGURAÇÃO GLOBAL === */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  box-sizing: border-box;
+  font-family: var(--fonts-family);
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* === BLOCO 1 - HEADER DO PERFIL DO PRESTADOR === */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #FFFAF5;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* Centraliza a logo */
+.logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: #1a1a1a;
+  font-family: 'Georgia', serif; 
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Botões de ação */
+.botaoAcao {
+  border: none;
+  background-color: transparent;
+  padding: 8px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.botaoAcao:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.botaoAcao svg {
+  color: var(--black-color);
+}
+
+/* Container para ícones da direita */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 38px; /* Mesmo tamanho do botão voltar para manter simetria */
+}
+
+/* === ABAS DE STATUS === */
+.status-tabs {
+  display: flex;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.status-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border-color);
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-tab::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-secondary) !important; /* Adicionado !important */
+  transition: background-color 0.2s ease;
+}
+
+/* Cores específicas para cada status */
+.status-tab[data-status="todas"]::before {
+  background-color: var(--black-color) !important;
+}
+
+.status-tab[data-status="pendente"]::before {
+  background-color: var(--warning-color) !important;
+}
+
+.status-tab[data-status="cancelada"]::before {
+  background-color: var(--danger-color) !important;
+}
+
+.status-tab[data-status="concluida"]::before {
+  background-color: var(--success-color) !important;
+}
+
+.status-tab.active {
+  background-color: var(--black-color);
+  color: white;
+  border-color: var(--black-color);
+}
+
+.status-tab.active::before {
+  background-color: white !important;
+}
+
+.status-tab:hover:not(.active) {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-color: var(--black-color);
+}
+
+/* === CONTAINER DE CONTEÚDO === */
+.content-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 100px;
+}
+
+/* === LISTA DE ORDENS === */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* === CARD DE ORDEM === */
+.order-card {
+  background-color: var(--card-background);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.provider-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' );
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.order-info {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black-color);
+  margin: 0 0 4px;
+}
+
+.provider-name {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.order-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pendente {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--pending-color);
+}
+
+.status-concluida {
+  background-color: rgba(0, 200, 81, 0.1);
+  color: var(--success-color);
+}
+
+.status-cancelada {
+  background-color: rgba(255, 68, 68, 0.1);
+  color: var(--danger-color);
+}
+
+.order-details {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.detail-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black-color);
+  text-align: right;
+  word-break: break-word;
+}
+
+.order-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* === ESTADO VAZIO === */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--black-color);
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* === BARRA DE NAVEGAÇÃO INFERIOR === */
+.bottom-nav {
+  background-color: #ffffff;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: color 0.2s ease;
+}
+
+.nav-item svg {
+  margin-bottom: 4px;
+}
+
+.nav-item.active {
+  color: var(--black-color);
+}
+
+.nav-item:hover {
+  color: var(--black-color);
+}
+
+/* === MODAL === */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-container {
+  background-color: var(--card-background);
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--black-color);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.modal-content {
+  padding: 0 20px 20px;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 480px) {
+  header {
+    padding: 12px 16px;
+  }
+  
+  .status-tabs {
+    padding: 0 16px;
+  }
+  
+  .content-container {
+    padding: 0 16px 100px;
+  }
+  
+  .order-card {
+    padding: 12px;
+  }
+  
+  .service-name {
+    font-size: 15px;
+  }
+  
+  .provider-name {
+    font-size: 13px;
+  }
+
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-container {
+    max-height: 90vh;
+  }
+}
+
+
+
+/* Estilos específicos para o modal de confirmação */
+.modal-container.small {
+  max-width: 380px;
+}
+
+.confirmation-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.confirmation-icon {
+  margin-bottom: 20px;
+}
+
+.confirmation-content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.confirmation-content p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 25px;
+}
+
+.contact-button {
+  background-color: var(--black-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-button:hover {
+  background-color: #333;
+}
+
+.contact-button svg {
+  color: white;
+}

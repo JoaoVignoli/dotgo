@@ -7,30 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggle-calendar-view');
     const scheduleButton = document.querySelector('.schedule-btn');
 
-    const confirmationModal = document.getElementById('confirmationModal');
-    const closeModalButton = confirmationModal.querySelector('.modal-close-btn');
-    const contactModalButton = confirmationModal.querySelector('.contact-btn');
-
     // --- DADOS DE EXEMPLO ---
     const serviceDurationHours = 4;
     const breakTimeMinutes = 90;
     const unavailableDates = ['2025-07-13', '2025-07-14'];
     const bookedSlots = { '2025-07-17': ['10:00'] };
-    const providerPhoneNumber = '5547991836922';
 
     // --- ESTADO DA APLICAÇÃO ---
     let viewDate = new Date();      // A data que o calendário está mostrando (inicia com hoje)
     let selectedDate = null;      // A data que o usuário CLICOU (inicia nula)
     let isMonthView = false;
-
-    // --- FUNÇÕES DO MODAL ---
-    function showConfirmationModal() {
-        confirmationModal.classList.add('active');
-    }
-
-    function hideConfirmationModal() {
-        confirmationModal.classList.remove('active');
-    }
 
     // --- FUNÇÕES DE RENDERIZAÇÃO ---
 
@@ -223,22 +209,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selectedTime = selectedTimeEl.dataset.time;
         const formattedDate = selectedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        
+        // Salva os dados do agendamento no localStorage para usar na tela de ordens
+        const agendamentoData = {
+            prestador: 'Pedro Augusto',
+            servico: 'Muros e Paredes',
+            data: formattedDate,
+            horario: selectedTime,
+            observacoes: document.querySelector('.observations-section textarea').value || ''
+        };
+        
+        localStorage.setItem('ultimoAgendamento', JSON.stringify(agendamentoData));
+        
         console.log('Agendamento realizado para:', formattedDate, 'às', selectedTime);
         
-        showConfirmationModal();
-    });
-
-    closeModalButton.addEventListener('click', hideConfirmationModal);
-    confirmationModal.addEventListener('click', (e) => {
-        if (e.target === confirmationModal) hideConfirmationModal();
-    });
-
-    contactModalButton.addEventListener('click', () => {
-        if (!selectedDate) return;
-        const message = encodeURIComponent(`Olá, acabei de agendar o serviço para o dia ${selectedDate.toLocaleDateString('pt-BR')} e gostaria de confirmar os detalhes.`);
-        window.open(`https://wa.me/${providerPhoneNumber}?text=${message}`, '_blank' );
+        // Redireciona para a tela de ordens de serviço
+        window.location.href = 'orders.html';
     });
 
     // --- INICIALIZAÇÃO ---
     renderAll();
 });
+
