@@ -8,24 +8,22 @@ import java.time.LocalDateTime;
 
 public class ServiceOrderRequestDto {
 
-    private User client;
-    private Product product;
+    private Integer clientId;
+    private Integer productId;
     private BigDecimal total_value;
     private String observation;
-    private LocalDateTime createdAt;
     private LocalDateTime initialDate;
     private LocalDateTime previousEndDate;
-    private LocalDateTime endDate;
     private Boolean approval;
     private Boolean waitApproval;
     private User userApproval;
 
-    public User getClient() {
-        return client;
+    public Integer getClientId() {
+        return clientId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
     public BigDecimal getTotal_value() {
@@ -36,20 +34,12 @@ public class ServiceOrderRequestDto {
         return observation;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public LocalDateTime getInitialDate() {
         return initialDate;
     }
 
     public LocalDateTime getPreviousEndDate() {
         return previousEndDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
     }
 
     public Boolean getApproval() {
