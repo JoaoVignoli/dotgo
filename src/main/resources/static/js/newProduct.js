@@ -112,9 +112,11 @@ async function createProduct() {
         body: JSON.stringify(productData),
     })
 
+    const productInfos = await responseInfos.json();
+
     if (responseInfos.status == 201) {
-        const productInfos = await responseInfos.json();
         const productId = productInfos.id;
+        console.log(productId);
         const response = await fetch("/products/" + productId + "/upload", {
             method: "POST",
             body: formData
