@@ -18,10 +18,6 @@ async function logout() {
 
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
-    
-    if(favorites.includes(providerId)) {
-        console.log(providerId + " está favoritado.")
-    }
 
     return favorites.includes(providerId);
 }
@@ -58,9 +54,6 @@ async function addFavorite(providerId, userId) {
         // Adiciona a nova entrada ao mapa.
         favoriteIdMap[newFavorite.serviceProviderId] = newFavorite.id;
 
-        console.log(`Prestador ${providerId} (Favorito ID: ${newFavorite.id}) adicionado aos favoritos.`);
-        console.log("Mapa de favoritos atualizado:", favoriteIdMap);
-
     } catch (error) {
         console.error("Falha ao adicionar favorito:", error);
     }
@@ -90,8 +83,6 @@ async function removeFavorite(providerId) {
 
         // Também remove a entrada do mapa.
         delete favoriteIdMap[providerId];
-
-        console.log(`Prestador ${providerId} removido dos favoritos.`);
 
     } catch (error) {
         console.error("Falha ao remover favorito:", error);
@@ -124,14 +115,12 @@ async function getUserFavorites() {
                 return fav.serviceProviderId;
             });
 
-            console.log("Favoritos do usuário carregados a partir de /auth/me:", favoriteProviderIds);
             // Retorna a lista de IDs de prestadores favoritados.
             return favoriteProviderIds;
 
         } else {
             // Se o usuário não tiver favoritos ou a propriedade não existir,
             // retorna um array vazio para evitar erros.
-            console.log("Usuário autenticado, mas não possui favoritos ou a propriedade 'favorites' não foi encontrada.");
             return [];
         }
 
@@ -204,10 +193,6 @@ async function navigateToSubcategories(category) {
     const subcategories = await getCategories(`/categories/${category.id}/subcategories`);
     if (subcategories.length > 0) {
         renderCategories(subcategories);
-    } else {
-        // Se não houver subcategorias, talvez você queira buscar os prestadores dessa categoria final
-        console.log(`Nenhuma subcategoria encontrada. Buscando prestadores para a categoria ID: ${category.id}`);
-        // Aqui você chamaria uma função para buscar e exibir os prestadores filtrados.
     }
 }
 
@@ -398,12 +383,14 @@ function displayServiceHolders(serviceHolder, isUserLoggedIn) {
         favoriteButton.classList.add("clicked");
         setTimeout(() => {
             favoriteButton.classList.remove("clicked");
-        }, 200);
+        }, 100);
     });
 
+    // Esconder botão de favorito se não estiver logado.
     if (!isUserLoggedIn) {
         favoriteButton.style.display = "none";
     }
+
 
     // --- Montagem da Estrutura--
 
@@ -458,7 +445,6 @@ function createCategoryItem(category) {
     categoryItem.addEventListener('click', (event) => {
 
         if (event.target.closest('button')) {
-            console.log('Click intercepted on button within category item');
             return;
         }
 
@@ -478,10 +464,7 @@ function createCategoryItem(category) {
 
         if (!categoryIcon.classList.contains('category-icon--selected')) {
             categoryIcon.classList.add('category-icon--selected');
-            console.log('Added selected class to category:', category.name);
-        } else {
-            console.log('Category already selected:', category.name);
-        }
+        } 
 
         if (category.isLeaf) {
             // Futuramente: filterProvidersByCategory(category.id);

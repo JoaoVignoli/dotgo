@@ -8,10 +8,6 @@ function returnWindow() {
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
     
-    if(favorites.includes(providerId)) {
-        console.log(providerId + " está favoritado.")
-    }
-
     return favorites.includes(providerId);
 }
 
@@ -47,9 +43,6 @@ async function addFavorite(providerId, userId) {
         // Adiciona a nova entrada ao mapa.
         favoriteIdMap[newFavorite.serviceProviderId] = newFavorite.id;
 
-        console.log(`Prestador ${providerId} (Favorito ID: ${newFavorite.id}) adicionado aos favoritos.`);
-        console.log("Mapa de favoritos atualizado:", favoriteIdMap);
-
     } catch (error) {
         console.error("Falha ao adicionar favorito:", error);
     }
@@ -80,8 +73,6 @@ async function removeFavorite(providerId) {
         // Também remove a entrada do mapa.
         delete favoriteIdMap[providerId];
 
-        console.log(`Prestador ${providerId} removido dos favoritos.`);
-
     } catch (error) {
         console.error("Falha ao remover favorito:", error);
     }
@@ -89,7 +80,6 @@ async function removeFavorite(providerId) {
 
 async function getUserFavorites() {
     try {
-        // PASSO 1: Buscar os dados do usuário (que incluem os favoritos).
         const response = await fetch('/auth/me');
 
         if (!response.ok) {
@@ -98,29 +88,23 @@ async function getUserFavorites() {
 
         const userData = await response.json();
 
-        // PASSO 2: Verificar se o usuário e a propriedade 'favorites' existem.
-        // Acessamos 'userData.favorites' em vez de uma variável inexistente.
         if (userData && Array.isArray(userData.favorites)) {
             
-            // Limpa o mapa para evitar dados duplicados.
             favoriteIdMap = {};
 
-            // PASSO 3: Mapear a lista 'userData.favorites'.
             const favoriteProviderIds = userData.favorites.map(fav => {
-                // Popula o mapa para a função de remoção.
+
+                // Insere dados providerId e favoriteId em um mapa.
                 favoriteIdMap[fav.serviceProviderId] = fav.id; 
-                // Retorna o ID do prestador para a lista principal.
+
                 return fav.serviceProviderId;
             });
 
-            console.log("Favoritos do usuário carregados a partir de /auth/me:", favoriteProviderIds);
-            // Retorna a lista de IDs de prestadores favoritados.
+            // Retorna favoritos.
             return favoriteProviderIds;
 
         } else {
-            // Se o usuário não tiver favoritos ou a propriedade não existir,
-            // retorna um array vazio para evitar erros.
-            console.log("Usuário autenticado, mas não possui favoritos ou a propriedade 'favorites' não foi encontrada.");
+            // Array vazio para caso não tenho nenhum favorito.
             return [];
         }
 
@@ -226,10 +210,18 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
 
     favoriteButton.addEventListener('click', async (event) => {
 
+        event.stopPropagation();
+        event.preventDefault();
+
+        const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
+
+        // Desativa o botão para evitar cliques duplos enquanto a requisição está em andamento
+        favoriteButton.disabled = true; 
+
         try {
             if (isCurrentlyFavorited) {
                 // 1. Tenta remover o favorito no backend
-                await removeFavorite(serviceHolder.id);
+                await removeFavorite(serviceProviderData.id);
 
                 // 2. Se a remoção for bem-sucedida, atualiza a UI
                 favoriteButton.innerHTML = ''; // Limpa o ícone antigo
@@ -240,7 +232,7 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
                 // Verifica se o usuário está logado antes de tentar favoritar
                 if (isUserLoggedIn && isUserLoggedIn.userId) {
                     // 1. Tenta adicionar o favorito no backend
-                    await addFavorite(serviceHolder.id, isUserLoggedIn.userId);
+                    await addFavorite(serviceProviderData.id, isUserLoggedIn.userId);
 
                     // 2. Se a adição for bem-sucedida, atualiza a UI
                     favoriteButton.innerHTML = ''; // Limpa o ícone antigo
@@ -263,13 +255,13 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
         favoriteButton.classList.add("clicked");
         setTimeout(() => {
             favoriteButton.classList.remove("clicked");
-        }, 200);
+        }, 100);
     });
 
     const headerIcons = document.getElementById('header-icons');
     headerIcons.prepend(favoriteButton);
 
-    // Econder botão de favorito.
+    // Esconder botão de favorito se não estiver logado.
     if (!isUserLoggedIn) {
         favoriteButton.style.display = "none";
     }
@@ -286,6 +278,25 @@ async function getServiceProvider(providerId) {
     const data = await response.json();
 
     return data;
+}
+
+function showLoggedUserButtons() {
+
+    const shareButton = document.getElementById("shareButton");
+    shareButton.classList.remove("hidden");
+
+    const favoritesButton = document.getElementById("favoritesButton");
+    favoritesButton.classList.remove("hidden");
+
+    const ordersButton = document.getElementById("ordersButton");
+    ordersButton.classList.remove("hidden");
+
+    const profileButton = document.getElementById("profileButton");
+    profileButton.classList.remove("hidden");
+
+    const loginButton = document.getElementById("loginButton");
+    loginButton.classList.add("hidden");
+
 }
 
 async function verifyUserStatus() {
