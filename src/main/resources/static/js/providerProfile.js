@@ -177,6 +177,9 @@ function showProfile() {
     const tabProducts = document.getElementById("tabProducts");
     tabProducts.classList.remove("active");
 
+    const productList = document.getElementById("productsList");
+    productList.classList.add("hidden")
+
     const profileContainer = document.getElementById("profileContainer");
     profileContainer.classList.remove("hidden")
 }
@@ -190,6 +193,9 @@ function showProducts() {
 
     const productList = document.getElementById("productsList");
     productList.classList.remove("hidden")
+    
+    const profileContainer = document.getElementById("profileContainer");
+    profileContainer.classList.add("hidden")
 }
 
 function showProductDetail(providerPhone) {
