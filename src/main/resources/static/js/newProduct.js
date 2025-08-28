@@ -115,7 +115,7 @@ async function createProduct() {
     if (responseInfos.status == 201) {
         const productInfos = await responseInfos.json();
         const productId = productInfos.id;
-        const response = await fetch("/" + productId + "/upload", {
+        const response = await fetch("/products/" + productId + "/upload", {
             method: "POST",
             body: formData
         })
