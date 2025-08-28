@@ -196,7 +196,7 @@ function showProductDetail(providerPhone) {
 
 }
 
-async function fillProviderProducts(productData, providerPhone) {
+async function fillProviderProducts(product, providerPhone) {
 
     const productList = document.getElementById("productsList");
 
