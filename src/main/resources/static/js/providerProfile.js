@@ -201,7 +201,7 @@ async function fillProviderProducts(product, providerPhone) {
     const productList = document.getElementById("productsList");
 
     const productCard = document.createElement("div");
-    productCard.classList.add("productCard");
+    productCard.classList.add("product-card");
 
     const productImage = document.createElement("img");
     productImage.classList.add("product-image");
@@ -457,7 +457,7 @@ async function main() {
         fillProviderProducts(product, providerInfos.phone);
     });
     
-
+    tabProfile.addEventListener("click", showProfile)
     tabProducts.addEventListener("click", showProducts)
 
 }
