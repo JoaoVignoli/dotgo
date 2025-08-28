@@ -7,7 +7,7 @@ function returnWindow() {
 
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
-    
+
     return favorites.includes(providerId);
 }
 
@@ -26,7 +26,7 @@ async function addFavorite(providerId, userId) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
-            credentials: 'include' 
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -55,11 +55,11 @@ async function removeFavorite(providerId) {
 
     if (favoriteId === undefined) {
         console.error(`Não foi possível encontrar o ID do favorito para o prestador ${providerId}. A remoção foi abortada.`);
-        return; 
+        return;
     }
 
     try {
-        const response = await fetch('/favorites/' + favoriteId, { 
+        const response = await fetch('/favorites/' + favoriteId, {
             method: 'DELETE'
         });
 
@@ -89,13 +89,13 @@ async function getUserFavorites() {
         const userData = await response.json();
 
         if (userData && Array.isArray(userData.favorites)) {
-            
+
             favoriteIdMap = {};
 
             const favoriteProviderIds = userData.favorites.map(fav => {
 
                 // Insere dados providerId e favoriteId em um mapa.
-                favoriteIdMap[fav.serviceProviderId] = fav.id; 
+                favoriteIdMap[fav.serviceProviderId] = fav.id;
 
                 return fav.serviceProviderId;
             });
@@ -117,7 +117,7 @@ async function getUserFavorites() {
 
 function createSvgIcon(config, paths) {
     const svgNS = "http://www.w3.org/2000/svg";
-    const svgIcon = document.createElementNS(svgNS, "svg" );
+    const svgIcon = document.createElementNS(svgNS, "svg");
 
     // Aplica todas as configurações (width, height, viewBox, etc.)
     for (const attr in config) {
@@ -149,7 +149,7 @@ function createStarIcon() {
 function createHeartIconOutline() {
     const heartSvg = createSvgIcon(
         { xmlns: "http://www.w3.org/2000/svg", width: "25", height: "25", viewBox: "0 0 25 25", fill: "currentColor" },
-        [{ 
+        [{
             d: "M16.6875 2.625C14.8041 2.625 13.1325 3.36844 12 4.64625C10.8675 3.36844 9.19594 2.625 7.3125 2.625C5.67208 2.62698 4.09942 3.27952 2.93947 4.43947C1.77952 5.59942 1.12698 7.17208 1.125 8.8125C1.125 15.5944 11.0447 21.0131 11.4666 21.2409C11.6305 21.3292 11.8138 21.3754 12 21.3754C12.1862 21.3754 12.3695 21.3292 12.5334 21.2409C12.9553 21.0131 22.875 15.5944 22.875 8.8125C22.873 7.17208 22.2205 5.59942 21.0605 4.43947C19.9006 3.27952 18.3279 2.62698 16.6875 2.625ZM16.1728 15.9713C14.8671 17.0792 13.4714 18.0764 12 18.9525C10.5286 18.0764 9.13287 17.0792 7.82719 15.9713C5.79562 14.2284 3.375 11.5706 3.375 8.8125C3.375 7.76821 3.78984 6.76669 4.52827 6.02827C5.26669 5.28984 6.26821 4.875 7.3125 4.875C8.98125 4.875 10.3781 5.75625 10.9584 7.17562C11.0429 7.38254 11.1871 7.55961 11.3726 7.68425C11.5581 7.80889 11.7765 7.87545 12 7.87545C12.2235 7.87545 12.4419 7.80889 12.6274 7.68425C12.8129 7.55961 12.9571 7.38254 13.0416 7.17562C13.6219 5.75625 15.0188 4.875 16.6875 4.875C17.7318 4.875 18.7333 5.28984 19.4717 6.02827C20.2102 6.76669 20.625 7.76821 20.625 8.8125C20.625 11.5706 18.2044 14.2284 16.1728 15.9713Z",
             fill: "#0C0C0C"
         }]
@@ -161,7 +161,7 @@ function createHeartIconOutline() {
 function createHeartIconFilled() {
     const heartSvg = createSvgIcon(
         { xmlns: "http://www.w3.org/2000/svg", width: "25", height: "25", viewBox: "0 0 25 25", fill: "currentColor" },
-        [{ 
+        [{
             d: "M16.6875 2.625C14.8041 2.625 13.1325 3.36844 12 4.64625C10.8675 3.36844 9.19594 2.625 7.3125 2.625C5.67208 2.62698 4.09942 3.27952 2.93947 4.43947C1.77952 5.59942 1.12698 7.17208 1.125 8.8125C1.125 15.5944 11.0447 21.0131 11.4666 21.2409C11.6305 21.3292 11.8138 21.3754 12 21.3754C12.1862 21.3754 12.3695 21.3292 12.5334 21.2409C12.9553 21.0131 22.875 15.5944 22.875 8.8125C22.873 7.17208 22.2205 5.59942 21.0605 4.43947C19.9006 3.27952 18.3279 2.62698 16.6875 2.625Z",
             fill: "#E53935"
         }]
@@ -170,7 +170,48 @@ function createHeartIconFilled() {
     return heartSvg;
 }
 
-async function fillProviderData(serviceProviderData, isUserLoggedIn) {
+async function fillProviderProducts(productsData, providerPhone) {
+
+    productsData.forEach(product => {
+        const productList = document.getElementById("productsList");
+
+        const productCard = document.createElement("div");
+        productCard.classList.add("productCard");
+
+        const productImage = document.createElement("img");
+        productImage.classList.add("product-image");
+        productImage.src = product.pictureUrl;
+        productImage.alt = product.name
+
+        const productInfo = document.createElement("div");
+        productInfo.classList.add("product-info");
+
+        const productTitle = document.createElement("h3");
+        productTitle.classList.add("product-title");
+        productTitle.innerText = product.name;
+
+        const productPrice = document.createElement("div");
+        productPrice.classList.add("product-price");
+
+        const priceLabel = document.createElement("span");
+        priceLabel.classList.add("price-label");
+        priceLabel.innerText = "R$";
+
+        const priceText = document.createElement("span");
+        priceText.classList.add("price-text");
+
+        if (product.priceToBeAgreed) {
+            priceText.innerText = "A combinar";
+        } else {
+            priceText.innerText = product.price;
+        }
+        
+    });
+
+
+}
+
+async function fillProviderInfos(serviceProviderData, isUserLoggedIn) {
 
     const profilePhoto = document.getElementById('profile-photo');
     profilePhoto.src = serviceProviderData.urlProfilePhoto;
@@ -216,7 +257,7 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
         const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
 
         // Desativa o botão para evitar cliques duplos enquanto a requisição está em andamento
-        favoriteButton.disabled = true; 
+        favoriteButton.disabled = true;
 
         try {
             if (isCurrentlyFavorited) {
@@ -250,7 +291,7 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
             // Reativa o botão após a conclusão da operação (sucesso ou falha)
             favoriteButton.disabled = false;
         }
-    
+
         // Feedback visual temporário
         favoriteButton.classList.add("clicked");
         setTimeout(() => {
@@ -268,8 +309,20 @@ async function fillProviderData(serviceProviderData, isUserLoggedIn) {
 
 }
 
-async function getServiceProvider(providerId) {
+async function getProviderInfos(providerId) {
     const response = await fetch('/users/' + providerId);
+
+    if (!response.ok) {
+        throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
+async function getProviderProducts(providerId) {
+    const response = await fetch('/users/' + providerId + "/products");
 
     if (!response.ok) {
         throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
@@ -331,7 +384,14 @@ async function verifyUserStatus() {
 
 async function main() {
 
+    const providerId = localStorage.getItem("providerId")
+
     const returnButton = document.getElementById("returnButton");
+    const tabProfile = document.getElementById("tabProfile");
+    const tabProducts = document.getElementById("tabProducts");
+    const tabReviews = document.getElementById("tabReviews");
+    const tabDeatils = document.getElementById("tabDeatils");
+
     returnButton.addEventListener("click", returnWindow);
 
     const user = await verifyUserStatus();
@@ -341,15 +401,19 @@ async function main() {
         showLoggedUserButtons();
     }
 
-    const providerId = localStorage.getItem("providerId")
-
-    if(!providerId) {
+    if (!providerId) {
         console.error("ProviderId não informado.")
     }
 
-    const serviceProviderData = await getServiceProvider(providerId);
+    const providerInfos = await getProviderInfos(providerId);
 
-    fillProviderData(serviceProviderData, user)
+    const providerProducts = await getProviderProducts(providerId)
+
+    fillProviderInfos(providerInfos, user);
+
+    fillProviderProducts(providerProducts, providerInfos.phone);
+
+    tabProducts.addEventListener("click",)
 
 }
 

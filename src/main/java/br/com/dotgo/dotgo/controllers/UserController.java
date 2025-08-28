@@ -2,10 +2,12 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserSummaryResponseDto;
 import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
+import br.com.dotgo.dotgo.dtos.ProductResponseDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
 import br.com.dotgo.dotgo.entities.Favorites;
+import br.com.dotgo.dotgo.entities.Product;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
 import br.com.dotgo.dotgo.repositories.UserRepository;
@@ -191,7 +193,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/favorites")
-    public ResponseEntity<?> getMethodName(@PathVariable Integer userId) {
+    public ResponseEntity<?> getFavorites(@PathVariable Integer userId) {
         
         Optional<User> user = this.userRepository.findById(userId);
 
@@ -211,4 +213,32 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
     
+    @GetMapping("/{userId}/products")
+    public ResponseEntity<?> getProducts(@PathVariable Integer userId) {
+
+        Optional<User> optionalUser = this.userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Usuário não localizado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        User user = optionalUser.get();
+
+        List<Product> products = user.getProducts();
+
+        ArrayList<ProductResponseDto> responseList = new ArrayList<>();
+
+        for (Product product : products) {
+            String url = this.fileStorageService.getPublicFileUrl(product.getPicture());
+
+            ProductResponseDto productResponseDto = new ProductResponseDto(product, url);
+
+            responseList.add(productResponseDto);
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
 }
