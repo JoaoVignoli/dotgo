@@ -170,44 +170,86 @@ function createHeartIconFilled() {
     return heartSvg;
 }
 
-async function fillProviderProducts(productsData, providerPhone) {
+function showProfile() {
+    const tabProfile = document.getElementById("tabProfile");
+    tabProfile.classList.add("active");
 
-    productsData.forEach(product => {
-        const productList = document.getElementById("productsList");
+    const tabProducts = document.getElementById("tabProducts");
+    tabProducts.classList.remove("active");
 
-        const productCard = document.createElement("div");
-        productCard.classList.add("productCard");
+    const profileContainer = document.getElementById("profileContainer");
+    profileContainer.classList.remove("hidden")
+}
 
-        const productImage = document.createElement("img");
-        productImage.classList.add("product-image");
-        productImage.src = product.pictureUrl;
-        productImage.alt = product.name
+function showProducts() {
+    const tabProfile = document.getElementById("tabProfile");
+    tabProfile.classList.remove("active");
 
-        const productInfo = document.createElement("div");
-        productInfo.classList.add("product-info");
+    const tabProducts = document.getElementById("tabProducts");
+    tabProducts.classList.add("active");
 
-        const productTitle = document.createElement("h3");
-        productTitle.classList.add("product-title");
-        productTitle.innerText = product.name;
+    const productList = document.getElementById("productsList");
+    productList.classList.remove("hidden")
+}
 
-        const productPrice = document.createElement("div");
-        productPrice.classList.add("product-price");
+function showProductDetail(providerPhone) {
 
-        const priceLabel = document.createElement("span");
-        priceLabel.classList.add("price-label");
-        priceLabel.innerText = "R$";
+}
 
-        const priceText = document.createElement("span");
-        priceText.classList.add("price-text");
+async function fillProviderProducts(productData, providerPhone) {
 
-        if (product.priceToBeAgreed) {
-            priceText.innerText = "A combinar";
-        } else {
-            priceText.innerText = product.price;
-        }
-        
-    });
+    const productList = document.getElementById("productsList");
 
+    const productCard = document.createElement("div");
+    productCard.classList.add("productCard");
+
+    const productImage = document.createElement("img");
+    productImage.classList.add("product-image");
+    productImage.src = product.pictureUrl;
+    productImage.alt = product.name
+
+    const productInfo = document.createElement("div");
+    productInfo.classList.add("product-info");
+
+    const productTitle = document.createElement("h3");
+    productTitle.classList.add("product-title");
+    productTitle.innerText = product.name;
+
+    const productDescription = document.createElement("p");
+    productDescription.classList.add("product-description");
+    productDescription.innerText = product.description;
+
+    const productPrice = document.createElement("div");
+    productPrice.classList.add("product-price");
+
+    const priceLabel = document.createElement("span");
+    priceLabel.classList.add("price-label");
+    priceLabel.innerText = "R$";
+
+    const priceText = document.createElement("span");
+    priceText.classList.add("price-text");
+
+    if (product.priceToBeAgreed) {
+        priceText.innerText = "A combinar";
+    } else {
+        priceText.innerText = product.price;
+    }
+
+    productPrice.appendChild(priceLabel);
+    productPrice.appendChild(priceText);
+
+    productInfo.appendChild(productTitle);
+    productInfo.appendChild(productDescription);
+    productInfo.appendChild(productPrice);
+
+    productCard.appendChild(productImage);
+    productCard.appendChild(productInfo);
+
+    productList.appendChild(productCard);
+
+    productCard.addEventListener("click", (event) => {
+        showProductDetail(providerPhone);
+    })
 
 }
 
@@ -411,9 +453,12 @@ async function main() {
 
     fillProviderInfos(providerInfos, user);
 
-    fillProviderProducts(providerProducts, providerInfos.phone);
+    providerProducts.forEach(product => {
+        fillProviderProducts(product, providerInfos.phone);
+    });
+    
 
-    tabProducts.addEventListener("click",)
+    tabProducts.addEventListener("click", showProducts)
 
 }
 
