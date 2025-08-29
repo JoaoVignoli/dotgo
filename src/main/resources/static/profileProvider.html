@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil do Prestador - DotGo</title>
   <link rel="stylesheet" href="css/providerProfile.css" />
-  <link rel="stylesheet" href="css/profileProduct.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,700&display=swap" rel="stylesheet">
@@ -120,6 +119,63 @@
       <section class="products-list hidden" id="productsList">
         <!-- Preenchido com dados do banco -->
       </section>
+
+      <div class="content-container hidden" id="schedulingContainer">
+
+        <!-- Card do Serviço -->
+        <section class="service-card">
+          <img src="" alt="" class="service-image-placeholder">
+          <div class="service-info">
+            <h3 class=".service-title-scheduling"></h3>
+            <p class="service-description"></p>
+            <p class="service-price"></p>
+          </div>
+        </section>
+
+        <!-- Calendário -->
+        <section class="calendar-section">
+          <div class="calendar-header">
+            <h3 id="calendar-month-year"></h3>
+            <button class="calendar-icon-btn" id="toggle-calendar-view">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 2v4m8-4v4M3 10h18M4 6h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z">
+                </path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- O container da semana será preenchido pelo JavaScript -->
+          <div class="calendar-week" id="calendar-week-container">
+          </div>
+        </section>
+
+        <!-- Container do mês completo (começa escondido) -->
+        <div class="calendar-month" id="calendar-month-container">
+        </div>
+        </section>
+
+        <!-- Horários Disponíveis -->
+        <section class="time-section">
+          <h3>Horários</h3>
+          <!-- O container dos horários terá scroll horizontal -->
+          <div class="time-slots-wrapper">
+            <div class="time-slots" id="time-slots-container">
+              <!-- Os horários serão preenchidos pelo JavaScript -->
+            </div>
+          </div>
+        </section>
+
+
+        <!-- Observações -->
+        <section class="observations-section">
+          <h3>Observações</h3>
+          <textarea placeholder="Adicione detalhes ou instruções para o prestador..."></textarea>
+        </section>
+
+        <!-- Botão de Agendar -->
+        <button class="schedule-btn">Agendar</button>
+      </div>
     </div>
     <footer class="bottom-nav">
       <a href="/" class="nav-item active">
@@ -138,7 +194,7 @@
         </svg>
         <span>Favoritos</span>
       </a>
-      <a href="#" class="nav-item hidden" id="ordersButton">
+      <a href="service-orders" class="nav-item hidden" id="ordersButton">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentcolor"
           style="color: #666666">
           <path
@@ -163,34 +219,34 @@
         <span>Login</span>
       </a>
     </footer>
-  </div>
-
-  <div id="productModal" class="modal-overlay hidden">
-    <div class="modal-container" id="modalContainer">
-      <button class="modal-close-btn" id="modalClose">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <img src="" alt="" class="service-image-placeholder" id="modalProductImg">
-      <h2 class="service-title" id="modalServiceTitle"></h2>
-      <div class="service-description">
-        <h3>Descrição:</h3>
-        <p id="modalProductDescription"></p>
+    <div id="productModal" class="modal-overlay hidden">
+      <div class="modal-container" id="modalContainer">
+        <button class="modal-close-btn" id="modalClose">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <img src="" alt="" class="service-image-placeholder" id="modalProductImg">
+        <h2 class="service-title" id="modalServiceTitle"></h2>
+        <div class="service-description">
+          <h3>Descrição:</h3>
+          <p id="modalProductDescription"></p>
+        </div>
+        <div class="service-price">
+          <span id="modalProductPrice"></span>
+        </div>
+        <div class="service-time">
+          <span id="modalServiceTime"></span>
+        </div>
+        <button class="contact-btn" id="modalActionButton">
+          <span id="modalActionButtonText"></span>
+        </button>
       </div>
-      <div class="service-price">
-        <span id="modalProductPrice"></span>
-      </div>
-      <div class="service-time">
-        <span>Estimativa de tempo: </span><span id="modalServiceTime"></span>
-      </div>
-      <button class="contact-btn" id="modalActionButton">
-        <span id="modalActionButtonText"></span>
-      </button>
     </div>
   </div>
+
 </body>
 
 </html>

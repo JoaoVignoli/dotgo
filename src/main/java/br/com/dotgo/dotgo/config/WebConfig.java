@@ -36,7 +36,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/provider-profile").setViewName("forward:/profileProvider.html");
         registry.addViewController("/personal-profile").setViewName("forward:/personalProfile.html");
         
-        registry.addRedirectViewController("/service-order/scheduler", "forward:/scheduling.html");
+        registry.addViewController("/service-orders").setViewName ("forward:/orders.html");
+        
     }
 } 
 

@@ -29,7 +29,7 @@ public class ServiceOrderController {
 
     //Metodo para a criação de uma nova ordem de serviço
     @PostMapping
-    public ServiceOrderResponseDto createServiceOrder(
+    public ResponseEntity<ServiceOrderResponseDto> createServiceOrder(
             @RequestBody ServiceOrderRequestDto request
             ) {
 
@@ -51,7 +51,7 @@ public class ServiceOrderController {
         //Salva a nova ServiceOrder no banco de dados
         this.serviceOrderRepository.save(novo);
         
-        return new ServiceOrderResponseDto(novo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceOrderResponseDto(novo));
     }
 }
 

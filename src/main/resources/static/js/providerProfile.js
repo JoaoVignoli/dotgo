@@ -1,6 +1,19 @@
 let favorites = [];
 let favoriteIdMap = {};
 
+let selectedProduct = null;
+
+const serviceDurationHours = 4;
+const breakTimeMinutes = 90;
+const unavailableDates = ['2025-07-13', '2025-07-14'];
+const bookedSlots = { '2025-07-17': ['10:00'] };
+
+// ===== ESTADO DO CALENDÁRIO =====
+let viewDate = new Date();
+let selectedDate = null;
+let isMonthView = false;
+
+
 function returnWindow() {
     history.back();
 }
@@ -12,8 +25,23 @@ function closeModal() {
 
 function showProductModal(product, providerPhone) {
     const productModal = document.getElementById("productModal");
+    const modalContainer = document.getElementById("modalContainer");
+    const modalCloseButton = document.getElementById("modalClose");
 
-    // ... (todo o seu código para preencher os dados do modal continua igual)
+    const handleCloseButtonClick = () => {
+        closeModal();
+        modalCloseButton.removeEventListener("click", handleCloseButtonClick);
+    };
+    modalCloseButton.addEventListener("click", handleCloseButtonClick);
+
+    const handleOverlayClick = (event) => {
+        if (!modalContainer.contains(event.target)) {
+            closeModal();
+            productModal.removeEventListener("click", handleOverlayClick);
+        }
+    };
+    productModal.addEventListener("click", handleOverlayClick);
+
     const modalProductImg = document.getElementById("modalProductImg");
     modalProductImg.src = product.pictureUrl;
     modalProductImg.alt = product.name;
@@ -35,25 +63,20 @@ function showProductModal(product, providerPhone) {
     if (product.timeToBeAgreed) {
         modalServiceTime.innerText = "Estimativa de tempo: A combinar";
     } else {
-        // Corrigi para pegar a propriedade correta, se o nome for diferente, ajuste aqui
         modalServiceTime.innerText = "Estimativa de tempo: " + (product.estimatedTime || 'N/A') + " min";
     }
 
-    const modalActionButtonText = document.getElementById("modalActionButtonText");
     const modalActionButton = document.getElementById("modalActionButton");
-
-    // **Importante:** Precisamos remover o listener antigo antes de adicionar um novo
-    // para evitar que múltiplos cliques sejam registrados.
     const newActionButton = modalActionButton.cloneNode(true);
     modalActionButton.parentNode.replaceChild(newActionButton, modalActionButton);
 
     newActionButton.addEventListener("click", () => {
         if (product.timeToBeAgreed || product.priceToBeAgreed) {
             const message = encodeURIComponent(`Olá, vi o serviço "${product.name}" e gostaria de mais informações.`);
-            window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank' );
+            window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank'  );
         } else {
-            localStorage.setItem("selectedProduct", product.id);
-            window.location.pathname = "/service-order/scheduler";
+            selectedProduct = product;
+            showSchedulingInterface();
         }
     });
 
@@ -63,8 +86,46 @@ function showProductModal(product, providerPhone) {
         newActionButton.querySelector('#modalActionButtonText').innerText = "Agendar";
     }
 
-    // Finalmente, remove a classe 'hidden' para mostrar o modal
     productModal.classList.remove("hidden");
+}
+
+function showSchedulingInterface() {
+    closeModal();
+    
+    const productsList = document.getElementById("productsList");
+    const profileContainer = document.getElementById("profileContainer");
+    const contentContainer = document.querySelector(".content-container");
+    
+    productsList.classList.add("hidden");
+    profileContainer.classList.add("hidden");
+    contentContainer.classList.remove("hidden");
+    
+    fillSelectedServiceInfo();
+    
+    initializeScheduling();
+}
+
+function fillSelectedServiceInfo() {
+    if (!selectedProduct) return;
+    
+    // Preencher card do serviço
+    const serviceImg = document.querySelector(".service-image-placeholder")
+    const serviceTitle = document.querySelector(".service-title");
+    const serviceDescription = document.querySelector(".service-description");
+    const servicePrice = document.querySelector(".service-price");
+
+
+    if (serviceImg) serviceImg.src = selectedProduct.pictureUrl;
+    if (serviceTitle) serviceTitle.innerText = selectedProduct.name;
+    if (serviceDescription) serviceDescription.innerText = selectedProduct.description;
+    
+    if (servicePrice) {
+        if (selectedProduct.priceToBeAgreed) {
+            servicePrice.innerText = "R$: A combinar";
+        } else {
+            servicePrice.innerText = "R$: " + selectedProduct.price;
+        }
+    }
 }
 
 // Verificar se está favoritado
@@ -242,11 +303,15 @@ function showProfile() {
     const productList = document.getElementById("productsList");
     productList.classList.add("hidden")
 
+    const schedulingContainer = document.getElementById("schedulingContainer");
+    schedulingContainer.classList.add("hidden")
+
     const profileContainer = document.getElementById("profileContainer");
     profileContainer.classList.remove("hidden")
 }
 
-function showProducts() {
+function showProductList() {
+
     const tabProfile = document.getElementById("tabProfile");
     tabProfile.classList.remove("active");
 
@@ -255,6 +320,9 @@ function showProducts() {
 
     const productList = document.getElementById("productsList");
     productList.classList.remove("hidden")
+
+    const schedulingContainer = document.getElementById("schedulingContainer");
+    schedulingContainer.classList.add("hidden")
     
     const profileContainer = document.getElementById("profileContainer");
     profileContainer.classList.add("hidden")
@@ -312,7 +380,6 @@ async function fillProviderProducts(product, providerPhone) {
     productList.appendChild(productCard);
 
     productCard.addEventListener("click", (event) => {
-        console.log(product.id + " selecionado.")
         showProductModal(product, providerPhone);
     })
 
@@ -418,13 +485,10 @@ async function fillProviderInfos(serviceProviderData, isUserLoggedIn) {
 
 async function getProviderInfos(providerId) {
     const response = await fetch('/users/' + providerId);
-
     if (!response.ok) {
         throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
     }
-
     const data = await response.json();
-
     return data;
 }
 
@@ -461,84 +525,354 @@ function showLoggedUserButtons() {
 
 async function verifyUserStatus() {
     try {
-        // Faz a requisição para o endpoint que retorna o status da autenticação
         const response = await fetch('/auth/status');
 
-        // Se a resposta não for "ok" (ex: erro 500, falha de rede), trata como um erro.
         if (!response.ok) {
             throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
         }
 
-        // Extrai o corpo da resposta como JSON
         const user = await response.json();
 
-        // A validação principal: verifica a propriedade "isAuthenticated" no JSON
         if (user.isAuthenticated) {
-            // Se autenticado, retorna os dados do usuário
             return user;
         } else {
-            // Se não autenticado, retorna null
             return null;
         }
 
     } catch (error) {
-        // Captura erros de rede ou o erro que lançamos acima
         console.error("Falha crítica na verificação de autenticação:", error);
-        // Em caso de qualquer erro, consideramos o usuário como não autenticado
         return null;
+    }
+}
+
+function initializeScheduling() {
+    const calendarWeekContainer = document.getElementById('calendar-week-container');
+    const calendarMonthContainer = document.getElementById('calendar-month-container');
+    const timeSlotsContainer = document.getElementById('time-slots-container');
+    const monthYearDisplay = document.getElementById('calendar-month-year');
+    const toggleButton = document.getElementById('toggle-calendar-view');
+    const scheduleButton = document.querySelector('.schedule-btn');
+
+    if (!calendarWeekContainer || !timeSlotsContainer) {
+        console.error("Elementos do calendário não encontrados");
+        return;
+    }
+
+    renderAll();
+    setupSchedulingEventListeners();
+}
+
+function initializeScheduling() {
+    const calendarWeekContainer = document.getElementById('calendar-week-container');
+    const calendarMonthContainer = document.getElementById('calendar-month-container');
+    const timeSlotsContainer = document.getElementById('time-slots-container');
+    const monthYearDisplay = document.getElementById('calendar-month-year');
+    const toggleButton = document.getElementById('toggle-calendar-view');
+    const scheduleButton = document.querySelector('.schedule-btn');
+
+    if (!calendarWeekContainer || !timeSlotsContainer) {
+        console.error("Elementos do calendário não encontrados");
+        return;
+    }
+
+    renderAll();
+    setupSchedulingEventListeners();
+}
+
+function renderAll() {
+    renderWeekCalendar(viewDate);
+    renderMonthCalendar(viewDate);
+    updateCalendarView();
+    renderTimeSlots(viewDate);
+}
+
+function renderWeekCalendar(date) {
+    const calendarWeekContainer = document.getElementById('calendar-week-container');
+    const monthYearDisplay = document.getElementById('calendar-month-year');
+    
+    if (!calendarWeekContainer || !monthYearDisplay) return;
+    
+    calendarWeekContainer.innerHTML = '';
+    const weekDays = getWeekDays(date);
+    monthYearDisplay.textContent = date.toLocaleDateString('pt-BR', { 
+        month: 'long', 
+        year: 'numeric' 
+    }).replace(/^\w/, c => c.toUpperCase());
+    
+    weekDays.forEach(day => {
+        const dayElement = createDayElement(day);
+        calendarWeekContainer.appendChild(dayElement);
+    });
+}
+
+function renderMonthCalendar(date) {
+    const calendarMonthContainer = document.getElementById('calendar-month-container');
+    if (!calendarMonthContainer) return;
+    
+    calendarMonthContainer.innerHTML = '';
+    const monthDays = getMonthDays(date);
+    const dayLetters = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+    
+    dayLetters.forEach(letter => {
+        const letterEl = document.createElement('div');
+        letterEl.className = 'month-day-letter';
+        letterEl.textContent = letter;
+        calendarMonthContainer.appendChild(letterEl);
+    });
+    
+    monthDays.forEach(day => {
+        if (!day) {
+            calendarMonthContainer.appendChild(document.createElement('div'));
+            return;
+        }
+        const dayElement = createDayElement(day, true);
+        calendarMonthContainer.appendChild(dayElement);
+    });
+}
+
+function renderTimeSlots(date) {
+    const timeSlotsContainer = document.getElementById('time-slots-container');
+    if (!timeSlotsContainer) return;
+    
+    timeSlotsContainer.innerHTML = '';
+    const availableSlots = generateAvailableSlots(date);
+    
+    if (availableSlots.length === 0 || isDateUnavailable(date)) {
+        timeSlotsContainer.innerHTML = '<p>Nenhum horário disponível para este dia.</p>';
+        return;
+    }
+    
+    availableSlots.forEach(slot => {
+        const timeSlotButton = document.createElement('button');
+        timeSlotButton.className = 'time-slot';
+        timeSlotButton.textContent = slot;
+        timeSlotButton.dataset.time = slot;
+        timeSlotsContainer.appendChild(timeSlotButton);
+    });
+}
+
+function generateAvailableSlots(date) {
+    const slots = [];
+    const dateString = date.toISOString().split('T')[0];
+    const alreadyBooked = bookedSlots[dateString] || [];
+    let currentTime = new Date(date);
+    currentTime.setHours(8, 0, 0, 0);
+    const endTime = new Date(date);
+    endTime.setHours(22, 0, 0, 0);
+    
+    while (currentTime < endTime) {
+        const slotTime = currentTime.toLocaleTimeString('pt-BR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        if (!alreadyBooked.includes(slotTime)) {
+            slots.push(slotTime);
+        }
+        currentTime.setHours(currentTime.getHours() + serviceDurationHours);
+        currentTime.setMinutes(currentTime.getMinutes() + breakTimeMinutes);
+    }
+    return slots;
+}
+
+function createDayElement(day, isMonthViewElement = false) {
+    const dayContainer = document.createElement('div');
+    dayContainer.className = 'day-container';
+    
+    if (!isMonthViewElement) {
+        const dayLetter = document.createElement('span');
+        dayLetter.className = 'day-letter';
+        dayLetter.textContent = day.toLocaleDateString('pt-BR', { 
+            weekday: 'short' 
+        }).charAt(0).toUpperCase();
+        dayContainer.appendChild(dayLetter);
+    }
+    
+    const dayNumber = document.createElement('button');
+    dayNumber.className = 'day-number';
+    dayNumber.textContent = day.getDate();
+    dayNumber.dataset.date = day.toISOString().split('T')[0];
+    
+    if (selectedDate && isSameDay(day, selectedDate)) {
+        dayNumber.classList.add('selected');
+    }
+    if (isDateUnavailable(day)) {
+        dayNumber.classList.add('unavailable');
+    }
+    
+    dayContainer.appendChild(dayNumber);
+    return dayContainer;
+}
+
+function getWeekDays(date) {
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() - date.getDay());
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        week.push(day);
+    }
+    return week;
+}
+
+function getMonthDays(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const daysInMonth = [];
+    
+    for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
+        daysInMonth.push(null);
+    }
+    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
+        daysInMonth.push(new Date(year, month, i));
+    }
+    return daysInMonth;
+}
+
+function isSameDay(d1, d2) {
+    if (!d1 || !d2) return false;
+    return d1.getFullYear() === d2.getFullYear() && 
+           d1.getMonth() === d2.getMonth() && 
+           d1.getDate() === d2.getDate();
+}
+
+function isDateUnavailable(date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) return true;
+    const dateString = date.toISOString().split('T')[0];
+    return unavailableDates.includes(dateString);
+}
+
+function updateCalendarView() {
+    const calendarMonthContainer = document.getElementById('calendar-month-container');
+    const calendarWeekContainer = document.getElementById('calendar-week-container');
+    
+    if (calendarMonthContainer) {
+        calendarMonthContainer.classList.toggle('hidden', !isMonthView);
+    }
+    if (calendarWeekContainer) {
+        calendarWeekContainer.classList.toggle('hidden', isMonthView);
+    }
+}
+
+function handleDaySelection(target) {
+    if (target && target.classList.contains('day-number') && !target.classList.contains('unavailable')) {
+        viewDate = new Date(target.dataset.date + 'T12:00:00Z');
+        selectedDate = new Date(target.dataset.date + 'T12:00:00Z');
+        renderAll();
+    }
+}
+
+function setupSchedulingEventListeners() {
+    const toggleButton = document.getElementById('toggle-calendar-view');
+    const calendarWeekContainer = document.getElementById('calendar-week-container');
+    const calendarMonthContainer = document.getElementById('calendar-month-container');
+    const timeSlotsContainer = document.getElementById('time-slots-container');
+    const scheduleButton = document.querySelector('.schedule-btn');
+
+    if (toggleButton) {
+        toggleButton.addEventListener('click', () => {
+            isMonthView = !isMonthView;
+            updateCalendarView();
+        });
+    }
+
+    if (calendarWeekContainer) {
+        calendarWeekContainer.addEventListener('click', (e) => {
+            handleDaySelection(e.target.closest('.day-number'));
+        });
+    }
+
+    if (calendarMonthContainer) {
+        calendarMonthContainer.addEventListener('click', (e) => {
+            handleDaySelection(e.target.closest('.day-number'));
+        });
+    }
+
+    if (timeSlotsContainer) {
+        timeSlotsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('time-slot')) {
+                const oldSelected = timeSlotsContainer.querySelector('.time-slot.selected');
+                if (oldSelected) oldSelected.classList.remove('selected');
+                e.target.classList.add('selected');
+            }
+        });
+    }
+
+    if (scheduleButton) {
+        scheduleButton.addEventListener('click', () => {
+            const timeSlotsContainer = document.getElementById('time-slots-container');
+            const selectedTimeEl = timeSlotsContainer ? timeSlotsContainer.querySelector('.time-slot.selected') : null;
+            
+            if (!selectedDate) {
+                alert('Por favor, selecione uma data no calendário.');
+                return;
+            }
+            if (!selectedTimeEl) {
+                alert('Por favor, selecione um horário.');
+                return;
+            }
+
+            const selectedTime = selectedTimeEl.dataset.time;
+            const formattedDate = selectedDate.toLocaleDateString('pt-BR', { 
+                day: '2-digit', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Salvar dados do agendamento
+            const agendamentoData = {
+                produto: selectedProduct ? selectedProduct.name : 'Serviço',
+                prestador: document.getElementById('provider-name')?.innerText || 'Prestador',
+                data: formattedDate,
+                horario: selectedTime,
+                observacoes: document.querySelector('.observations-section textarea')?.value || ''
+            };
+            
+            localStorage.setItem('ultimoAgendamento', JSON.stringify(agendamentoData));
+            localStorage.setItem('selectedProduct', selectedProduct ? selectedProduct.id : '');
+            
+            console.log('Agendamento realizado:', agendamentoData);
+            
+            // Redirecionar para página de ordens
+            window.location.href = '/service-orders';
+        });
     }
 }
 
 async function main() {
 
-    const productModal = document.getElementById("productModal");
-    const modalCloseButton = document.getElementById("modalClose");
-    const modalContainer = document.getElementById("modalContainer");
-
-    // 1. Fechar ao clicar no botão "X"
-    modalCloseButton.addEventListener("click", closeModal);
-
-    // 2. Fechar ao clicar fora do conteúdo do modal (no overlay)
-    productModal.addEventListener("click", (event) => {
-        // Verifica se o clique foi no overlay e não no container do modal
-        if (!modalContainer.contains(event.target)) {
-            closeModal();
-        }
-    });
-
     const providerId = localStorage.getItem("providerId")
 
-    const returnButton = document.getElementById("returnButton");
-    const tabProfile = document.getElementById("tabProfile");
-    const tabProducts = document.getElementById("tabProducts");
-    const tabReviews = document.getElementById("tabReviews");
-    const tabDeatils = document.getElementById("tabDeatils");
+    if (!providerId) {
+        console.error("ProviderId não informado.");
+        return;
+    }
 
-    returnButton.addEventListener("click", returnWindow);
+    document.getElementById("returnButton").addEventListener("click", returnWindow);
+    document.getElementById("tabProfile").addEventListener("click", showProfile);
+    document.getElementById("tabProducts").addEventListener("click", showProductList);
 
     const user = await verifyUserStatus();
-
     if (user) {
         favorites = await getUserFavorites();
         showLoggedUserButtons();
+    }    
+
+    try {
+        const providerInfos = await getProviderInfos(providerId);
+        const providerProducts = await getProviderProducts(providerId);
+
+        fillProviderInfos(providerInfos, user);
+        providerProducts.forEach(product => {
+            fillProviderProducts(product, providerInfos.phone);
+        });
+    } catch (error) {
+        console.error("Falha ao carregar dados do prestador:", error);
     }
-
-    if (!providerId) {
-        console.error("ProviderId não informado.")
-    }
-
-    const providerInfos = await getProviderInfos(providerId);
-
-    const providerProducts = await getProviderProducts(providerId)
-
-    fillProviderInfos(providerInfos, user);
-
-    providerProducts.forEach(product => {
-        fillProviderProducts(product, providerInfos.phone);
-    });
-    
-    tabProfile.addEventListener("click", showProfile)
-    tabProducts.addEventListener("click", showProducts)
 
 }
 
