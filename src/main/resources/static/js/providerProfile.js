@@ -3,7 +3,7 @@ let favoriteIdMap = {};
 
 let selectedProduct = null;
 
-const serviceDurationHours = 4;
+let serviceDurationHours = 4;
 const breakTimeMinutes = 90;
 const unavailableDates = ['2025-07-13', '2025-07-14'];
 const bookedSlots = { '2025-07-17': ['10:00'] };
