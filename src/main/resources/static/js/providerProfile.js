@@ -46,7 +46,6 @@ function showProductModal(product, providerPhone) {
         modalActionButtonText.innerText = "Agendar"
     }
 
-    productModal.classList.add("modal-overlay");
     productModal.classList.remove("hidden");
     
     const modalActionButton = document.getElementById("modalActionButton");
