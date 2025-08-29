@@ -5,6 +5,63 @@ function returnWindow() {
     history.back();
 }
 
+function closeModal() {
+
+}
+
+function showProductModal(product, providerPhone) {
+    const productModal = document.getElementById("servideModal");
+
+    const modalProductImg = document.getElementById("modalProductImg");
+    modalProductImg.src = product.pictureUrl;
+    modalProductImg.alt = product.name;
+
+    const modalServiceTitle = document.getElementById("modalServiceTitle");
+    modalServiceTitle.innerText = product.name;
+
+    const modalProductDescription = document.getElementById("modalProductDescription");
+    modalProductDescription.innerText = product.description;
+
+    const modalProductPrice = document.getElementById("modalProductPrice");
+
+    if (product.priceToBeAgreed) {
+        modalProductPrice.innerText = "R$: A combinar";
+    } else {
+        modalProductPrice.innerText = "R$: " + product.price;
+    }
+
+    const modalServiceTime = document.getElementById("modalServiceTime");
+
+    if (product.timeToBeAgreed) {
+        modalServiceTime.innerText = "Estimativa de tempo: A combinar"
+    } else {
+        modalServiceTime.innerText = "Estimativa de tempo: " + product.estimatedTime + " min"
+    }
+
+    const modalActionButtonText = document.getElementById("modalActionButtonText");
+
+    if (product.timeToBeAgreed || product.priceToBeAgreed) {
+        modalActionButtonText.innerText = "Entrar em contato"
+    } else {
+        modalActionButtonText.innerText = "Agendar"
+    }
+
+    productModal.classList.add("modal-overlay");
+    productModal.classList.remove("hidden");
+    
+    const modalActionButton = document.getElementById("modalActionButton");
+
+    modalActionButton.addEventListener("click", (event) => {
+        if (product.timeToBeAgreed || product.priceToBeAgreed) {
+            const message = encodeURIComponent(`Olá, vi o serviço "${product.name}" e gostaria de mais informações.`);
+            window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank' );
+        } else {
+            localStorage.setItem("selectedProduct", product.id);
+            window.location.pathname = "/service-order/scheduler"
+        }
+    })
+}
+
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
 
@@ -198,10 +255,6 @@ function showProducts() {
     profileContainer.classList.add("hidden")
 }
 
-function showProductDetail(providerPhone) {
-
-}
-
 async function fillProviderProducts(product, providerPhone) {
 
     const productList = document.getElementById("productsList");
@@ -254,7 +307,7 @@ async function fillProviderProducts(product, providerPhone) {
     productList.appendChild(productCard);
 
     productCard.addEventListener("click", (event) => {
-        showProductDetail(providerPhone);
+        showProductModal(product, providerPhone);
     })
 
 }
