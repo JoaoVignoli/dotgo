@@ -76,7 +76,7 @@ function showProductModal(product, providerPhone) {
             window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank'  );
         } else {
             selectedProduct = product;
-            showSchedulingInterface();
+            showSchedulingInterface(product);
         }
     });
 
@@ -89,9 +89,11 @@ function showProductModal(product, providerPhone) {
     productModal.classList.remove("hidden");
 }
 
-function showSchedulingInterface() {
+function showSchedulingInterface(product) {
     closeModal();
     
+    serviceDurationHours = product.estimatedTime / 60 
+
     const productsList = document.getElementById("productsList");
     const profileContainer = document.getElementById("profileContainer");
     const contentContainer = document.querySelector(".content-container");
@@ -130,7 +132,6 @@ function fillSelectedServiceInfo() {
 
 // Verificar se está favoritado
 function checkIfFavorited(providerId) {
-
     return favorites.includes(providerId);
 }
 
