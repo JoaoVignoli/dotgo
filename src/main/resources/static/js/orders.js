@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Limpa o último agendamento do localStorage ao carregar a página
+  localStorage.removeItem("ultimoAgendamento");
+
   const ordersList = document.getElementById("orders-list");
   const emptyState = document.getElementById("empty-state");
   const statusTabs = document.querySelectorAll(".status-tab");
@@ -39,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="order-details">
               <div class="detail-row">
                   <span class="detail-label">Data:</span>
-                  <span class="detail-value">${formatDateTime(order.date)} às ${order.time}</span>
+                  <span class="detail-value">${order.date} às ${order.time}</span>
               </div>
               <div class="detail-row">
                   <span class="detail-label">Valor:</span>
@@ -62,51 +65,35 @@ document.addEventListener("DOMContentLoaded", () => {
     ordersList.innerHTML = ""; // Limpa a lista atual
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-    // Dados de exemplo para demonstração (se não houver ordens salvas)
-    if (orders.length === 0) {
-        orders = [
-            {
-                id: 1,
-                serviceName: "Instalação Elétrica",
-                providerName: "João Silva",
-                status: "pendente",
-                date: "2025-01-15",
-                time: "14:00",
-                price: "R$ 250,00",
-                address: "Rua das Flores, 123",
-                createdAt: "2025-01-10",
-                observations: ""
-            },
-            {
-                id: 2,
-                serviceName: "Limpeza Residencial",
-                providerName: "Maria Santos",
-                status: "concluida",
-                date: "2025-01-12",
-                time: "09:00",
-                price: "R$ 150,00",
-                address: "Av. Principal, 456",
-                createdAt: "2025-01-08",
-                observations: ""
-            }
-        ];
-        localStorage.setItem("orders", JSON.stringify(orders));
-    }
-
-    // Adiciona a última ordem agendada se existir e não estiver na lista
-    const lastScheduledOrder = JSON.parse(localStorage.getItem("lastScheduledOrder"));
-    if (lastScheduledOrder) {
+    // Verifica se há dados de agendamento vindos da tela anterior
+    const ultimoAgendamento = JSON.parse(localStorage.getItem("ultimoAgendamento"));
+    if (ultimoAgendamento) {
       // Verifica se a ordem já existe para evitar duplicatas
       const exists = orders.some(order => 
-        order.serviceName === lastScheduledOrder.serviceName && 
-        order.date === lastScheduledOrder.date &&
-        order.time === lastScheduledOrder.time
+        order.serviceName === ultimoAgendamento.servico && 
+        order.date === ultimoAgendamento.data &&
+        order.time === ultimoAgendamento.horario &&
+        order.providerName === ultimoAgendamento.prestador
       );
+      
       if (!exists) {
-        orders.unshift(lastScheduledOrder); // Adiciona no início da lista
+        // Cria nova ordem com os dados do agendamento
+        const novaOrdem = {
+          id: Date.now(), // ID único baseado no timestamp
+          serviceName: ultimoAgendamento.servico,
+          providerName: ultimoAgendamento.prestador,
+          status: "pendente",
+          date: ultimoAgendamento.data,
+          time: ultimoAgendamento.horario,
+          price: "R$ 75,00", // Valor padrão - pode ser ajustado conforme necessário
+          address: "Endereço do cliente", // Endereço padrão - pode ser ajustado
+          createdAt: new Date().toISOString(),
+          observations: ultimoAgendamento.observacoes || ""
+        };
+        
+        orders.unshift(novaOrdem); // Adiciona no início da lista
         localStorage.setItem("orders", JSON.stringify(orders)); // Atualiza o localStorage
       }
-      localStorage.removeItem("lastScheduledOrder"); // Limpa após adicionar
     }
 
     const filteredOrders = orders.filter((order) => {
@@ -126,12 +113,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para mostrar o modal de confirmação
   const showConfirmationModal = () => {
-    confirmationModal.classList.add("visible");
+    confirmationModal.style.display = "flex";
+    // Adiciona classe para animação
+    setTimeout(() => {
+      confirmationModal.classList.add("visible");
+    }, 10);
   };
 
   // Função para esconder o modal de confirmação
   const hideConfirmationModal = () => {
     confirmationModal.classList.remove("visible");
+    setTimeout(() => {
+      confirmationModal.style.display = "none";
+    }, 300);
   };
 
   // Função para mostrar o modal de detalhes da ordem
@@ -148,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="order-details">
               <div class="detail-row">
                   <span class="detail-label">Data:</span>
-                  <span class="detail-value">${formatDateTime(order.date)} às ${order.time}</span>
+                  <span class="detail-value">${order.date} às ${order.time}</span>
               </div>
               <div class="detail-row">
                   <span class="detail-label">Valor:</span>
@@ -162,12 +156,18 @@ document.addEventListener("DOMContentLoaded", () => {
               <p class="order-date">Criado em ${new Date(order.createdAt).toLocaleDateString("pt-BR")}</p>
           </div>
       `;
-    serviceModal.classList.add("visible");
+    serviceModal.style.display = "flex";
+    setTimeout(() => {
+      serviceModal.classList.add("visible");
+    }, 10);
   };
 
   // Função para esconder o modal de detalhes da ordem
   const hideServiceModal = () => {
     serviceModal.classList.remove("visible");
+    setTimeout(() => {
+      serviceModal.style.display = "none";
+    }, 300);
   };
 
   // Event Listeners
@@ -195,16 +195,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Redirecionar para o WhatsApp
   contactButton.addEventListener("click", () => {
-    window.open("https://wa.me/5511999999999", "_blank"); // Substitua pelo número de telefone desejado
+    window.open("https://wa.me/5511999999999", "_blank" ); // Substitua pelo número de telefone desejado
   });
 
   // Inicialização
   loadOrders();
 
-  // Verifica se veio da tela de agendamento
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get("fromScheduling") === "true") {
-    showConfirmationModal();
+  // Verifica se há dados de agendamento e mostra o modal de confirmação
+  const ultimoAgendamentoCheck = JSON.parse(localStorage.getItem("ultimoAgendamento"));
+  if (ultimoAgendamentoCheck) {
+    // Mostra o modal de confirmação após um pequeno delay para garantir que a página carregou
+    setTimeout(() => {
+      showConfirmationModal();
+    }, 500);
   }
 });
 
@@ -228,5 +231,3 @@ function formatDateFromBR(brDate) {
         return new Date().toISOString().split("T")[0];
     }
 }
-
-
