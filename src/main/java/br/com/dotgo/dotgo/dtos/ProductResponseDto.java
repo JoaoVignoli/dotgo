@@ -22,7 +22,7 @@ public class ProductResponseDto {
     public ProductResponseDto(Product product, String pictureUrl) {
         this.id = product.getId();
         this.name = product.getName();
-        this.description = product.getName();
+        this.description = product.getDescription();
         this.price = product.getPrice();
         this.estimatedTime = product.getEstimatedTime();
         this.receiveAttachments = product.getReceiveAttachments();
