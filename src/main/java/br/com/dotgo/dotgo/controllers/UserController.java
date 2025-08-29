@@ -2,14 +2,18 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserSummaryResponseDto;
 import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
+import br.com.dotgo.dotgo.dtos.FeedRequestDto;
+import br.com.dotgo.dotgo.dtos.FeedResponseDto;
 import br.com.dotgo.dotgo.dtos.ProductResponseDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
 import br.com.dotgo.dotgo.entities.Favorites;
+import br.com.dotgo.dotgo.entities.Feed;
 import br.com.dotgo.dotgo.entities.Product;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
+import br.com.dotgo.dotgo.repositories.FeedRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
 import br.com.dotgo.dotgo.services.AuthService;
 import br.com.dotgo.dotgo.services.FileStorageService;
@@ -39,17 +43,19 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
+    private final FeedRepository feedRepository;
     private final AuthService authService;
     private static final String USERS_PICTURES_FOLDER = "pictures/users";
 
     public UserController(
         UserRepository userRepository, PasswordEncoder passwordEncoder,
-        FileStorageService fileStorageService, AuthService authService
+        FileStorageService fileStorageService, AuthService authService, FeedRepository feedRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.fileStorageService = fileStorageService;
         this.authService = authService;
+        this.feedRepository = feedRepository;
     }
 
     @PostMapping
@@ -238,6 +244,32 @@ public class UserController {
             responseList.add(productResponseDto);
         }
 
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+
+    @GetMapping("/{userId}/feed")
+    public ResponseEntity<?> getFeed(@PathVariable Integer userId) {
+
+        Optional<User> optionalUser = this.userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Usuário não localizado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        User user = optionalUser.get();
+
+        List<Feed> feedPictures = user.getFeed();
+
+        List<FeedResponseDto> responseList = new ArrayList<>();
+
+        for (Feed feedPicture : feedPictures) {
+            
+            responseList.add(new FeedResponseDto(feedPicture, this.fileStorageService.getPublicFileUrl(feedPicture.getPictureUrl())));
+
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }

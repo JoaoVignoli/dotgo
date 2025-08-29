@@ -329,6 +329,18 @@ function showProductList() {
     profileContainer.classList.add("hidden")
 }
 
+function fillProviderFeed(providerFeedData) {
+
+    const portifolioGrid = document.getElementById("portifolioGrid");
+
+    providerFeedData.forEach(feedPicture => {
+        const newImg = document.createElement("img");   
+        newImg.src = feedPicture.picture_url;
+
+        portifolioGrid.appendChild(newImg);
+    });
+}
+
 async function fillProviderProducts(product, providerPhone) {
 
     const productList = document.getElementById("productsList");
@@ -502,6 +514,15 @@ async function getProviderProducts(providerId) {
 
     const data = await response.json();
 
+    return data;
+}
+
+async function getProviderFeed(providerId) {
+    const response = await fetch("/users/" + providerId + "/feed");
+    if (!response.ok) {
+        throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+    }
+    const data = await response.json();
     return data;
 }
 
@@ -866,8 +887,10 @@ async function main() {
     try {
         const providerInfos = await getProviderInfos(providerId);
         const providerProducts = await getProviderProducts(providerId);
+        const providerFeed = await getProviderFeed(providerId)
 
         fillProviderInfos(providerInfos, user);
+        fillProviderFeed(providerFeed)
         providerProducts.forEach(product => {
             fillProviderProducts(product, providerInfos.phone);
         });

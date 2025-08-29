@@ -191,5 +191,29 @@ public class User {
         this.serviceProvidersLikeds = serviceProvidersLikeds;
     }
 
+    public List<Feed> getFeed() {
+        return feed;
+    }
+
+    public void setFeed(List<Feed> feed) {
+        this.feed = feed;
+    }
+
+    public List<ServiceOrder> getServiceOrders() {
+        return serviceOrders;
+    }
+
+    public void setServiceOrders(List<ServiceOrder> serviceOrders) {
+        this.serviceOrders = serviceOrders;
+    }
+
+    public List<ServiceOrder> getServiceOrdersWaitingApproval() {
+        return serviceOrdersWaitingApproval;
+    }
+
+    public void setServiceOrdersWaitingApproval(List<ServiceOrder> serviceOrdersWaitingApproval) {
+        this.serviceOrdersWaitingApproval = serviceOrdersWaitingApproval;
+    }
+
     
 }
