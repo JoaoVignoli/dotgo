@@ -312,6 +312,7 @@ async function fillProviderProducts(product, providerPhone) {
     productList.appendChild(productCard);
 
     productCard.addEventListener("click", (event) => {
+        console.log(product.id + " selecionado.")
         showProductModal(product, providerPhone);
     })
 
