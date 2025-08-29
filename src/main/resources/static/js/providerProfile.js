@@ -6,12 +6,14 @@ function returnWindow() {
 }
 
 function closeModal() {
-
+    const productModal = document.getElementById("productModal");
+    productModal.classList.add("hidden");
 }
 
 function showProductModal(product, providerPhone) {
     const productModal = document.getElementById("productModal");
 
+    // ... (todo o seu código para preencher os dados do modal continua igual)
     const modalProductImg = document.getElementById("modalProductImg");
     modalProductImg.src = product.pictureUrl;
     modalProductImg.alt = product.name;
@@ -23,7 +25,6 @@ function showProductModal(product, providerPhone) {
     modalProductDescription.innerText = product.description;
 
     const modalProductPrice = document.getElementById("modalProductPrice");
-
     if (product.priceToBeAgreed) {
         modalProductPrice.innerText = "R$: A combinar";
     } else {
@@ -31,34 +32,39 @@ function showProductModal(product, providerPhone) {
     }
 
     const modalServiceTime = document.getElementById("modalServiceTime");
-
     if (product.timeToBeAgreed) {
-        modalServiceTime.innerText = "Estimativa de tempo: A combinar"
+        modalServiceTime.innerText = "Estimativa de tempo: A combinar";
     } else {
-        modalServiceTime.innerText = "Estimativa de tempo: " + product.estimatedTime + " min"
+        // Corrigi para pegar a propriedade correta, se o nome for diferente, ajuste aqui
+        modalServiceTime.innerText = "Estimativa de tempo: " + (product.estimatedTime || 'N/A') + " min";
     }
 
     const modalActionButtonText = document.getElementById("modalActionButtonText");
-
-    if (product.timeToBeAgreed || product.priceToBeAgreed) {
-        modalActionButtonText.innerText = "Entrar em contato"
-    } else {
-        modalActionButtonText.innerText = "Agendar"
-    }
-
-    productModal.classList.remove("hidden");
-    
     const modalActionButton = document.getElementById("modalActionButton");
 
-    modalActionButton.addEventListener("click", (event) => {
+    // **Importante:** Precisamos remover o listener antigo antes de adicionar um novo
+    // para evitar que múltiplos cliques sejam registrados.
+    const newActionButton = modalActionButton.cloneNode(true);
+    modalActionButton.parentNode.replaceChild(newActionButton, modalActionButton);
+
+    newActionButton.addEventListener("click", () => {
         if (product.timeToBeAgreed || product.priceToBeAgreed) {
             const message = encodeURIComponent(`Olá, vi o serviço "${product.name}" e gostaria de mais informações.`);
             window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank' );
         } else {
             localStorage.setItem("selectedProduct", product.id);
-            window.location.pathname = "/service-order/scheduler"
+            window.location.pathname = "/service-order/scheduler";
         }
-    })
+    });
+
+    if (product.timeToBeAgreed || product.priceToBeAgreed) {
+        newActionButton.querySelector('#modalActionButtonText').innerText = "Entrar em contato";
+    } else {
+        newActionButton.querySelector('#modalActionButtonText').innerText = "Agendar";
+    }
+
+    // Finalmente, remove a classe 'hidden' para mostrar o modal
+    productModal.classList.remove("hidden");
 }
 
 // Verificar se está favoritado
@@ -483,6 +489,21 @@ async function verifyUserStatus() {
 }
 
 async function main() {
+
+    const productModal = document.getElementById("productModal");
+    const modalCloseButton = document.getElementById("modalClose");
+    const modalContainer = document.getElementById("modalContainer");
+
+    // 1. Fechar ao clicar no botão "X"
+    modalCloseButton.addEventListener("click", closeModal);
+
+    // 2. Fechar ao clicar fora do conteúdo do modal (no overlay)
+    productModal.addEventListener("click", (event) => {
+        // Verifica se o clique foi no overlay e não no container do modal
+        if (!modalContainer.contains(event.target)) {
+            closeModal();
+        }
+    });
 
     const providerId = localStorage.getItem("providerId")
 
