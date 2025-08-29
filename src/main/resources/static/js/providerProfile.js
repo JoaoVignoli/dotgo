@@ -860,7 +860,7 @@ function setupSchedulingEventListeners() {
             console.log('Agendamento realizado:', agendamentoData);
             
             // Redirecionar para página de ordens
-            window.location.href = '/service-orders';
+            window.location.href = '/my-service-orders';
         });
     }
 }
