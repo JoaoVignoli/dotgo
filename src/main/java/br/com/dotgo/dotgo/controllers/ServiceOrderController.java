@@ -8,10 +8,7 @@ import br.com.dotgo.dotgo.repositories.ServiceOrderRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -30,13 +27,16 @@ public class ServiceOrderController {
         this.productRepository = productRepository;
     }
 
+    //Metodo para a criação de uma nova ordem de serviço
     @PostMapping
-    private ServiceOrderResponseDto createServiceOrder(
+    public ServiceOrderResponseDto createServiceOrder(
             @RequestBody ServiceOrderRequestDto request
             ) {
 
+        //Inicia a nova ServiceOrder
         ServiceOrder novo = new ServiceOrder();
 
+        //Adiciona todos os atributos do request a nova ServiceOrder
         novo.setUser(userRepository.findById(request.getClientId()).get());
         novo.setProduct(productRepository.findById(request.getProductId()).get());
         novo.setTotal_value(request.getTotal_value());
@@ -48,21 +48,11 @@ public class ServiceOrderController {
         novo.setWaitApproval(request.getWaitApproval());
         novo.setUserApproval(request.getUserApproval());
 
+        //Salva a nova ServiceOrder no banco de dados
         this.serviceOrderRepository.save(novo);
         
         return new ServiceOrderResponseDto(novo);
     }
-
-
-    //Criar GET para visão dos clientes
-    
-
-
-
-    //Criar GET para visão dos Prestadores
-
-
-
 }
 
 
