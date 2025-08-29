@@ -10,7 +10,7 @@ function closeModal() {
 }
 
 function showProductModal(product, providerPhone) {
-    const productModal = document.getElementById("servideModal");
+    const productModal = document.getElementById("productModal");
 
     const modalProductImg = document.getElementById("modalProductImg");
     modalProductImg.src = product.pictureUrl;
