@@ -201,14 +201,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicialização
   loadOrders();
 
-  // Verifica se há dados de agendamento e mostra o modal de confirmação
+    // Verifica se há dados de agendamento vindos da tela de profileprovider
   const ultimoAgendamentoCheck = JSON.parse(localStorage.getItem("ultimoAgendamento"));
-  if (ultimoAgendamentoCheck) {
-    // Mostra o modal de confirmação após um pequeno delay para garantir que a página carregou
+  const selectedProductId = localStorage.getItem("selectedProduct");
+  
+  // Só mostra o modal se ambos existirem (indicando que veio da tela de agendamento)
+  if (ultimoAgendamentoCheck && selectedProductId) {
+    // Mostra o modal de confirmação após um pequeno delay
     setTimeout(() => {
       showConfirmationModal();
     }, 500);
+    
+    // Limpa os dados após mostrar o modal para evitar que apareça novamente
+    localStorage.removeItem("selectedProduct");
   }
+
 });
 
 // Função auxiliar para converter data do formato brasileiro para ISO (se necessário)
