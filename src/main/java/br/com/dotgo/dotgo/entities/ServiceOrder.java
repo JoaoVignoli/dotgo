@@ -50,11 +50,11 @@ public class ServiceOrder {
         this.product = product;
     }
 
-    public User getUser() {
+    public User getClient() {
         return client;
     }
 
-    public void setUser(User client) {
+    public void setClient(User client) {
         this.client = client;
     }
 

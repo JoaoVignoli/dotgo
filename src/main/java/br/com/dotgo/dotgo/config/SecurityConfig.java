@@ -53,6 +53,7 @@ public class SecurityConfig {
                             "/forgotPassword.html", "/verificationCode.html", "/resetPassword.html",
                             // Profile Pages
                             "/provider-profile", "/profileProvider.html", "/provider-profile/**",
+                            "/service-orders/**",
                             // Static Resources (CSS, JS, Imagens, etc.)
                             "/css/**", 
                             "/js/**", 

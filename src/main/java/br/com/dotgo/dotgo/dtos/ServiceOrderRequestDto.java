@@ -16,7 +16,7 @@ public class ServiceOrderRequestDto {
     private LocalDateTime previousEndDate;
     private Boolean approval;
     private Boolean waitApproval;
-    private User userApproval;
+    private Integer userApproval;
 
     public Integer getClientId() {
         return clientId;
@@ -50,7 +50,7 @@ public class ServiceOrderRequestDto {
         return waitApproval;
     }
 
-    public User getUserApproval() {
+    public Integer getUserApproval() {
         return userApproval;
     }
 }

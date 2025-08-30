@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ServiceOrderResponseDto {
 
     private Integer id;
-    private User client;
+    private Integer client;
     private Product product;
     private BigDecimal total_value;
     private String observation;
@@ -19,11 +19,11 @@ public class ServiceOrderResponseDto {
     private LocalDateTime previousEndDate;
     private Boolean approval;
     private Boolean waitApproval;
-    private User userApproval;
+    private Integer userApproval;
 
     public ServiceOrderResponseDto (ServiceOrder serviceOrder) {
         this.id = serviceOrder.getId();
-        this.client = serviceOrder.getUser();
+        this.client = serviceOrder.getClient().getId();
         this.product = serviceOrder.getProduct();
         this.total_value = serviceOrder.getTotal_value();
         this.observation = serviceOrder.getObservation();
@@ -32,14 +32,14 @@ public class ServiceOrderResponseDto {
         this.previousEndDate = serviceOrder.getPreviousEndDate();
         this.approval = serviceOrder.getApproval();
         this.waitApproval = serviceOrder.getWaitApproval();
-        this.userApproval = serviceOrder.getUserApproval();
+        this.userApproval = serviceOrder.getUserApproval().getId();
     }
 
     public Integer getId() {
         return id;
     }
 
-    public User getClient() {
+    public Integer getClient() {
         return client;
     }
 
@@ -75,7 +75,7 @@ public class ServiceOrderResponseDto {
         return waitApproval;
     }
 
-    public User getUserApproval() {
+    public Integer getUserApproval() {
         return userApproval;
     }
 }
