@@ -1,8 +1,5 @@
 package br.com.dotgo.dotgo.dtos;
 
-import br.com.dotgo.dotgo.entities.Product;
-import br.com.dotgo.dotgo.entities.User;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

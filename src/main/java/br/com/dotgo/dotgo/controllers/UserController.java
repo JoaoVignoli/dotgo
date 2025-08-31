@@ -2,7 +2,6 @@ package br.com.dotgo.dotgo.controllers;
 
 import br.com.dotgo.dotgo.dtos.UserSummaryResponseDto;
 import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
-import br.com.dotgo.dotgo.dtos.FeedRequestDto;
 import br.com.dotgo.dotgo.dtos.FeedResponseDto;
 import br.com.dotgo.dotgo.dtos.ProductResponseDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
@@ -43,7 +42,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
-    private final FeedRepository feedRepository;
     private final AuthService authService;
     private static final String USERS_PICTURES_FOLDER = "pictures/users";
 
@@ -55,7 +53,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
         this.fileStorageService = fileStorageService;
         this.authService = authService;
-        this.feedRepository = feedRepository;
     }
 
     @PostMapping

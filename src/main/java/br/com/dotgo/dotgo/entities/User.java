@@ -32,9 +32,11 @@ public class User {
     private String biography;
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Address> addresses = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Product> products = new ArrayList<>();
 
@@ -49,9 +51,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Feed> feed = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     List<ServiceOrder> serviceOrders = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userApproval", cascade = CascadeType.ALL)
     List<ServiceOrder> serviceOrdersWaitingApproval = new ArrayList<>();
 
