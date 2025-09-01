@@ -3,8 +3,12 @@ package br.com.dotgo.dotgo.controllers;
 import br.com.dotgo.dotgo.dtos.FavoritesResponseDto;
 import br.com.dotgo.dotgo.dtos.LoginRequestDto;
 import br.com.dotgo.dotgo.dtos.LoginResult;
+import br.com.dotgo.dotgo.dtos.ServiceOrderResponseDto;
 import br.com.dotgo.dotgo.entities.Favorites;
+import br.com.dotgo.dotgo.entities.Product;
+import br.com.dotgo.dotgo.entities.ServiceOrder;
 import br.com.dotgo.dotgo.entities.User;
+import br.com.dotgo.dotgo.enums.UserRole;
 import br.com.dotgo.dotgo.services.AuthService;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -114,6 +118,17 @@ public class AuthController {
             List<FavoritesResponseDto> favoritesDtos = new ArrayList<>();
             for (Favorites favorite: user.getFavorites()) {
                 favoritesDtos.add(new FavoritesResponseDto(favorite));
+            }
+
+            List<ServiceOrderResponseDto> serviceOrderDtos = new ArrayList<>();
+            if (user.getRole() == UserRole.CLIENT) {
+                for (ServiceOrder SO: user.getServiceOrders()) {
+                    serviceOrderDtos.add(new ServiceOrderResponseDto(SO));
+                }
+            } else if (user.getRole() == UserRole.SERVICE_HOLDER) {
+                List<Product> products = user.getProducts();
+                for (Product product: products) {
+                }
             }
 
             Map<String, Object> userData = new HashMap<>();
