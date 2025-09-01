@@ -9,6 +9,7 @@ import br.com.dotgo.dotgo.entities.Product;
 import br.com.dotgo.dotgo.entities.ServiceOrder;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
+import br.com.dotgo.dotgo.repositories.ServiceOrderRepository;
 import br.com.dotgo.dotgo.services.AuthService;
 import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,10 +37,12 @@ public class AuthController {
 
     private final AuthService authService;
     private final FileStorageService fileStorageService;
+    private final ServiceOrderRepository serviceOrderRepository;
     
-    public AuthController(AuthService authService, FileStorageService fileStorageService) {
+    public AuthController(AuthService authService, FileStorageService fileStorageService, ServiceOrderRepository serviceOrderRepository) {
         this.authService = authService;
         this.fileStorageService = fileStorageService;
+        this.serviceOrderRepository = serviceOrderRepository;
     }
 
     @PostMapping("/login")
@@ -126,8 +129,9 @@ public class AuthController {
                     serviceOrderDtos.add(new ServiceOrderResponseDto(SO));
                 }
             } else if (user.getRole() == UserRole.SERVICE_HOLDER) {
-                List<Product> products = user.getProducts();
-                for (Product product: products) {
+                List<ServiceOrder> serviceOrders = this.serviceOrderRepository.findAllByServiceProviderId(user.getId());
+                for (ServiceOrder SO: serviceOrders) {
+                    serviceOrderDtos.add(new ServiceOrderResponseDto(SO));
                 }
             }
 
