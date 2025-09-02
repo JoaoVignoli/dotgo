@@ -188,7 +188,8 @@ header {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-  margin: 16px;
+  margin: 1rem;
+  padding: 1rem;
 }
 
 .provider-description h2 {
@@ -204,6 +205,7 @@ header {
   line-height: 1.5;
   color: #333;
   margin-left: 5px;
+  text-align: justify;
 }
 
 /* === BLOCO 2 – PORTFÓLIO DE IMAGENS === */
