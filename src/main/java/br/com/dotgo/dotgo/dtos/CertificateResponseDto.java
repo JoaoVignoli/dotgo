@@ -1,30 +1,38 @@
-package br.com.dotgo.dotgo.entities;
+package br.com.dotgo.dotgo.dtos;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import br.com.dotgo.dotgo.entities.Certificate;
+import jakarta.validation.constraints.NotBlank;
 
-@Entity
-public class Certificate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CertificateResponseDto {
+
     private Integer id;
+    @NotBlank(message = "O nome do curso é obrigatório.")
     private String course;
+    @NotBlank(message = "O nome da instituição de ensino é obrigatório.")
     private String institution;
+    @NotBlank(message = "A carga horária é obrigatória.")
     private Integer workload;
+    @NotBlank(message = "A data de início é obrigatória.")
     private LocalDate startDate;
     private LocalDate endDate;
     private String description;
     private String pictureUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "service_provider_id")
-    private User serviceProvider;
+    public CertificateResponseDto(Certificate certificate, String pictureUrl) {
+        this.id = certificate.getId();
+        this.course = certificate.getCourse();
+        this.institution = certificate.getInstitution();
+        this.workload = certificate.getWorkload();
+        this.startDate = certificate.getStartDate();
+        this.endDate = certificate.getEndDate();
+        this.description = certificate.getDescription();
+        this.pictureUrl = pictureUrl;
+    }
+
+    public CertificateResponseDto() {
+    }
 
     public Integer getId() {
         return id;
@@ -82,14 +90,6 @@ public class Certificate {
         this.description = description;
     }
 
-    public User getServiceProvider() {
-        return serviceProvider;
-    }
-
-    public void setServiceProvider(User serviceProvider) {
-        this.serviceProvider = serviceProvider;
-    }
-
     public String getPictureUrl() {
         return pictureUrl;
     }
@@ -98,6 +98,4 @@ public class Certificate {
         this.pictureUrl = pictureUrl;
     }
 
-
 }
-
