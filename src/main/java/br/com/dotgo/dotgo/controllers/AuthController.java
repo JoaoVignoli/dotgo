@@ -5,7 +5,6 @@ import br.com.dotgo.dotgo.dtos.LoginRequestDto;
 import br.com.dotgo.dotgo.dtos.LoginResult;
 import br.com.dotgo.dotgo.dtos.ServiceOrderResponseDto;
 import br.com.dotgo.dotgo.entities.Favorites;
-import br.com.dotgo.dotgo.entities.Product;
 import br.com.dotgo.dotgo.entities.ServiceOrder;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.enums.UserRole;
@@ -147,6 +146,7 @@ public class AuthController {
             userData.put("products", user.getProducts());
             userData.put("biography", user.getBiography());
             userData.put("especialty", user.getSpecialty());
+            userData.put("serviceOrders", serviceOrderDtos);
             
             return ResponseEntity.ok(userData);
             
