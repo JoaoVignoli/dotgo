@@ -1,4 +1,5 @@
 let productListSize = 0;
+let userData = null;
 
 function createSvgIcon(config, paths) {
     const svgNS = "http://www.w3.org/2000/svg";
@@ -46,7 +47,7 @@ function productsDisplayList(product) {
     const productList = document.getElementById("product-list");
 
     const productItem = document.createElement("div");
-    productItem.classList.add("product-item"); 
+    productItem.classList.add("product-item");
 
     const productInfo = document.createElement("div");
     productInfo.classList.add("product-info");
@@ -119,13 +120,13 @@ function productsDisplayList(product) {
 
 async function deleteProduct(event, productId) {
     event.preventDefault();
-    
+
     if (confirm('Tem certeza que deseja excluir este produto?')) {
         try {
             const response = await fetch('/products/' + productId, {
                 method: 'DELETE'
             });
-            
+
             if (response.ok) {
                 // Remover da tela com animação
                 const productItem = event.target.closest('.product-item');
@@ -134,7 +135,7 @@ async function deleteProduct(event, productId) {
                     productItem.remove();
                     productListSize -= 1;
                 }, 300);
-                
+
                 updateFinishButtonState();
 
                 console.log('Produto excluído com sucesso');
@@ -179,7 +180,7 @@ async function createProduct(event) {
     };
 
     try {
-            const responseInfos = await fetch("/products", {
+        const responseInfos = await fetch("/products", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -196,8 +197,8 @@ async function createProduct(event) {
         const createdProductInfos = await responseInfos.json();
         const productId = createdProductInfos.id;
 
-    
-        if (productPictureInput.files.length > 0) { 
+
+        if (productPictureInput.files.length > 0) {
             const formData = new FormData();
             formData.append('picture', productPictureInput.files[0]);
 
@@ -279,8 +280,34 @@ function updateFinishButtonState() {
     }
 }
 
+async function getUserData() {
+    try {
 
-function main() {
+    
+        const response = await fetch('/auth/me');
+
+        if (!response.ok) {
+            throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+        }
+
+        const user = await response.json();
+
+        return user
+
+    } catch (error) {
+        console.error("Falha crítica ao obter dados do usuário:", error);
+        return null;
+    }
+}
+
+async function main() {
+    userData = await getUserData();
+    const userProducts = userData.products;
+
+    userProducts.forEach(product => {
+        productsDisplayList(product);
+    })
+
     const userId = localStorage.getItem("userId");
     const subcategoryId = localStorage.getItem("userSelectedSubcategoryId");
 
@@ -293,12 +320,10 @@ function main() {
     const finishButton = document.getElementById("finishButton")
 
     if (finishButton) {
-        // Inicializar estado do botão
         updateFinishButtonState();
-        
+
         finishButton.addEventListener("click", () => {
             if (!finishButton.disabled) {
-                // Opcional: Confirmar antes de sair
                 window.location.pathname = "/";
             }
         });
