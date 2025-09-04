@@ -18,9 +18,9 @@ function registerAddress() {
     const cep = document.getElementById("cep");
     const street = document.getElementById("street");
     const neighborhood = document.getElementById("neighborhood");
-    const city = document.getElementById("city"); 
-    const state = document.getElementById("state"); 
-    const addressNumber = document.getElementById("addressNumber"); 
+    const city = document.getElementById("city");
+    const state = document.getElementById("state");
+    const addressNumber = document.getElementById("addressNumber");
     const complement = document.getElementById("complement");
 
     const addressData = {
@@ -43,13 +43,13 @@ function registerAddress() {
         },
         body: JSON.stringify(addressData),
     })
-    .then((data) => data.json())
-    .then((response) => {
-        console.log(response);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+        .then((data) => data.json())
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 async function personalInfoRegister() {
@@ -72,8 +72,6 @@ async function personalInfoRegister() {
         "specialty": specialty.value
     }
 
-    console.log(userData)
-
 
     const response = await fetch("/users", {
         method: "POST",
@@ -83,9 +81,29 @@ async function personalInfoRegister() {
         body: JSON.stringify(userData),
     })
 
-    const json = await response.json();
+    if (response.status == 201) {
 
-    return json.id;
+        const userDataToLogin = {
+            "email": email.value,
+            "password": password.value
+        }
+
+        const loginResponse = await fetch("/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userDataToLogin),
+            credentials: 'include'
+        })
+
+        if (loginResponse.status = 200) {
+            const json = await response.json();
+
+            return json.id;
+        }
+    }
+
 }
 
 function returnWindow() {
@@ -110,10 +128,10 @@ async function nextStep() {
             const status = await registerProfilePicture();
             if (status == 201) {
                 if (localStorage.getItem("userRole") == "SERVICE_HOLDER") {
-                window.location.pathname = "/register/products";
-            } else {
-                window.location.pathname = "/";
-            }
+                    window.location.pathname = "/register/products";
+                } else {
+                    window.location.pathname = "/";
+                }
             }
             console.log(status)
             break;
