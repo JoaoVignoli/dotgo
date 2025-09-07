@@ -32,13 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
     card.dataset.status = order.status;
     card.innerHTML = `
           <div class="order-header">
-              <div class="provider-avatar"></div>
-              <div class="order-info">
-                  <h3 class="service-name">${order.serviceName}</h3>
-                  <p class="provider-name">${order.providerName}</p>
-              </div>
-              <span class="order-status status-${order.status}">${order.status}</span>
-          </div>
+          <div class="provider-avatar">
+            <img src="/api/files/provider-photos/${order.providerId || 'default'}.jpg" 
+              alt="Foto do prestador" 
+              onerror="this.style.display='none'; this.parentElement.style.backgroundImage='url(data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\' fill=\\'%23666\\'><path d=\\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\\'/></svg> )'" />
+        </div>
+          <div class="order-info">
+            <h3 class="service-name">${order.serviceName}</h3>
+            <p class="provider-name">${order.providerName}</p>
+        </div>
+            <span class="order-status status-${order.status}">${order.status}</span>
+        </div>
+
           <div class="order-details">
               <div class="detail-row">
                   <span class="detail-label">Data:</span>

@@ -98,10 +98,18 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.11.0</version> <!-- A versão pode ser diferente -->
+    	<configuration>
+			 <source>21</source> <!-- Mantenha a sua versão original -->
+			<target>21</target> <!-- Mantenha a sua versão original -->
+			<compilerArgs>
+            <arg>--enable-preview</arg>
+        </compilerArgs>
+    	</configuration>
+	</plugin>
 		</plugins>
 	</build>
 

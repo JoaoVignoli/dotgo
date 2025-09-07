@@ -8,7 +8,7 @@
   --text-secondary: #666666;
   --price-color: #00C851;
 }
-
+ 
 /* === CONFIGURAÇÃO GLOBAL === */
 html,
 body {
@@ -18,7 +18,7 @@ body {
   box-sizing: border-box;
   font-family: var(--fonts-family)
 }
-
+ 
 /* === BLOCO 1 - HEADER DO PERFIL DO PRESTADOR === */
 header {
   display: flex;
@@ -33,18 +33,18 @@ header {
   z-index: 1000;
   box-sizing: border-box;
 }
-
+ 
 .hidden {
   display: none !important;
 }
-
+ 
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100dvh;
   box-sizing: border-box;
 }
-
+ 
 .infos-containers {
   overflow-y: auto;
   display: flex;
@@ -52,7 +52,7 @@ header {
   flex-grow: 1;
   width: 100%;
 }
-
+ 
 /* Centraliza a logo de verdade */
 .logo {
   font-size: 30px;
@@ -65,18 +65,18 @@ header {
   margin: 0 auto;
   position: absolute;
 }
-
+ 
 /* Botões de ação alinhados */
 .action-button {
   border: none;
   background-color: var(--backgroud-color);
   padding: 0px;
 }
-
+ 
 .action-button:active {
   transform: translateY(1px);
 }
-
+ 
 /* Container para ícones da direita */
 .header-icons {
   display: flex;
@@ -85,31 +85,31 @@ header {
   margin-left: auto;
   /* força ícones para a direita */
 }
-
+ 
 /* === BLOCO 2 - PERFIL DO PRESTADOR === */
 .provider-profile {
   padding: 1rem 0.5rem;
 }
-
+ 
 .profile-main {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
+ 
 .profile-photo-container {
   position: relative;
   width: 80px;
   height: 80px;
 }
-
+ 
 .profile-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
 }
-
+ 
 .verified-icon {
   position: absolute;
   bottom: 0;
@@ -117,36 +117,36 @@ header {
   width: 18px;
   height: 18px;
 }
-
+ 
 .profile-info {
   flex-grow: 1;
 }
-
+ 
 .provider-name {
   margin: 0;
   font-size: 1.1rem;
   font-weight: bold;
   color: #1a1a1a;
 }
-
+ 
 .provider-profession {
   margin: 2px 0;
   font-size: 0.9rem;
   color: #666;
 }
-
+ 
 .provider-rating {
   margin-top: 0.3rem;
   display: flex;
   gap: 0.2rem;
 }
-
+ 
 .provider-name-container {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-
+ 
 /* === MENU DE ABAS === */
 .tab-menu {
   display: flex;
@@ -154,7 +154,7 @@ header {
   margin-top: 20px;
   border-bottom: 1px solid #ddd;
 }
-
+ 
 .tab {
   flex: 1;
   text-align: center;
@@ -165,24 +165,24 @@ header {
   cursor: pointer;
   color: #555;
 }
-
+ 
 .tab.active {
   font-weight: bold;
   border-bottom: 2px solid #1a1a1a;
   color: #1a1a1a;
 }
-
+ 
 .provider-name-container {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-
+ 
 .verified-inline-icon {
   width: 16px;
   height: 16px;
 }
-
+ 
 /* === BLOCO 2 – DESCRIÇÃO DO PRESTADOR === */
 .provider-description {
   background: #fff;
@@ -190,7 +190,7 @@ header {
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   margin: 16px;
 }
-
+ 
 .provider-description h2 {
   font-size: 20px;
   font-weight: bold;
@@ -198,68 +198,68 @@ header {
   margin-top: 5px;
   margin-left: 5px;
 }
-
+ 
 .provider-description p {
   font-size: 14px;
   line-height: 1.5;
   color: #333;
   margin-left: 5px;
 }
-
+ 
 /* === BLOCO 2 – PORTFÓLIO DE IMAGENS === */
 .provider-portfolio {
   padding: 16px;
 }
-
+ 
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
-
+ 
 .portfolio-grid img {
   width: 100%;
   border-radius: 8px;
   object-fit: cover;
   height: 150px;
 }
-
+ 
 /* === BLOCO 2 – ESPECIALIZAÇÕES === */
 .provider-specialties {
   padding: 16px;
 }
-
+ 
 .provider-specialties h2 {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 15px;
 }
-
+ 
 .specialty-item {
   display: flex;
   gap: 12px;
   margin-bottom: 16px;
   align-items: flex-start;
 }
-
+ 
 .specialty-icon {
   width: 50px;
   height: 50px;
   background-color: #ddd;
   border-radius: 12px;
 }
-
+ 
 .specialty-content h3 {
   font-size: 14px;
   margin: 0;
 }
-
+ 
 .specialty-content p {
   font-size: 13px;
   margin-top: 4px;
   color: #555;
 }
-
+ 
 /* ===== FEED - NAVIGATION-BAR ===== */
 .bottom-nav {
   background-color: #ffffff;
@@ -269,7 +269,7 @@ header {
   align-items: center;
   padding: 8px 0;
 }
-
+ 
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -278,15 +278,15 @@ header {
   color: #555;
   text-decoration: none;
 }
-
+ 
 .nav-item svg {
   margin-bottom: 2px;
 }
-
+ 
 .nav-item.active {
   color: #000;
 }
-
+ 
 /* === CARDS === */
 .card {
   background-color: #FFFFFF;
@@ -298,50 +298,50 @@ header {
   padding: 16px;
   margin: 12px;
 }
-
+ 
 .star-icon {
   width: 20px;
   height: 20px;
   fill: #FFB65C;
 }
-
+ 
 .heart-icon {
   color: #E53935;
   transition: transform 0.2s ease-in-out, color 0.2s;
 }
-
+ 
 .heart-icon:hover {
   color: #C62828;
   transform: scale(1.1);
   cursor: pointer;
 }
-
+ 
 .heart-icon {
   width: 30px !important;
   height: 30px !important;
   fill: #E65B48;
 }
-
+ 
 /* Coração preenchido */
 .heart-icon.heart-filled path {
   fill: #E53935;
   stroke: none;
 }
-
+ 
 @keyframes heartClick {
   0% {
     transform: scale(1);
   }
-
+ 
   50% {
     transform: scale(1.3);
   }
-
+ 
   100% {
     transform: scale(1);
   }
 }
-
+ 
 .favorite-button {
   display: flex;
   background: none;
@@ -351,25 +351,25 @@ header {
   border-radius: 50%;
   transition: all 0.2s ease-in-out;
 }
-
+ 
 .favorite-button:hover {
   transform: scale(1.1);
   background-color: rgba(0, 0, 0, 0.05);
 }
-
+ 
 .favorite-button.clicked {
   animation: heartClick 0.3s ease-in-out;
 }
-
+ 
 /* Produtos */
-
+ 
 .products-list {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-
+ 
 .product-card {
   background-color: var(--card-background);
   border-radius: 16px;
@@ -380,19 +380,19 @@ header {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
-
+ 
 .product-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
-
+ 
 .product-image {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
   border-radius: 1rem;
 }
-
+ 
 .product-placeholder {
   width: 100%;
   height: 100%;
@@ -403,7 +403,7 @@ header {
   justify-content: center;
   position: relative;
 }
-
+ 
 .product-placeholder::before {
   content: '';
   width: 32px;
@@ -412,14 +412,14 @@ header {
   background-repeat: no-repeat;
   background-position: center;
 }
-
+ 
 .product-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
+ 
 .product-title {
   margin: 0 0 8px 0;
   font-size: 16px;
@@ -427,7 +427,7 @@ header {
   color: #1a1a1a;
   line-height: 1.3;
 }
-
+ 
 .product-description {
   margin: 0 0 12px 0;
   font-size: 13px;
@@ -435,40 +435,40 @@ header {
   line-height: 1.4;
   flex: 1;
 }
-
+ 
 .product-price {
   display: flex;
   align-items: baseline;
   gap: 4px;
   color: #00C851;
 }
-
+ 
 .price-label {
   font-size: 14px;
   color: var(--price-color);
   font-weight: 600;
 }
-
+ 
 .price-value {
   font-size: 16px;
   color: var(--price-color);
   font-weight: 700;
 }
-
+ 
 .price-unit {
   font-size: 14px;
   color: var(--price-color);
   font-weight: 600;
 }
-
+ 
 .price-text {
   font-size: 14px;
   color: var(--price-color);
   font-weight: 600;
 }
-
+ 
 /* Modal */
-
+ 
 /* Overlay que cobre a tela inteira */
 .modal-overlay {
   position: fixed;
@@ -486,7 +486,7 @@ header {
   box-sizing: border-box;
   transition: opacity 0.3s ease;
 }
-
+ 
 /* O container principal do modal */
 .modal-container {
   background: #FFFAF5;
@@ -503,19 +503,19 @@ header {
   border: 1px solid #1a1a1a;
   padding-top: 48px;
 }
-
+ 
 @keyframes modalSlideIn {
   from {
     opacity: 0;
     transform: translateY(30px) scale(0.98);
   }
-
+ 
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
-
+ 
 /* Botão de fechar (X) */
 .modal-close-btn {
   position: absolute;
@@ -534,12 +534,12 @@ header {
   width: 32px;
   height: 32px;
 }
-
+ 
 .modal-close-btn svg {
   width: 24px;
   height: 24px;
 }
-
+ 
 /* Placeholder da imagem do serviço */
 .service-image-placeholder {
   width: 140px;
@@ -549,7 +549,7 @@ header {
   margin: 12px auto 24px;
   border: 1px solid #1a1a1a;
 }
-
+ 
 /* Título do serviço */
 .service-title {
   font-size: 18px;
@@ -560,7 +560,7 @@ header {
   text-align: center;
   padding: 0 32px; /* Padding lateral para compensar o botão X */
 }
-
+ 
 .service-title-scheduling {
   font-size: 18px;
   font-weight: 600;
@@ -569,44 +569,44 @@ header {
   max-width: 80%;
   text-align: center;
 }
-
+ 
 /* Container da descrição */
 .service-description {
   text-align: left;
 }
-
+ 
 .service-description h3 {
   font-size: 16px;
   font-weight: bold;
   color: #1a1a1a;
   margin: 0 0 10px 0;
 }
-
+ 
 .service-description ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-
+ 
 .service-description li {
   font-size: 14px;
   color: #4b5563;
   margin-bottom: 6px;
   line-height: 1.5;
 }
-
+ 
 /* Preço do serviço */
 .service-price {
   margin-bottom: 8px;
   text-align: left;
 }
-
+ 
 .service-price span {
   font-size: 16px;
   font-weight: 600;
   color: #00C851;
 }
-
+ 
 /* Tempo estimado */
 .service-time {
   font-size: 14px;
@@ -614,7 +614,7 @@ header {
   margin-bottom: 28px;
   text-align: left;
 }
-
+ 
 /* Botão de contato */
 .contact-btn {
   width: 100%;
@@ -634,18 +634,18 @@ header {
   /* Adiciona a borda preta e fina ao botão também */
   border: 1px solid #1a1a1a;
 }
-
+ 
 .contact-btn:hover {
   background-color: #333;
 }
-
+ 
 /* Garante que o SVG no botão seja exibido corretamente */
 .contact-btn svg {
   display: inline-block;
   stroke: white;
   /* Garante que a cor da linha do ícone seja branca */
 }
-
+ 
 /* === BLOCO 4 - CONTAINER DE CONTEÚDO SCROLLÁVEL === */
 .content-container {
   flex: 1;
@@ -653,7 +653,7 @@ header {
   padding: 0 1rem;
   /* Espaço para a barra inferior */
 }
-
+ 
 /* === CARD DE SERVIÇO === */
 .service-card {
   display: flex;
@@ -663,7 +663,7 @@ header {
   background-color: var(--background-color);
   margin-bottom: 1.5rem;
 }
-
+ 
 .service-image-placeholder {
   width: 90px;
   height: 90px;
@@ -673,62 +673,62 @@ header {
   border: 1px solid var(--black-color);
   margin: 0;
 }
-
+ 
 .service-info {
   flex: 1;
   padding-top: 0.5;
 }
-
+ 
 .service-title {
   margin: 0 0 8px;
   font-size: 1rem;
   font-weight: 600;
 }
-
+ 
 .service-description {
   margin: 0 0 12px;
   font-size: 0.85rem;
   color: var(--text-secondary);
   line-height: 1.4;
 }
-
+ 
 .service-price {
   margin: 0;
   font-size: 0.9rem;
   color: var(--price-color);
   font-weight: 600;
 }
-
+ 
 /* === CALENDÁRIO === */
 .calendar-section {
   margin-bottom: 24px;
 }
-
+ 
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
-
+ 
 .calendar-header h3 {
   margin: 0;
   font-size: 1.1rem;
 }
-
+ 
 .calendar-icon-btn {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
 }
-
+ 
 .calendar-week {
   display: flex;
   justify-content: space-between;
   /* Espaçamento igual entre os dias */
 }
-
+ 
 .day-container {
   text-align: center;
   display: flex;
@@ -738,13 +738,13 @@ header {
   gap: 8px;
   /* Espaço entre a letra e a bolinha */
 }
-
+ 
 .day-letter {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-secondary);
 }
-
+ 
 .day-number {
   width: 42px;
   height: 42px;
@@ -760,19 +760,19 @@ header {
   justify-content: center;
   transition: all 0.2s ease;
 }
-
+ 
 .day-number:hover:not(.selected):not(.unavailable) {
   background-color: #f0f0f0;
   border-color: #aaa;
 }
-
+ 
 /* Dia selecionado */
 .day-number.selected {
   background-color: var(--black-color);
   color: #fff;
   border-color: var(--black-color);
 }
-
+ 
 /* Dia indisponível */
 .day-number.unavailable {
   background-color: #f0f0f0;
@@ -781,35 +781,35 @@ header {
   cursor: not-allowed;
   text-decoration: line-through;
 }
-
+ 
 /* === HORÁRIOS === */
 .time-section {
   margin-bottom: 24px;
 }
-
+ 
 .time-section h3 {
   margin: 0 0 12px;
   font-size: 1.1rem;
 }
-
-
+ 
+ 
 .time-slots-wrapper {
   overflow-x: auto;
   padding-bottom: 10px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
+ 
 .time-slots-wrapper::-webkit-scrollbar {
   display: none;
 }
-
+ 
 .time-slots {
   display: flex;
   gap: 12px;
   width: max-content;
 }
-
+ 
 .time-slot {
   padding: 10px 20px;
   border-radius: 20px;
@@ -821,28 +821,28 @@ header {
   transition: all 0.2s ease;
   white-space: nowrap;
 }
-
+ 
 .time-slot.selected {
   background-color: var(--black-color);
   color: #fff;
   border-color: var(--black-color);
 }
-
+ 
 .time-slot:hover:not(.selected) {
   background-color: #f0f0f0;
   border-color: #aaa;
 }
-
+ 
 /* === OBSERVAÇÕES === */
 .observations-section {
   margin-bottom: 24px;
 }
-
+ 
 .observations-section h3 {
   margin: 0 0 12px;
   font-size: 1.1rem;
 }
-
+ 
 .observations-section textarea {
   width: 100%;
   height: 100px;
@@ -854,7 +854,7 @@ header {
   resize: vertical;
   box-sizing: border-box;
 }
-
+ 
 /* === BOTÃO AGENDAR === */
 .schedule-btn {
   width: 100%;
@@ -868,7 +868,7 @@ header {
   cursor: pointer;
   margin-bottom: 1rem;
 }
-
+ 
 /* ===== FEED - NAVIGATION-BAR ===== */
 .bottom-nav {
   background-color: #ffffff;
@@ -878,7 +878,7 @@ header {
   align-items: center;
   padding: 8px 0;
 }
-
+ 
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -887,16 +887,16 @@ header {
   color: #555;
   text-decoration: none;
 }
-
+ 
 .nav-item svg {
   margin-bottom: 2px;
 }
-
+ 
 .nav-item.active {
   color: #000;
 }
-
-
+ 
+ 
 .calendar-month {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -907,8 +907,8 @@ header {
   margin-right: auto;
   margin-bottom: 16px;
 }
-
-
+ 
+ 
 .month-day-letter {
   font-weight: 600;
   text-align: center;
@@ -916,3 +916,4 @@ header {
   color: var(--text-secondary);
   margin-bottom: 4px;
 }
+ 
