@@ -50,10 +50,13 @@ create table address (
 
 create table certifacate (
 	id serial not null primary key,
-	name Varchar(255) not null,
+	course Varchar(255) not null,
+	institution Varchar(255) not null,
+	workload int not null,
 	start_date date not null,
 	end_date date,
 	description Text,
+	picture_url Varchar(255),
 	service_provider_id int references "user"(id) not null
 );
 

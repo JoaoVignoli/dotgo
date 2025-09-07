@@ -19,7 +19,7 @@ public class FileStorageService {
     @Value("${minio.bucket.name}")
     private String bucketName;
     
-    @Value("${minio.endpoint}")
+    @Value("${minio.public-url}")
     private String minioEndpoint;
 
     public String uploadFile(MultipartFile file, String folderPath) {

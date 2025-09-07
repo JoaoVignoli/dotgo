@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Limpa o último agendamento do localStorage ao carregar a página
-  localStorage.removeItem("ultimoAgendamento");
 
   const ordersList = document.getElementById("orders-list");
   const emptyState = document.getElementById("empty-state");

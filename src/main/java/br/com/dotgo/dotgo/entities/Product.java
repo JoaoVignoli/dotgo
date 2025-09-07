@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class Product {
     private LocalDateTime createdAt;
     private String picture;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
@@ -38,6 +41,7 @@ public class Product {
     @JoinColumn(name = "service_provider_id")
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ServiceOrder> serviceOrders = new ArrayList<>();
 

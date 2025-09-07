@@ -8,7 +8,6 @@ const breakTimeMinutes = 0;
 const unavailableDates = ['2025-07-13', '2025-07-14'];
 const bookedSlots = { '2025-07-17': ['10:00'] };
 
-// ===== ESTADO DO CALENDÁRIO =====
 let viewDate = new Date();
 let selectedDate = null;
 let isMonthView = false;
@@ -73,7 +72,7 @@ function showProductModal(product, providerPhone) {
     newActionButton.addEventListener("click", () => {
         if (product.timeToBeAgreed || product.priceToBeAgreed) {
             const message = encodeURIComponent(`Olá, vi o serviço "${product.name}" e gostaria de mais informações.`);
-            window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank'  );
+            window.open(`https://wa.me/${providerPhone}?text=${message}`, '_blank');
         } else {
             selectedProduct = product;
             showSchedulingInterface(product);
@@ -91,25 +90,25 @@ function showProductModal(product, providerPhone) {
 
 function showSchedulingInterface(product) {
     closeModal();
-    
-    serviceDurationHours = product.estimatedTime / 60 
+
+    serviceDurationHours = product.estimatedTime / 60
 
     const productsList = document.getElementById("productsList");
     const profileContainer = document.getElementById("profileContainer");
     const contentContainer = document.querySelector(".content-container");
-    
+
     productsList.classList.add("hidden");
     profileContainer.classList.add("hidden");
     contentContainer.classList.remove("hidden");
-    
+
     fillSelectedServiceInfo();
-    
+
     initializeScheduling();
 }
 
 function fillSelectedServiceInfo() {
     if (!selectedProduct) return;
-    
+
     // Preencher card do serviço
     const serviceImg = document.querySelector(".service-image-placeholder")
     const serviceTitle = document.querySelector(".service-title");
@@ -120,7 +119,7 @@ function fillSelectedServiceInfo() {
     if (serviceImg) serviceImg.src = selectedProduct.pictureUrl;
     if (serviceTitle) serviceTitle.innerText = selectedProduct.name;
     if (serviceDescription) serviceDescription.innerText = selectedProduct.description;
-    
+
     if (servicePrice) {
         if (selectedProduct.priceToBeAgreed) {
             servicePrice.innerText = "R$: A combinar";
@@ -324,7 +323,7 @@ function showProductList() {
 
     const schedulingContainer = document.getElementById("schedulingContainer");
     schedulingContainer.classList.add("hidden")
-    
+
     const profileContainer = document.getElementById("profileContainer");
     profileContainer.classList.add("hidden")
 }
@@ -334,7 +333,7 @@ function fillProviderFeed(providerFeedData) {
     const portifolioGrid = document.getElementById("portifolioGrid");
 
     providerFeedData.forEach(feedPicture => {
-        const newImg = document.createElement("img");   
+        const newImg = document.createElement("img");
         newImg.src = feedPicture.picture_url;
 
         portifolioGrid.appendChild(newImg);
@@ -611,16 +610,16 @@ function renderAll() {
 function renderWeekCalendar(date) {
     const calendarWeekContainer = document.getElementById('calendar-week-container');
     const monthYearDisplay = document.getElementById('calendar-month-year');
-    
+
     if (!calendarWeekContainer || !monthYearDisplay) return;
-    
+
     calendarWeekContainer.innerHTML = '';
     const weekDays = getWeekDays(date);
-    monthYearDisplay.textContent = date.toLocaleDateString('pt-BR', { 
-        month: 'long', 
-        year: 'numeric' 
+    monthYearDisplay.textContent = date.toLocaleDateString('pt-BR', {
+        month: 'long',
+        year: 'numeric'
     }).replace(/^\w/, c => c.toUpperCase());
-    
+
     weekDays.forEach(day => {
         const dayElement = createDayElement(day);
         calendarWeekContainer.appendChild(dayElement);
@@ -630,18 +629,18 @@ function renderWeekCalendar(date) {
 function renderMonthCalendar(date) {
     const calendarMonthContainer = document.getElementById('calendar-month-container');
     if (!calendarMonthContainer) return;
-    
+
     calendarMonthContainer.innerHTML = '';
     const monthDays = getMonthDays(date);
     const dayLetters = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-    
+
     dayLetters.forEach(letter => {
         const letterEl = document.createElement('div');
         letterEl.className = 'month-day-letter';
         letterEl.textContent = letter;
         calendarMonthContainer.appendChild(letterEl);
     });
-    
+
     monthDays.forEach(day => {
         if (!day) {
             calendarMonthContainer.appendChild(document.createElement('div'));
@@ -655,15 +654,15 @@ function renderMonthCalendar(date) {
 function renderTimeSlots(date) {
     const timeSlotsContainer = document.getElementById('time-slots-container');
     if (!timeSlotsContainer) return;
-    
+
     timeSlotsContainer.innerHTML = '';
     const availableSlots = generateAvailableSlots(date);
-    
+
     if (availableSlots.length === 0 || isDateUnavailable(date)) {
         timeSlotsContainer.innerHTML = '<p>Nenhum horário disponível para este dia.</p>';
         return;
     }
-    
+
     availableSlots.forEach(slot => {
         const timeSlotButton = document.createElement('button');
         timeSlotButton.className = 'time-slot';
@@ -681,11 +680,11 @@ function generateAvailableSlots(date) {
     currentTime.setHours(8, 0, 0, 0);
     const endTime = new Date(date);
     endTime.setHours(22, 0, 0, 0);
-    
+
     while (currentTime < endTime) {
-        const slotTime = currentTime.toLocaleTimeString('pt-BR', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
+        const slotTime = currentTime.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
         });
         if (!alreadyBooked.includes(slotTime)) {
             slots.push(slotTime);
@@ -699,28 +698,28 @@ function generateAvailableSlots(date) {
 function createDayElement(day, isMonthViewElement = false) {
     const dayContainer = document.createElement('div');
     dayContainer.className = 'day-container';
-    
+
     if (!isMonthViewElement) {
         const dayLetter = document.createElement('span');
         dayLetter.className = 'day-letter';
-        dayLetter.textContent = day.toLocaleDateString('pt-BR', { 
-            weekday: 'short' 
+        dayLetter.textContent = day.toLocaleDateString('pt-BR', {
+            weekday: 'short'
         }).charAt(0).toUpperCase();
         dayContainer.appendChild(dayLetter);
     }
-    
+
     const dayNumber = document.createElement('button');
     dayNumber.className = 'day-number';
     dayNumber.textContent = day.getDate();
     dayNumber.dataset.date = day.toISOString().split('T')[0];
-    
+
     if (selectedDate && isSameDay(day, selectedDate)) {
         dayNumber.classList.add('selected');
     }
     if (isDateUnavailable(day)) {
         dayNumber.classList.add('unavailable');
     }
-    
+
     dayContainer.appendChild(dayNumber);
     return dayContainer;
 }
@@ -743,7 +742,7 @@ function getMonthDays(date) {
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
     const daysInMonth = [];
-    
+
     for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
         daysInMonth.push(null);
     }
@@ -755,9 +754,9 @@ function getMonthDays(date) {
 
 function isSameDay(d1, d2) {
     if (!d1 || !d2) return false;
-    return d1.getFullYear() === d2.getFullYear() && 
-           d1.getMonth() === d2.getMonth() && 
-           d1.getDate() === d2.getDate();
+    return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
 }
 
 function isDateUnavailable(date) {
@@ -771,7 +770,7 @@ function isDateUnavailable(date) {
 function updateCalendarView() {
     const calendarMonthContainer = document.getElementById('calendar-month-container');
     const calendarWeekContainer = document.getElementById('calendar-week-container');
-    
+
     if (calendarMonthContainer) {
         calendarMonthContainer.classList.toggle('hidden', !isMonthView);
     }
@@ -788,7 +787,7 @@ function handleDaySelection(target) {
     }
 }
 
-function setupSchedulingEventListeners() {
+async function setupSchedulingEventListeners() {
     const toggleButton = document.getElementById('toggle-calendar-view');
     const calendarWeekContainer = document.getElementById('calendar-week-container');
     const calendarMonthContainer = document.getElementById('calendar-month-container');
@@ -825,42 +824,101 @@ function setupSchedulingEventListeners() {
     }
 
     if (scheduleButton) {
-        scheduleButton.addEventListener('click', () => {
+        scheduleButton.addEventListener('click', async () => {
+
             const timeSlotsContainer = document.getElementById('time-slots-container');
             const selectedTimeEl = timeSlotsContainer ? timeSlotsContainer.querySelector('.time-slot.selected') : null;
-            
+            const observationTextArea = document.querySelector('.observations-section textarea');
+
+            // Validações
             if (!selectedDate) {
                 alert('Por favor, selecione uma data no calendário.');
                 return;
             }
+
             if (!selectedTimeEl) {
                 alert('Por favor, selecione um horário.');
                 return;
             }
 
-            const selectedTime = selectedTimeEl.dataset.time;
-            const formattedDate = selectedDate.toLocaleDateString('pt-BR', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric' 
-            });
-            
-            // Salvar dados do agendamento
-            const agendamentoData = {
-                produto: selectedProduct ? selectedProduct.name : 'Serviço',
-                prestador: document.getElementById('provider-name')?.innerText || 'Prestador',
-                data: formattedDate,
-                horario: selectedTime,
-                observacoes: document.querySelector('.observations-section textarea')?.value || ''
+            if (!selectedProduct) {
+                alert('Erro: Nenhum produto foi selecionado.');
+                return;
+            }
+
+            // 1. Obter o horário selecionado
+            const selectedTime = selectedTimeEl.dataset.time; // Ex: "10:00"
+            const [hours, minutes] = selectedTime.split(':');
+
+            // 2. Montar a data inicial do agendamento
+            const initialDate = new Date(selectedDate);
+            initialDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+
+            // 3. Calcular a data final (baseada na duração do serviço)
+            const endDate = new Date(initialDate);
+            endDate.setHours(endDate.getHours() + serviceDurationHours);
+
+            // 4. Obter observações do textarea
+            const observation = observationTextArea ? observationTextArea.value.trim() : '';
+
+            const user = await verifyUserStatus();
+            const clientId = user ? user.userId : null;
+
+            // Abrir modal para informar que o usuário não está logado redirecionar para pagina de login 
+            if (!clientId) {
+                alert('Erro: Usuário não autenticado.');
+                return;
+            }
+
+            let userApproval = localStorage.getItem("providerId");
+            let waitApproval = true;
+            let approval = false;
+
+            if (selectedProduct.autoApprove == true) {
+                waitApproval = false;
+                approval = true;
+            }
+
+            // 6. Criar o JSON com os dados dinâmicos
+            const newServiceOrderData = {
+                "clientId": clientId,
+                "productId": selectedProduct.id,
+                "total_value": selectedProduct.priceToBeAgreed ? 0 : parseFloat(selectedProduct.price),
+                "observation": observation || `Agendamento para ${selectedProduct.name}`,
+                "initialDate": initialDate.toISOString(),
+                "previousEndDate": endDate.toISOString(),
+                "waitApproval": waitApproval,
+                "userApproval": +userApproval,
+                "approval": approval
             };
-            
-            localStorage.setItem('ultimoAgendamento', JSON.stringify(agendamentoData));
-            localStorage.setItem('selectedProduct', selectedProduct ? selectedProduct.id : '');
-            
-            console.log('Agendamento realizado:', agendamentoData);
-            
-            // Redirecionar para página de ordens
-            window.location.href = '/my-service-orders';
+
+            try {
+                const response = await fetch("/service-orders", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newServiceOrderData),
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `Erro ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Agendamento criado com sucesso:', result);
+
+                // 8. Salvar dados localmente e redirecionar
+                localStorage.setItem('ultimoAgendamento', JSON.stringify(result));
+                localStorage.setItem('selectedProduct', selectedProduct.id);
+
+                window.location.href = '/my-service-orders';
+
+            } catch (error) {
+                console.error('Erro ao criar agendamento:', error);
+            }
         });
     }
 }
@@ -882,7 +940,7 @@ async function main() {
     if (user) {
         favorites = await getUserFavorites();
         showLoggedUserButtons();
-    }    
+    }
 
     try {
         const providerInfos = await getProviderInfos(providerId);

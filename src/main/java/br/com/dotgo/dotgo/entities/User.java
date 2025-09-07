@@ -48,6 +48,7 @@ public class User {
     @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
     List<Favorites> serviceProvidersLikeds = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Feed> feed = new ArrayList<>();
 
