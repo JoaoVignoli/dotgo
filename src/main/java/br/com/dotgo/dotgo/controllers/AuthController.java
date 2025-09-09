@@ -119,7 +119,10 @@ public class AuthController {
 
             List<FavoritesResponseDto> favoritesDtos = new ArrayList<>();
             for (Favorites favorite: user.getFavorites()) {
-                favoritesDtos.add(new FavoritesResponseDto(favorite));
+
+                String providerPictureUrl = this.fileStorageService.getPublicFileUrl(favorite.getServiceProvider().getPicture());
+
+                favoritesDtos.add(new FavoritesResponseDto(favorite, providerPictureUrl));
             }
 
             List<ServiceOrderResponseDto> serviceOrderDtos = new ArrayList<>();

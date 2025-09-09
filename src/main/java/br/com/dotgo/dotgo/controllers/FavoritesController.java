@@ -9,6 +9,7 @@ import br.com.dotgo.dotgo.entities.Favorites;
 import br.com.dotgo.dotgo.entities.User;
 import br.com.dotgo.dotgo.repositories.FavoritesRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
+import br.com.dotgo.dotgo.services.FileStorageService;
 import jakarta.validation.Valid;
 
 import java.util.HashMap;
@@ -29,10 +30,12 @@ public class FavoritesController {
 
     private FavoritesRepository favoritesRepository;
     private UserRepository userRepository;
+    private FileStorageService fileStorageService;
 
-    public FavoritesController(FavoritesRepository favoritesRepository, UserRepository userRepository) {
+    public FavoritesController(FavoritesRepository favoritesRepository, UserRepository userRepository, FileStorageService fileStorageService) {
         this.favoritesRepository = favoritesRepository;
         this.userRepository = userRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping
@@ -59,9 +62,11 @@ public class FavoritesController {
         newFavorites.setServiceProvider(serviceProvider.get());
         newFavorites.setUser(user.get());
 
+        String pictureUrl = this.fileStorageService.getPublicFileUrl(serviceProvider.get().getPicture());
+
         var favoritesSaved = this.favoritesRepository.save(newFavorites);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new FavoritesResponseDto(favoritesSaved));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new FavoritesResponseDto(favoritesSaved, pictureUrl));
     }
 
     @DeleteMapping("/{favoriteId}")

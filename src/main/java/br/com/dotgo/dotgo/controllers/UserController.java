@@ -195,27 +195,6 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @GetMapping("/{userId}/favorites")
-    public ResponseEntity<?> getFavorites(@PathVariable Integer userId) {
-        
-        Optional<User> user = this.userRepository.findById(userId);
-
-        if (user.isEmpty()) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "Usuário não localizado.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-
-        List<Favorites> userFavorites = user.get().getServiceProvidersLikeds();
-        ArrayList<FavoritesResponseDto> responseList = new ArrayList<>();
-
-        for (Favorites favorites : userFavorites) {
-            responseList.add(new FavoritesResponseDto(favorites));
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseList);
-    }
     
     @GetMapping("/{userId}/products")
     public ResponseEntity<?> getProducts(@PathVariable Integer userId) {
