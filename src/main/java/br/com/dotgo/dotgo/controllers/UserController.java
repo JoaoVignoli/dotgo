@@ -272,7 +272,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
     }
 
-    @GetMapping("/{userId/details")
+    @GetMapping("/{userId}/details")
     public ResponseEntity<?> getDetails(@PathVariable Integer userId) {
 
         Optional<User> optionalUser = this.userRepository.findById(userId);

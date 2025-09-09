@@ -33,6 +33,7 @@ public class ServiceOrder {
     @ManyToOne
     @JoinColumn(name = "user_approval")
     private User userApproval;
+    private String status;
 
     public Integer getId() {
         return id;
@@ -128,6 +129,14 @@ public class ServiceOrder {
 
     public void setUserApproval(User userApproval) {
         this.userApproval = userApproval;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

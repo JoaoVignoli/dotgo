@@ -33,12 +33,11 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px 20px;
-  background-color: var(--background-color);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 16px;
+  background-color: var(--backgroud-color);
+  width: 100%;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* Centraliza a logo */

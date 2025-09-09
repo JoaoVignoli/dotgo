@@ -270,6 +270,7 @@ header {
   padding: 8px 0;
   z-index: 1000;
 }
+
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -278,15 +279,19 @@ header {
   color: #555;
   text-decoration: none;
 }
+
 .nav-item svg {
   margin-bottom: 2px;
 }
+
 .nav-item.active {
   color: #000;
 }
+
 .hidden {
   display: none;
 }
+
 .category-item,
 .provider-card,
 .favorite-button {

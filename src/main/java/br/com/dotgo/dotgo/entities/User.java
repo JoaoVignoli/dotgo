@@ -23,6 +23,7 @@ public class User {
     private String email;
     private String phone;
     private Date birthday;
+    @JsonIgnore
     private String password;
     private String picture;
     @Enumerated(EnumType.STRING)

@@ -74,7 +74,15 @@ function productsDisplayList(product) {
     if (product.priceToBeAgreed === true) {
         productPrice.innerText = "R$: A combinar";
     } else {
-        productPrice.innerText = "R$: " + (product.price || "0,00");
+
+        const formattedPrice = new Intl.NumberFormat(
+            'pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }
+        ).format(product.price)
+
+        productPrice.innerText = formattedPrice;
     }
 
     productDetails.appendChild(productName);
