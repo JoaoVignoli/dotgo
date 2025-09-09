@@ -1,22 +1,23 @@
 package br.com.dotgo.dotgo.dtos;
 
 import br.com.dotgo.dotgo.entities.Favorites;
-import br.com.dotgo.dotgo.entities.User;
 
 public class FavoritesResponseDto {
     
     private Integer id;
-    private User serviceProvider;
+    private Integer serviceProviderId;
     private String serviceProviderName;
     private Integer serviceProviderRating;
     private String serviceProviderSpecialty;
+    private String serviceProviderPicture;
 
-    public FavoritesResponseDto(Favorites favorites) {
+    public FavoritesResponseDto(Favorites favorites, String serviceProviderPicture) {
         this.id = favorites.getId();
-        this.serviceProvider = favorites.getServiceProvider();
+        this.serviceProviderId = favorites.getServiceProvider().getId();
         this.serviceProviderName = favorites.getServiceProvider().getName();
         this.serviceProviderRating = 5;
         this.serviceProviderSpecialty = favorites.getServiceProvider().getSpecialty();
+        this.serviceProviderPicture = serviceProviderPicture;
     }
 
     public FavoritesResponseDto() {
@@ -30,12 +31,12 @@ public class FavoritesResponseDto {
         this.id = id;
     }
 
-    public User getServiceProvider() {
-        return serviceProvider;
+    public Integer getServiceProviderId() {
+        return serviceProviderId;
     }
 
-    public void setServiceProvider(User serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public void setServiceProviderId(Integer serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
     }
 
     public String getServiceProviderName() {
@@ -62,4 +63,11 @@ public class FavoritesResponseDto {
         this.serviceProviderSpecialty = serviceProviderSpecialty;
     }
     
+    public String getServiceProviderPicture() {
+        return serviceProviderPicture;
+    }
+
+    public void setServiceProviderPicture(String serviceProviderPicture) {
+        this.serviceProviderPicture = serviceProviderPicture;
+    }
 }
