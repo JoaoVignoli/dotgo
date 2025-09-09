@@ -1,18 +1,19 @@
 package br.com.dotgo.dotgo.dtos;
 
 import br.com.dotgo.dotgo.entities.Favorites;
+import br.com.dotgo.dotgo.entities.User;
 
 public class FavoritesResponseDto {
     
     private Integer id;
-    private Integer serviceProviderId;
+    private User serviceProvider;
     private String serviceProviderName;
     private Integer serviceProviderRating;
     private String serviceProviderSpecialty;
 
     public FavoritesResponseDto(Favorites favorites) {
         this.id = favorites.getId();
-        this.serviceProviderId = favorites.getServiceProvider().getId();
+        this.serviceProvider = favorites.getServiceProvider();
         this.serviceProviderName = favorites.getServiceProvider().getName();
         this.serviceProviderRating = 5;
         this.serviceProviderSpecialty = favorites.getServiceProvider().getSpecialty();
@@ -29,12 +30,12 @@ public class FavoritesResponseDto {
         this.id = id;
     }
 
-    public Integer getServiceProviderId() {
-        return serviceProviderId;
+    public User getServiceProvider() {
+        return serviceProvider;
     }
 
-    public void setServiceProviderId(Integer serviceProviderId) {
-        this.serviceProviderId = serviceProviderId;
+    public void setServiceProvider(User serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 
     public String getServiceProviderName() {
