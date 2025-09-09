@@ -525,6 +525,15 @@ async function getProviderFeed(providerId) {
     return data;
 }
 
+async function getProviderDetails(providerId) {
+    const respose = await fetch("/users/" + providerId + "/details")
+    if (!response.ok) {
+        throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+}
+
 function showLoggedUserButtons() {
 
     const shareButton = document.getElementById("shareButton");
@@ -935,6 +944,7 @@ async function main() {
     document.getElementById("returnButton").addEventListener("click", returnWindow);
     document.getElementById("tabProfile").addEventListener("click", showProfile);
     document.getElementById("tabProducts").addEventListener("click", showProductList);
+    document.getElementById("tabDetails").addEventListener("click", showDetails);
 
     const user = await verifyUserStatus();
     if (user) {
@@ -946,12 +956,14 @@ async function main() {
         const providerInfos = await getProviderInfos(providerId);
         const providerProducts = await getProviderProducts(providerId);
         const providerFeed = await getProviderFeed(providerId)
+        const providerDetails = await getProviderDetails(providerId);
 
         fillProviderInfos(providerInfos, user);
         fillProviderFeed(providerFeed)
         providerProducts.forEach(product => {
             fillProviderProducts(product, providerInfos.phone);
         });
+        fillProviderDetails(providerDetails);
     } catch (error) {
         console.error("Falha ao carregar dados do prestador:", error);
     }
