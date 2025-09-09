@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -269,5 +270,21 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+
+    @GetMapping("/{userId/details")
+    public ResponseEntity<?> getDetails(@PathVariable Integer userId) {
+
+        Optional<User> optionalUser = this.userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("message", "Usuário não localizado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        User user = optionalUser.get();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new PublicServiceProviderDto(user, this.fileStorageService.getPublicFileUrl(user.getPicture())));
     }
 }
