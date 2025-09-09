@@ -2,6 +2,19 @@ function returnWindow() {
     history.back();
 }
 
+const detailsContainer = document.querySelector(".details-container");
+const infosContainer = document.getElementById("infos-containers");
+
+function detailsWindow() {
+    if (detailsContainer.classList.contains("hidden")) {
+        detailsContainer.classList.remove("hidden");
+    }
+
+    if (!infosContainer.classList.contains("hidden")) {
+        infosContainer.classList.add("hidden");
+    }
+}
+
 function createSvgIcon(config, paths) {
     const svgNS = "http://www.w3.org/2000/svg";
     const svgIcon = document.createElementNS(svgNS, "svg" );
@@ -134,6 +147,10 @@ async function main() {
     }
 
     fillUserData(userData)
+
+    const detailButton = document.getElementById("tabDetalhes");
+    detailButton.addEventListener("click", detailsWindow);
+
 }
 
 window.addEventListener("load", main);
