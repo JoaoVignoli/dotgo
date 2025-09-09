@@ -31,6 +31,14 @@ public class PublicServiceProviderDto {
         this.address = user.getAddresses();
     }
 
+    public List<Address> getAddress() {
+        return address;
+    }
+
+    public void setAddress(List<Address> address) {
+        this.address = address;
+    }
+
     public Integer getId() {
         return id;
     }
