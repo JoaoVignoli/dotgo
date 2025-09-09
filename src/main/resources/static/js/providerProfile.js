@@ -328,6 +328,25 @@ function showProductList() {
     profileContainer.classList.add("hidden")
 }
 
+function fillProviderDetails(serviceProviderData, isUserLoggedIn) {
+
+    const address = serviceProviderData.address;
+    const firstAddress = address[0];
+
+    const street = firstAddress.street;
+    const neighborhood = firstAddress.neighborhood;
+    const city = firstAddress.city;
+    const state = firstAddress.state;
+    const addressNumber = firstAddress.address_number
+    const cep = firstAddress.cep;
+
+    const finalAddress = street + ", " + addressNumber + " - " + neighborhood + ", " + city + " - " + state + ", " + cep;
+
+
+    const providerAddress = document.getElementById('userAddress');
+    providerAddress.innerText = finalAddress;
+}
+
 function fillProviderFeed(providerFeedData) {
 
     const portifolioGrid = document.getElementById("portifolioGrid");
@@ -518,15 +537,6 @@ async function getProviderProducts(providerId) {
 
 async function getProviderFeed(providerId) {
     const response = await fetch("/users/" + providerId + "/feed");
-    if (!response.ok) {
-        throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-}
-
-async function getProviderDetails(providerId) {
-    const respose = await fetch("/users/" + providerId + "/details")
     if (!response.ok) {
         throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
     }
@@ -956,14 +966,13 @@ async function main() {
         const providerInfos = await getProviderInfos(providerId);
         const providerProducts = await getProviderProducts(providerId);
         const providerFeed = await getProviderFeed(providerId)
-        const providerDetails = await getProviderDetails(providerId);
 
         fillProviderInfos(providerInfos, user);
         fillProviderFeed(providerFeed)
         providerProducts.forEach(product => {
             fillProviderProducts(product, providerInfos.phone);
         });
-        fillProviderDetails(providerDetails);
+        fillProviderDetails(providerInfos, user);
     } catch (error) {
         console.error("Falha ao carregar dados do prestador:", error);
     }
