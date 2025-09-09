@@ -1,6 +1,11 @@
 package br.com.dotgo.dotgo.dtos;
 
+import br.com.dotgo.dotgo.entities.Address;
 import br.com.dotgo.dotgo.entities.User;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PublicServiceProviderDto {
     private Integer id;
@@ -12,6 +17,8 @@ public class PublicServiceProviderDto {
     private String phone;
     private String biography;
 
+    List<Address> address = new ArrayList<>();
+
     public PublicServiceProviderDto(User user, String publicUrlPicture) {
         this.id = user.getId();
         this.name = user.getName();
@@ -21,6 +28,7 @@ public class PublicServiceProviderDto {
         this.rating = 5;
         this.phone = user.getPhone();
         this.biography = user.getBiography();
+        this.address = user.getAddresses();
     }
 
     public Integer getId() {

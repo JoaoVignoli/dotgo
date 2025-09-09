@@ -7,11 +7,9 @@ import br.com.dotgo.dotgo.dtos.ProductResponseDto;
 import br.com.dotgo.dotgo.dtos.PublicServiceProviderDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataRequestDto;
 import br.com.dotgo.dotgo.dtos.UserPersonalDataResponseDto;
-import br.com.dotgo.dotgo.entities.Favorites;
-import br.com.dotgo.dotgo.entities.Feed;
-import br.com.dotgo.dotgo.entities.Product;
-import br.com.dotgo.dotgo.entities.User;
+import br.com.dotgo.dotgo.entities.*;
 import br.com.dotgo.dotgo.enums.UserRole;
+import br.com.dotgo.dotgo.repositories.AddressRepository;
 import br.com.dotgo.dotgo.repositories.FeedRepository;
 import br.com.dotgo.dotgo.repositories.UserRepository;
 import br.com.dotgo.dotgo.services.AuthService;
@@ -41,19 +39,21 @@ import org.springframework.data.domain.Pageable;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
     private final AuthService authService;
     private static final String USERS_PICTURES_FOLDER = "pictures/users";
 
     public UserController(
-        UserRepository userRepository, PasswordEncoder passwordEncoder,
-        FileStorageService fileStorageService, AuthService authService, FeedRepository feedRepository
+            UserRepository userRepository, PasswordEncoder passwordEncoder,
+            FileStorageService fileStorageService, AuthService authService, FeedRepository feedRepository, AddressRepository addressRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.fileStorageService = fileStorageService;
         this.authService = authService;
+        this.addressRepository = addressRepository;
     }
 
     @PostMapping
@@ -249,21 +249,5 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(responseList);
-    }
-
-    @GetMapping("/{userId}/details")
-    public ResponseEntity<?> getDetails(@PathVariable Integer userId) {
-
-        Optional<User> optionalUser = this.userRepository.findById(userId);
-
-        if (optionalUser.isEmpty()) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "Usuário não localizado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-
-        User user = optionalUser.get();
-
-        return ResponseEntity.status(HttpStatus.OK).body(new PublicServiceProviderDto(user, this.fileStorageService.getPublicFileUrl(user.getPicture())));
     }
 }
