@@ -954,7 +954,7 @@ async function main() {
     document.getElementById("returnButton").addEventListener("click", returnWindow);
     document.getElementById("tabProfile").addEventListener("click", showProfile);
     document.getElementById("tabProducts").addEventListener("click", showProductList);
-    document.getElementById("tabDetails").addEventListener("click", showDetails);
+    // document.getElementById("tabDetails").addEventListener("click", showDetails);
 
     const user = await verifyUserStatus();
     if (user) {

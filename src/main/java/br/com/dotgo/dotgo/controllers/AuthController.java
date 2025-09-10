@@ -138,6 +138,7 @@ public class AuthController {
             }
 
             Map<String, Object> userData = new HashMap<>();
+            userData.put("id", user.getId());
             userData.put("profilePicture", this.fileStorageService.getPublicFileUrl(user.getPicture()));
             userData.put("name", user.getName());
             userData.put("email", user.getEmail());

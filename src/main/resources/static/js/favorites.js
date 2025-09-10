@@ -1,94 +1,84 @@
 let favorites = [];
 let favoriteIdMap = {};
 
-function checkIfFavorited(providerId) {
-  return favorites.includes(providerId);
+function showProviderProfile(providerId) {
+  localStorage.setItem("providerId", providerId);
+  window.location.pathname = "/provider-profile";
 }
 
-// Adicionar aos favoritos
-async function addFavorite(providerId, userId) {
+function checkIfFavorited(providerId) {
+  return favorites.some(fav => fav.serviceProviderId === providerId);
+}
 
+async function addFavorite(providerId, userId) {
   const requestBody = {
     "serviceProviderId": providerId,
     "userId": userId
-  }
-
+  };
   try {
     const response = await fetch('/favorites', {
       method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
-      credentials: 'include' 
+      credentials: 'include'
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || `Erro ${response.status}`);
     }
-
     const newFavorite = await response.json();
-
-    if (!favorites.includes(providerId)) {
-      favorites.push(providerId);
-    }
-
-    // Adiciona a nova entrada ao mapa.
+    favorites.push(newFavorite);
     favoriteIdMap[newFavorite.serviceProviderId] = newFavorite.id;
-
   } catch (error) {
     console.error("Falha ao adicionar favorito:", error);
+    throw error;
   }
 }
 
-// Remover dos favoritos
 async function removeFavorite(providerId) {
-
   const favoriteId = favoriteIdMap[providerId];
-
   if (favoriteId === undefined) {
-    console.error(`Não foi possível encontrar o ID do favorito para o prestador ${providerId}. A remoção foi abortada.`);
-    return; 
+    console.error(`Não foi possível encontrar o ID do favorito para o prestador ${providerId}.`);
+    return;
   }
-
   try {
-    const response = await fetch('/favorites/' + favoriteId, { 
-    method: 'DELETE'
+    const response = await fetch('/favorites/' + favoriteId, {
+      method: 'DELETE'
     });
-
     if (!response.ok) {
       throw new Error(`Erro ${response.status}`);
     }
-
-    // Sucesso! Remove o ID da lista local para atualizar a UI.
-    favorites = favorites.filter(id => id !== providerId);
-
-    // Também remove a entrada do mapa.
+    favorites = favorites.filter(fav => fav.serviceProviderId !== providerId);
     delete favoriteIdMap[providerId];
-
   } catch (error) {
     console.error("Falha ao remover favorito:", error);
+    throw error;
   }
 }
+
+// Função para reduzir o nome do prestador caso seja muito grande.
+function reduceName(name, maxLength, suffix = '...') {
+    if (name.length <= maxLength) {
+        return name;
+    }
+
+    return name.substring(0, maxLength) + suffix;
+}
+
 
 async function getUserFavorites() {
   try {
     const response = await fetch('/auth/me');
-
     if (!response.ok) {
       throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
     }
-
     const userData = await response.json();
-
     if (userData && Array.isArray(userData.favorites)) {
       favoriteIdMap = {};
-      const favoriteProviderIds = userData.favorites.map(fav => {
-        favoriteIdMap[fav.serviceProviderId] = fav.id; 
-        return fav.serviceProviderId;
+      userData.favorites.forEach(fav => {
+        favoriteIdMap[fav.serviceProviderId] = fav.id;
       });
-      return favoriteProviderIds;
+      return userData.favorites;
     } else {
       return [];
     }
@@ -99,34 +89,29 @@ async function getUserFavorites() {
 }
 
 function createSvgIcon(config, paths) {
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svgIcon = document.createElementNS(svgNS, "svg");
-
-    // Aplica todas as configurações (width, height, viewBox, etc.)
-    for (const attr in config) {
-        svgIcon.setAttribute(attr, config[attr]);
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svgIcon = document.createElementNS(svgNS, "svg" );
+  for (const attr in config) {
+    svgIcon.setAttribute(attr, config[attr]);
+  }
+  paths.forEach(pathData => {
+    const path = document.createElementNS(svgNS, "path");
+    for (const attr in pathData) {
+      path.setAttribute(attr, pathData[attr]);
     }
-
-    // Cria e anexa cada path
-    paths.forEach(pathData => {
-        const path = document.createElementNS(svgNS, "path");
-        for (const attr in pathData) {
-            path.setAttribute(attr, pathData[attr]);
-        }
-        svgIcon.appendChild(path);
-    });
-
-    return svgIcon;
+    svgIcon.appendChild(path);
+  });
+  return svgIcon;
 }
 
 function createStarIcon() {
-    const starSvg = createSvgIcon(
-        { xmlns: "http://www.w3.org/2000/svg", width: "22", height: "22", viewBox: "0 0 24 24", fill: "currentColor" },
-        [{ d: "M11.0867 1.0999C11.3802 0.476372 11.5269 0.164607 11.726 0.0649986C11.8993 -0.0216662 12.1007 -0.0216662 12.274 0.0649986C12.4731 0.164607 12.6198 0.476372 12.9133 1.0999L15.6971 7.01547C15.7838 7.19955 15.8271 7.29159 15.8904 7.36305C15.9464 7.42633 16.0136 7.47759 16.0883 7.51401C16.1726 7.55514 16.2695 7.56999 16.4631 7.59968L22.6902 8.55436C23.3459 8.6549 23.6738 8.70516 23.8255 8.87315C23.9576 9.01932 24.0196 9.22016 23.9945 9.41977C23.9656 9.64918 23.7283 9.89169 23.2535 10.3767L18.7493 14.9784C18.6089 15.1218 18.5386 15.1935 18.4933 15.2789C18.4532 15.3544 18.4275 15.4375 18.4176 15.5233C18.4064 15.6203 18.4229 15.7216 18.4561 15.9242L19.5189 22.4239C19.631 23.1094 19.687 23.4522 19.5817 23.6556C19.49 23.8326 19.3271 23.9567 19.1383 23.9934C18.9214 24.0356 18.6279 23.8737 18.041 23.55L12.4741 20.4792C12.3006 20.3836 12.2139 20.3357 12.1225 20.3169C12.0416 20.3003 11.9584 20.3003 11.8775 20.3169C11.7861 20.3357 11.6994 20.3836 11.5259 20.4792L5.95901 23.55C5.3721 23.8737 5.07865 24.0356 4.86166 23.9934C4.67287 23.9567 4.50997 23.8326 4.41832 23.6556C4.31299 23.4522 4.36904 23.1094 4.48113 22.4239L5.54393 15.9242C5.57707 15.7216 5.59364 15.6203 5.58243 15.5233C5.5725 15.4375 5.54677 15.3544 5.50666 15.2789C5.46136 15.1935 5.39115 15.1218 5.25074 14.9784L0.746471 10.3767C0.271736 9.89169 0.0343686 9.64918 0.00548393 9.41977C-0.0196473 9.22016 0.0424386 9.01932 0.174456 8.87315C0.32619 8.70516 0.654059 8.6549 1.3098 8.55436L7.53688 7.59968C7.73054 7.56999 7.82736 7.55514 7.91169 7.51401C7.98635 7.47759 8.05357 7.42633 8.10962 7.36305C8.17292 7.29159 8.21623 7.19955 8.30286 7.01547L11.0867 1.0999Z" }] // Path da estrela (resumido )
-    );
-    starSvg.classList.add("star-icon");
-    starSvg.style.color = "#FFB65C"; // Cor aplicada diretamente como no seu HTML
-    return starSvg;
+  const starSvg = createSvgIcon(
+    { xmlns: "http://www.w3.org/2000/svg", width: "22", height: "22", viewBox: "0 0 24 24", fill: "currentColor" },
+    [{ d: "M11.0867 1.0999C11.3802 0.476372 11.5269 0.164607 11.726 0.0649986C11.8993 -0.0216662 12.1007 -0.0216662 12.274 0.0649986C12.4731 0.164607 12.6198 0.476372 12.9133 1.0999L15.6971 7.01547C15.7838 7.19955 15.8271 7.29159 15.8904 7.36305C15.9464 7.42633 16.0136 7.47759 16.0883 7.51401C16.1726 7.55514 16.2695 7.56999 16.4631 7.59968L22.6902 8.55436C23.3459 8.6549 23.6738 8.70516 23.8255 8.87315C23.9576 9.01932 24.0196 9.22016 23.9945 9.41977C23.9656 9.64918 23.7283 9.89169 23.2535 10.3767L18.7493 14.9784C18.6089 15.1218 18.5386 15.1935 18.4933 15.2789C18.4532 15.3544 18.4275 15.4375 18.4176 15.5233C18.4064 15.6203 18.4229 15.7216 18.4561 15.9242L19.5189 22.4239C19.631 23.1094 19.687 23.4522 19.5817 23.6556C19.49 23.8326 19.3271 23.9567 19.1383 23.9934C18.9214 24.0356 18.6279 23.8737 18.041 23.55L12.4741 20.4792C12.3006 20.3836 12.2139 20.3357 12.1225 20.3169C12.0416 20.3003 11.9584 20.3003 11.8775 20.3169C11.7861 20.3357 11.6994 20.3836 11.5259 20.4792L5.95901 23.55C5.3721 23.8737 5.07865 24.0356 4.86166 23.9934C4.67287 23.9567 4.50997 23.8326 4.41832 23.6556C4.31299 23.4522 4.36904 23.1094 4.48113 22.4239L5.54393 15.9242C5.57707 15.7216 5.59364 15.6203 5.58243 15.5233C5.5725 15.4375 5.54677 15.3544 5.50666 15.2789C5.46136 15.1935 5.39115 15.1218 5.25074 14.9784L0.746471 10.3767C0.271736 9.89169 0.0343686 9.64918 0.00548393 9.41977C-0.0196473 9.22016 0.0424386 9.01932 0.174456 8.87315C0.32619 8.70516 0.654059 8.6549 1.3098 8.55436L7.53688 7.59968C7.73054 7.56999 7.82736 7.55514 7.91169 7.51401C7.98635 7.47759 8.05357 7.42633 8.10962 7.36305C8.17292 7.29159 8.21623 7.19955 8.30286 7.01547L11.0867 1.0999Z" }]
+   );
+  starSvg.classList.add("star-icon");
+  starSvg.style.color = "var(--warning-color)";
+  return starSvg;
 }
 
 function createHeartIconOutline() {
@@ -153,337 +138,147 @@ function createHeartIconFilled() {
     return heartSvg;
 }
 
-function displayFavorites(favorite) {
+function displayFavorites(favorite, userId) {
+  const serviceProvidersList = document.getElementById("favorites-list");
 
+  const card = document.createElement("div");
+  card.classList.add("provider-card");
 
-    card.innerHTML = `
-      <div class="provider-avatar">
-        <img src="${getProviderPhotoUrl(provider.id || provider.providerId)}" 
-             alt="Foto de ${provider.name}" 
-             onerror="this.style.display='none'; this.parentElement.style.backgroundImage='url(data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\' fill=\\'%23666\\'><path d=\\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\\'/></svg>)'" />
-      </div>
-      <div class="provider-info">
-        <h3 class="provider-name">${provider.name}</h3>
-        <p class="provider-specialty">${provider.specialty || 'Prestador de Serviços'}</p>
-        <div class="provider-rating">
-          <div class="stars">
-            ${generateStars(provider.rating || 5)}
-          </div>
-          <span class="rating-text">${provider.rating || '5.0'}</span>
-        </div>
-      </div>
-      <button class="favorite-button" onclick="removeFavorite('${provider.id}')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      </button>
-    `;
+  const providerAvatar = document.createElement("div");
+  providerAvatar.classList.add("provider-avatar");
+  const providerImg = document.createElement("img");
+  providerImg.src = favorite.serviceProviderPicture;
+  providerImg.alt = `Foto de ${favorite.serviceProviderName}`;
+  providerAvatar.appendChild(providerImg);
 
+  const providerInfo = document.createElement("div");
+  providerInfo.classList.add("provider-info");
 
-    const serviceProvidersList = document.getElementById("favorites-list");
+  const providerName = document.createElement("h3");
+  providerName.classList.add("provider-name");
+  providerName.innerText = reduceName(favorite.serviceProviderName, 20);
 
-    // --- Criação dos Elementos ---
-    const card = document.createElement("div");
-    card.classList.add("provider-card");
+  const providerSpecialty = document.createElement("p");
+  providerSpecialty.classList.add("provider-specialty");
+  providerSpecialty.innerText = favorite.serviceProviderSpecialty;
 
-    const providerAvatar = document.createElement("div");
-    providerAvatar.classList.add("provider-avatar");
+  const providerRating = document.createElement("div");
+  providerRating.classList.add("provider-rating");
+  const providerStars = document.createElement("div");
+  providerStars.classList.add("stars");
+  const rating = favorite.rating || 0;
+  for (let i = 0; i < rating; i++) {
+    providerStars.appendChild(createStarIcon());
+  }
+  providerRating.appendChild(providerStars);
 
-    const providerImg = document.createElement("img");
-    providerImg.src = favorite.serviceProviderPicture;
+  const favoriteButton = document.createElement("button");
+  favoriteButton.classList.add("favorite-button");
+  favoriteButton.setAttribute("data-provider-id", favorite.serviceProviderId);
 
-    const providerPhoto = document.createElement("img");
-    providerPhoto.classList.add("provider-photo");
-    providerPhoto.src = serviceHolder.urlProfilePhoto;
-    providerPhoto.alt = "Foto de perfil: " + serviceHolder.name;
+  const heartIconContainer = document.createElement('div');
+  heartIconContainer.classList.add('heart-icon');
 
-    const providerInfo = document.createElement("div");
-    providerInfo.classList.add("provider-info");
+  if (checkIfFavorited(favorite.serviceProviderId)) {
+    heartIconContainer.appendChild(createHeartIconFilled());
+    favoriteButton.classList.add("favorited");
+  } else {
+    heartIconContainer.appendChild(createHeartIconOutline());
+  }
+  favoriteButton.appendChild(heartIconContainer);
 
-    const providerHeader = document.createElement("div");
-    providerHeader.classList.add("provider-header");
+  favoriteButton.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    event.preventDefault();
 
-    const providerHeaderDiv = document.createElement("div");
-    const providerName = document.createElement("strong");
-    const name = reduceName(serviceHolder.name, 20);
-    providerName.innerText = name;
+    // Lógica da animação
+    favoriteButton.classList.remove("clicked");
+    void favoriteButton.offsetWidth;
+    favoriteButton.classList.add("clicked");
 
-    const providerEspecialty = document.createElement("p");
-    providerEspecialty.innerText = serviceHolder.specialty;
+    const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
+    favoriteButton.disabled = true;
 
-    const providerRating = document.createElement("div");
-    providerRating.classList.add("provider-rating");
-    for (let i = 0; i < serviceHolder.rating; i++) {
-        providerRating.appendChild(createStarIcon());
-    }
-
-    const favoriteButton = document.createElement("button");
-    favoriteButton.classList.add("favorite-button");
-    favoriteButton.setAttribute("data-provider-id", serviceHolder.id);
-
-    const isFavorited = checkIfFavorited(serviceHolder.id);
-    if (isFavorited) {
-        favoriteButton.appendChild(createHeartIconFilled()); // Coração preenchido
+    try {
+      if (isCurrentlyFavorited) {
+        await removeFavorite(favorite.serviceProviderId);
+        heartIconContainer.innerHTML = '';
+        heartIconContainer.appendChild(createHeartIconOutline());
+        favoriteButton.classList.remove("favorited");
+      } else {
+        await addFavorite(favorite.serviceProviderId, userId);
+        heartIconContainer.innerHTML = '';
+        heartIconContainer.appendChild(createHeartIconFilled());
         favoriteButton.classList.add("favorited");
-    } else {
-        favoriteButton.appendChild(createHeartIconOutline()); // Coração vazio
+      }
+    } catch (error) {
+      console.error("Falha ao atualizar o status de favorito:", error);
+    } finally {
+      favoriteButton.disabled = false;
     }
+  });
 
-    favoriteButton.addEventListener('click', async (event) => {
+  providerInfo.appendChild(providerName);
+  providerInfo.appendChild(providerSpecialty);
+  providerInfo.appendChild(providerRating);
+  card.appendChild(providerAvatar);
+  card.appendChild(providerInfo);
+  card.appendChild(favoriteButton);
 
-        // Impede que o clique no botão acione o clique no card
-        event.stopPropagation();
-        event.preventDefault();
+  serviceProvidersList.appendChild(card);
 
-        const isCurrentlyFavorited = favoriteButton.classList.contains("favorited");
-
-        // Desativa o botão para evitar cliques duplos enquanto a requisição está em andamento
-        favoriteButton.disabled = true; 
-
-        try {
-            if (isCurrentlyFavorited) {
-                // 1. Tenta remover o favorito no backend
-                await removeFavorite(serviceHolder.id);
-
-                // 2. Se a remoção for bem-sucedida, atualiza a UI
-                favoriteButton.innerHTML = ''; // Limpa o ícone antigo
-                favoriteButton.appendChild(createHeartIconOutline()); // Adiciona o ícone de contorno
-                favoriteButton.classList.remove("favorited");
-
-            } else {
-                // Verifica se o usuário está logado antes de tentar favoritar
-                if (isUserLoggedIn && isUserLoggedIn.userId) {
-                    // 1. Tenta adicionar o favorito no backend
-                    await addFavorite(serviceHolder.id, isUserLoggedIn.userId);
-
-                    // 2. Se a adição for bem-sucedida, atualiza a UI
-                    favoriteButton.innerHTML = ''; // Limpa o ícone antigo
-                    favoriteButton.appendChild(createHeartIconFilled()); // Adiciona o ícone preenchido (vermelho)
-                    favoriteButton.classList.add("favorited");
-                } else {
-                    console.error("Não foi possível favoritar: ID do usuário não encontrado.");
-                    // Se o usuário não estiver logado, não fazemos nada na UI, pois o estado não mudou.
-                }
-            }
-        } catch (error) {
-            console.error("Falha ao atualizar o status de favorito:", error);
-            // Se ocorrer um erro na API, a UI não será alterada, refletindo o estado real.
-        } finally {
-            // Reativa o botão após a conclusão da operação (sucesso ou falha)
-            favoriteButton.disabled = false;
-        }
-
-        // Feedback visual temporário
-        favoriteButton.classList.add("clicked");
-        setTimeout(() => {
-            favoriteButton.classList.remove("clicked");
-        }, 100);
-    });
-
-    // Esconder botão de favorito se não estiver logado.
-    if (!isUserLoggedIn) {
-        favoriteButton.style.display = "none";
+  card.addEventListener('click', (event) => {
+    if (event.target.closest('.favorite-button')) {
+      return;
     }
-
-
-    // --- Montagem da Estrutura--
-
-    // 1. Monta o providerHeaderDiv (nome e ícone de verificado)
-    providerHeaderDiv.appendChild(providerName);
-    if (serviceHolder.verified) {
-        providerHeaderDiv.appendChild(createVerifyIcon());
-    }
-    providerHeaderDiv.appendChild(providerEspecialty);
-
-    // 2. Monta o providerHeader
-    providerHeader.appendChild(providerHeaderDiv);
-
-    // 3. Monta o providerInfo
-    providerInfo.appendChild(providerHeader);
-    providerInfo.appendChild(providerRating);
-
-    // 4. Monta o card principal
-    providerCard.appendChild(providerPhoto);
-    providerCard.appendChild(providerInfo);
-    providerCard.appendChild(favoriteButton);
-
-
-    // 5. Adiciona o card completo à lista
-    serviceProvidersList.appendChild(providerCard);
-
-    providerCard.addEventListener('click', (event) => {
-        if (event.target.closest('button') || event.target.closest('.favorite-button')) {
-            return;
-        }
-        showProviderProfile(serviceHolder.id);
-    });
+    showProviderProfile(favorite.serviceProviderId);
+  });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+async function verifyUserStatus() {
+  try {
+    const response = await fetch('/auth/status');
+    if (!response.ok) {
+      throw new Error(`Falha na comunicação com o servidor. Status: ${response.status}`);
+    }
+    const user = await response.json();
+    return user.isAuthenticated ? user : null;
+  } catch (error) {
+    console.error("Falha crítica na verificação de autenticação:", error);
+    return null;
+  }
+}
+
+async function main() {
   const favoritesList = document.getElementById("favorites-list");
   const emptyState = document.getElementById("empty-state");
 
-  // Função para renderizar um card de prestador favorito
-  const renderProviderCard = (provider) => {
-    const card = document.createElement("div");
-    card.className = "provider-card";
-    card.innerHTML = `
-      <div class="provider-avatar">
-        <img src="${getProviderPhotoUrl(provider.id || provider.providerId)}" 
-             alt="Foto de ${provider.name}" 
-             onerror="this.style.display='none'; this.parentElement.style.backgroundImage='url(data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\' fill=\\'%23666\\'><path d=\\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\\'/></svg>)'" />
-      </div>
-      <div class="provider-info">
-        <h3 class="provider-name">${provider.name}</h3>
-        <p class="provider-specialty">${provider.specialty || 'Prestador de Serviços'}</p>
-        <div class="provider-rating">
-          <div class="stars">
-            ${generateStars(provider.rating || 5)}
-          </div>
-          <span class="rating-text">${provider.rating || '5.0'}</span>
-        </div>
-      </div>
-      <button class="favorite-button" onclick="removeFavorite('${provider.id}')">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      </button>
-    `;
-    
-    // Adicionar evento de clique para ir ao perfil do prestador
-    card.addEventListener("click", (e) => {
-      // Não navegar se clicou no botão de favorito
-      if (e.target.closest('.favorite-button')) return;
-      
-      // Navegar para o perfil do prestador
-      window.location.href = `/provider-profile/${provider.id}`;
-    });
-    
-    return card;
+  const showEmptyState = () => {
+    if (favoritesList) favoritesList.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'flex';
   };
 
-  // Função para gerar estrelas de avaliação
-  function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    let starsHTML = '';
-    
-    // Estrelas cheias
-    for (let i = 0; i < fullStars; i++) {
-      starsHTML += `
-        <svg class="star" viewBox="0 0 24 24">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      `;
-    }
-    
-    // Estrela meio cheia (se necessário)
-    if (hasHalfStar) {
-      starsHTML += `
-        <svg class="star" viewBox="0 0 24 24">
-          <defs>
-            <linearGradient id="half">
-              <stop offset="50%" stop-color="#FFD700"/>
-              <stop offset="50%" stop-color="#E5E5E5"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#half)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      `;
-    }
-    
-    // Estrelas vazias
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-      starsHTML += `
-        <svg class="star" viewBox="0 0 24 24" fill="none" stroke="#E5E5E5">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      `;
-    }
-    
-    return starsHTML;
+  const user = await verifyUserStatus();
+  let userId = null;
+
+  if (user) {
+    userId = user.userId;
+    favorites = await getUserFavorites();
   }
 
-  // Função para carregar os prestadores favoritos
-  const loadFavorites = async () => {
-    try {
-      const response = await fetch('/auth/me');
-      if (!response.ok) {
-          throw new Error(`Erro ao buscar ordens de serviço: ${response.statusText}`);
-      }
-      const userData = await response.json();
-      
-      const favorites = userData.favorites;
-
-      if (favorites && favorites.length > 0) {
-        showFavoritesList(favorites);
-      } else {
-        showEmptyState();
-      }
-    } catch (error) {
-      console.error('Erro ao carregar favoritos:', error);
-      showEmptyState();
+  if (favorites.length > 0) {
+    if (favoritesList) {
+        favoritesList.innerHTML = '';
+        favoritesList.style.display = 'flex';
     }
-  };
-
-  // Função para exibir a lista de favoritos
-  const showFavoritesList = (favorites) => {
-    favoritesList.innerHTML = '';
-    emptyState.style.display = 'none';
-    favoritesList.style.display = 'flex';
+    if (emptyState) emptyState.style.display = 'none';
     
-    favorites.forEach(provider => {
-      const card = renderProviderCard(provider);
-      favoritesList.appendChild(card);
+    favorites.forEach(favorite => {
+      displayFavorites(favorite, userId);
     });
-  };
+  } else {
+    showEmptyState();
+  }
+}
 
-  // Função para exibir o estado vazio
-  const showEmptyState = () => {
-    favoritesList.style.display = 'none';
-    emptyState.style.display = 'flex';
-  };
-
-  // Função para remover um prestador dos favoritos
-  window.removeFavorite = async (providerId) => {
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        console.error('Token de autenticação não encontrado');
-        return;
-      }
-
-      const response = await fetch(`/api/favorites/${providerId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        // Recarregar a lista de favoritos
-        loadFavorites();
-        
-        // Mostrar feedback visual (opcional)
-        console.log('Prestador removido dos favoritos');
-      } else {
-        console.error('Erro ao remover favorito');
-      }
-    } catch (error) {
-      console.error('Erro ao remover favorito:', error);
-    }
-  };
-
-  // Carregar favoritos ao inicializar a página
-  loadFavorites();
-
-  // Atualizar a navegação ativa
-  const navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(item => {
-    item.classList.remove('active');
-  });
-  document.getElementById('favoritesButton').classList.add('active');
-});
-
+window.addEventListener("load", main);
